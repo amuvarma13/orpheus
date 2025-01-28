@@ -16,8 +16,8 @@ from transformers.modeling_outputs import ModelOutput
 
 
 
-from mm_model_from_colab.components import OrpheusProjector
-from mm_model_from_colab.config import OrpheusConfig
+from orpheus.mm_model_from_colab.components import OrpheusProjector
+from orpheus.mm_model_from_colab.config import OrpheusConfig
 
 @dataclass
 class OrpheusCausalLMOutputWithPast(ModelOutput):
