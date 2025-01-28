@@ -76,6 +76,7 @@ prompt = "What is an example of a healthy breakfast?"
 inputs = orpheus.get_inputs_from_text(prompt)
 
 # OR get inputs from speech
+import librosa
 speech_file = "input_speech.wav"
 y, sr = librosa.load(speech_file, sr=16000, mono=True)
 inputs = orpheus.get_inputs_from_speech(y)
