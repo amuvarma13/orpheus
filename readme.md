@@ -18,14 +18,14 @@ Colab will have appropriate versions of these packages installed.
 3. Import relevant Orpheus modules
 
 Due to how colab processes modules if you are on Colab import the  correct version.
-```bash
+```python
 from mm_model_for_colab import (
     OrpheusConfig,
     OrpheusForConditionalGeneration,
 )
 ```
 If you are running this normally import the default version
-```bash
+```python
 from mm_model import (
     OrpheusConfig,
     OrpheusForConditionalGeneration,
