@@ -1,4 +1,4 @@
-### RUN INFERENCE
+### 1. RUN INFERENCE
 1. Installation
 Clone this repository.
 ```bash
