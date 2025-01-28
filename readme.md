@@ -26,7 +26,7 @@ from orpheus.mm_model_from_colab.model import (
 )
 from orpheus.mm_model_from_colab.utils import fast_download_from_hub
 ```
-If you are running this normally import the default version
+If you are running this on a normal VM import the default version
 ```python
 from mm_model import (
     OrpheusConfig,
@@ -46,10 +46,7 @@ AutoConfig.register("orpheus", OrpheusConfig)
 AutoModel.register(OrpheusConfig, OrpheusForConditionalGeneration)
 ```
 
-5. Compose Model
-
-We have create helper functions you can use to compose the model faster
-
+5. Instantiate Model
 ```python
 fast_download_from_hub() 
 model_name = "amuvarma/zuck-3bregconvo-automodelcompat"
