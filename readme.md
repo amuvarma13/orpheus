@@ -35,8 +35,10 @@ from mm_model import (
 
 4. Register the model type with transformers
 
-```bash
+```python
 from transformers import AutoModel, AutoTokenizer, AutoConfig
 AutoConfig.register("orpheus", OrpheusConfig)
 AutoModel.register(OrpheusConfig, OrpheusForConditionalGeneration)
 ```
+
+5. 
