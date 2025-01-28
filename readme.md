@@ -37,7 +37,7 @@ from mm_model import (
     OrpheusForConditionalGeneration,
     OrpheusUtility
 )
-my_orpheus = OrpheusUtility()
+orpheus = OrpheusUtility()
 ```
 
 
@@ -53,7 +53,7 @@ AutoModel.register(OrpheusConfig, OrpheusForConditionalGeneration)
 
 5. Instantiate Model
 ```python
-my_orpheus.fast_download_from_hub() 
+orpheus.fast_download_from_hub() 
 model_name = "amuvarma/zuck-3bregconvo-automodelcompat"
 model = AutoModel.from_pretrained(model_name)
 tokenizer = AutoTokenizer.from_pretrained(model_name)

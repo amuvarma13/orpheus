@@ -2,7 +2,6 @@ from huggingface_hub import snapshot_download
 from concurrent.futures import ThreadPoolExecutor
 
 
-
 class OrpheusConversation():
     def __init__(self):
         self.message_embeds = []
@@ -12,7 +11,7 @@ class OrpheusUtility():
     def __init__(self):
         pass
     def _download_from_hub(self, model_name):
-        model_path = snapshot_download(
+        snapshot_download(
             repo_id=model_name,
             allow_patterns=[
                 "config.json",
