@@ -27,7 +27,7 @@ def fast_download_from_hub(text_model_name="amuvarma/3b-zuckreg-convo", multimod
     _download_from_hub(multimodal_model_name)
 
     text_model_id= "amuvarma/3b-zuckreg-convo"
-    mm_model_id = "amuvarma/3b-zuckreg-convo-projsnactune"
+    mm_model_id = "amuvarma/zuck-3bregconvo-automodelcompat"
 
     config = OrpheusConfig(
         text_model_id=model_id,
