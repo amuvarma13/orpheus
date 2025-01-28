@@ -57,5 +57,14 @@ model = AutoModel.from_pretrained(model_name)
 tokenizer = AutoTokenizer.from_pretrained(model_name)
 ```
 
-The model can 
+### Setup Environment
 
+The model can accept both text and speech inputs and outputs both text and speech outputs. You can use this model much like any LLM found on huggingface transformers.
+
+This section will show you how to run inference on text inputs, speech inputs, or multiturn conversations with combined inputs. We use a standard format for chats with ```start_of_human```, ```end_of_human```, ```start_of_ai```, and ```end_of_ai``` tokens to guide the model to understand whose turn it is.
+
+#### Text input
+```python
+prompt = "What is an example of a healthy breakfast?"
+inputs = tokenizer.encode(prompt, return_tensors="pt")
+model.generate(**inputs, max_new_tokens=2000, repetition_penalty=1.1, temperature=0.7)
