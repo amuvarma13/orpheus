@@ -68,3 +68,4 @@ This section will show you how to run inference on text inputs, speech inputs, o
 prompt = "What is an example of a healthy breakfast?"
 inputs = tokenizer.encode(prompt, return_tensors="pt")
 model.generate(**inputs, max_new_tokens=2000, repetition_penalty=1.1, temperature=0.7)
+```
