@@ -13,6 +13,27 @@ pip install torch==2.5.1 torchaudio transformers==4.47.0 flash_attn librosa soun
 
 Colab will have appropriate versions of these packages installed.
 
-3. Import relevant modules
+3. Import relevant Orpheus modules
 
-```from transformers import AutoModel, AutoTokenizer, ModelRegistry
+Due to how colab processes modules if you are on Colab import the  correct version.
+```bash
+from mm_model_for_colab import (
+    OrpheusConfig,
+    OrpheusForConditionalGeneration,
+)
+```
+If you are running this normally import the default version
+```bash
+from mm_model import (
+    OrpheusConfig,
+    OrpheusForConditionalGeneration,
+)
+```
+
+4. Register the model type with transformers
+
+```bash
+from transformers import AutoModel, AutoTokenizer, AutoConfig
+AutoConfig.register("orpheus", OrpheusConfig)
+AutoModel.register(OrpheusConfig, OrpheusForConditionalGeneration)
+```
