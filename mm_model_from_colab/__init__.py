@@ -2,6 +2,7 @@ from .model import (
     OrpheusConfig,
     OrpheusForConditionalGeneration,
     OrpheusPreTrainedModel,
+    OrpheusUtility
 )
 from .utils import (fast_download_from_hub)
 
