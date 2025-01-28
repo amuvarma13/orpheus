@@ -1,4 +1,7 @@
-### 1. RUN INFERENCE
+# Inference
+
+#### Setup Environment
+
 1. Installation
 Clone this repository.
 ```bash
@@ -7,7 +10,7 @@ pip install snac
 ```
 
 
-2. Additional setup
+#### 2. Additional setup
 If you are running this model on Google Colab you can skip this step. Cuda version should be 12.X otherwise you will have conflicts with the version of `flash_attn`. These can be resolved by reverting to an earlier version of `flash_attn`. 
 ```bash
 pip install torch==2.5.1 torchaudio transformers==4.47.0 flash_attn librosa soundfile
@@ -16,7 +19,7 @@ pip install torch==2.5.1 torchaudio transformers==4.47.0 flash_attn librosa soun
 Colab will have appropriate versions of these packages installed.
 
 
-3. Import relevant Orpheus modules
+#### 3. Import relevant Orpheus modules
 
 Due to how colab processes modules if you are on Colab import the  correct version.
 ```python
