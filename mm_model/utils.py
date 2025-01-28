@@ -1,6 +1,8 @@
 from huggingface_hub import snapshot_download
 
 def _download_from_hub(model_name):
+
+    print("provided model name", model_name)
     model_path = snapshot_download(
         repo_id=model_name,
         allow_patterns=[
