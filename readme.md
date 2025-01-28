@@ -109,3 +109,31 @@ display(Audio(output_speech, rate=16000))
 import soundfile as sf
 sf.write("output.wav", output_speech, 16000)
 ```
+
+#### Conversational Inference (multi-turn)
+
+Multiturn Inference is the equivalent of stacking multiple single turn inferences on top of each other. We instead choose to store the existing conversation as embedding vectors, i.e. for transformers inputs_embeds. You can do this manually without too much difficulty, or use the utility function below.
+
+```python
+conversation = orpheus.initialise_conversation_model() #initialise a new conversation
+
+# format a message object
+speech_file = "input_speech.wav"
+y, sr = librosa.load(speech_file, sr=16000, mono=True)
+first_message = {
+    "format":"speech",
+    "data": y
+}
+
+conversation.append_message(first_message)
+text_response_1, waveform_response_1 = conversation.generate_response()
+
+second_message = {
+    "format": "text",
+    "data": "Where are those foods from?"
+}
+
+conversation.append_message(second_message)
+text_response_2, waveform_response_2 = conversation.generate_response()
+```
+
