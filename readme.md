@@ -36,7 +36,7 @@ from mm_model import (
 ```
 
 
-## 4. Register the model type with transformers
+# 4. Register the model type with transformers
 
 Now we register the model so that we can use it with AutoModel and AutoTokenizer.
 
