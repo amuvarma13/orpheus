@@ -16,8 +16,8 @@ from transformers.modeling_outputs import ModelOutput
 
 
 
-from components import OrpheusProjector
-from config import OrpheusConfig
+from mm_model.components import OrpheusProjector
+from mm_model.config import OrpheusConfig
 
 @dataclass
 class OrpheusCausalLMOutputWithPast(ModelOutput):
