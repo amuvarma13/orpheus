@@ -25,6 +25,7 @@ def _download_from_hub(model_name):
     )
 
 def fast_download_from_hub(text_model_name="amuvarma/3b-zuckreg-convo", multimodal_model_name="amuvarma/zuck-3bregconvo-automodelcompat"):
+    print(text_model_name, multimodal_model_name)
     _download_from_hub(text_model_name)
     _download_from_hub(multimodal_model_name)
 
