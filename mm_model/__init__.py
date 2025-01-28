@@ -3,6 +3,6 @@ from .model import (
     OrpheusForConditionalGeneration,
     OrpheusPreTrainedModel,
 )
-from .utils import (fast_download_from_hub, OrpheusUtility)
+from .utils import (OrpheusUtility)
 
 __version__ = "0.1.0"
