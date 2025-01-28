@@ -28,7 +28,7 @@ from orpheus.mm_model_from_colab.model import (
     OrpheusForConditionalGeneration,
 )
 from orpheus.mm_model_from_colab.utils import OrpheusUtility
-my_orpheus = OrpheusUtility()
+orpheus = OrpheusUtility()
 ```
 If you are running this on a normal VM import the default version
 ```python
@@ -73,12 +73,12 @@ First we can pass our text based question as follows to generate our output toke
 
 # EITHER get inputs from text
 prompt = "What is an example of a healthy breakfast?"
-inputs = my_orpheus.get_inputs_from_text(prompt)
+inputs = orpheus.get_inputs_from_text(prompt)
 
 # OR get inputs from speech
 speech_file = "input_speech.wav"
 y, sr = librosa.load(speech_file, sr=16000, mono=True)
-inputs = my_orpheus.get_inputs_from_speech(y)
+inputs = orpheus.get_inputs_from_speech(y)
 
 #generate response
 output_tokens = model.generate(
@@ -93,7 +93,7 @@ output_tokens = model.generate(
 Next we can parse our output tokens to get both text and speech responses using the helper function provided which we imported earlier shown below.
 
 ```python
-output_text, output_speech = my_orpheus.parse_output_tokens(output_tokens)
+output_text, output_speech = orpheus.parse_output_tokens(output_tokens)
 print(f"Response is {output_text}")
 print(f"Shape of speech, {output_speech.shape}")
 ```
