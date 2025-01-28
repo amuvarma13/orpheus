@@ -68,13 +68,22 @@ The model can accept both text and speech inputs and outputs both text and speec
 
 This section will show you how to run inference on text inputs, speech inputs, or multiturn conversations with combined inputs. We use a standard format for chats with ```start_of_human```, ```end_of_human```, ```start_of_ai```, and ```end_of_ai``` tokens to guide the model to understand whose turn it is.
 
-#### Text input
+#### Simple Inference (1-turn)
 
 First we can pass our text based question as follows to generate our output tokens. We use the utility function provided which adds a couple of extra tokens to indicate the structure to the model.
 
 ```python
+
+# EITHER get inputs from text
 prompt = "What is an example of a healthy breakfast?"
-inputs = tokenizer.encode(prompt, return_tensors="pt")
+inputs = get_inputs_from_text(prompt)
+
+# OR get inputs from speech
+speech_file = "input_speech.wav"
+y, sr = librosa.load(speech_file, sr=16000, mono=True)
+inputs = get_inputs_from_speech(y)
+
+#generate response
 output_tokens = model.generate(
     **inputs, 
     max_new_tokens=2000, 
@@ -83,7 +92,8 @@ output_tokens = model.generate(
     )
 ```
 
-Next we can parse our output tokens to get both text and speech responses using the helper function provided which we imported earlier.
+
+Next we can parse our output tokens to get both text and speech responses using the helper function provided which we imported earlier shown below.
 
 ```python
 output_text, output_speech = parse_output_tokens(output_tokens)
