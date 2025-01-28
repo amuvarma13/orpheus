@@ -28,13 +28,18 @@ from orpheus.mm_model_from_colab.model import (
     OrpheusForConditionalGeneration,
 )
 from orpheus.mm_model_from_colab.utils import fast_download_from_hub
+from orpheus.mm_model_from_colab.utils import parse_output_tokens
 ```
 If you are running this on a normal VM import the default version
 ```python
 from mm_model import (
     OrpheusConfig,
     OrpheusForConditionalGeneration,
-    fast_download_from_hub
+    fast_download_from_hub, 
+    format_text_input,
+    format_speech_input,
+    format_conversation,
+    parse_output_tokens
 )
 ```
 
@@ -65,7 +70,7 @@ This section will show you how to run inference on text inputs, speech inputs, o
 
 #### Text input
 
-First we can pass our text based question as follows to generate our output tokens. 
+First we can pass our text based question as follows to generate our output tokens. We use the utility function provided which adds a couple of extra tokens to indicate the structure to the model.
 
 ```python
 prompt = "What is an example of a healthy breakfast?"
@@ -78,6 +83,22 @@ output_tokens = model.generate(
     )
 ```
 
-Next we can parse our output tokens to get both text and speech responses using the helper function provided.
+Next we can parse our output tokens to get both text and speech responses using the helper function provided which we imported earlier.
 
 ```python
+output_text, output_speech = parse_output_tokens(output_tokens)
+print(f"Response is {output_text}")
+print(f"Shape of speech, {output_speech.shape}")
+```
+
+The output speech is a numpy array of samples, which we can display using iPython if we are in a notebook environment, or save to a file.
+
+``` python
+# display using iPython
+from IPython.display import Audio, display
+display(Audio(output_speech, rate=16000))
+
+#save to file
+import soundfile as sf
+sf.write("output.wav", output_speech, 16000)
+```
