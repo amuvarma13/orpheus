@@ -1,3 +1,4 @@
+### SETUP
 1. Installation
 Clone this repository.
 ```bash
@@ -35,10 +36,13 @@ from mm_model import (
 
 4. Register the model type with transformers
 
+Now we register the model so that we can use it with AutoModel and AutoTokenizer.
+
 ```python
 from transformers import AutoModel, AutoTokenizer, AutoConfig
 AutoConfig.register("orpheus", OrpheusConfig)
 AutoModel.register(OrpheusConfig, OrpheusForConditionalGeneration)
 ```
 
-5. 
+5. Compose Model
+
