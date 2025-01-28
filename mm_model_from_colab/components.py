@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from mm_model.config import OrpheusConfig
+from orpheus.mm_model_for_colab.config import OrpheusConfig
 
 class RMSNorm(nn.Module):
     def __init__(self, hidden_size, eps=1e-6):
