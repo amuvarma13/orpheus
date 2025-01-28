@@ -1,4 +1,4 @@
-### SETUP
+### RUN INFERENCE
 1. Installation
 Clone this repository.
 ```bash
@@ -24,6 +24,7 @@ from orpheus.mm_model_from_colab.model import (
     OrpheusConfig,
     OrpheusForConditionalGeneration,
 )
+from orpheus.mm_model_from_colab.utils import fast_download_from_hub
 ```
 If you are running this normally import the default version
 ```python
@@ -50,21 +51,8 @@ AutoModel.register(OrpheusConfig, OrpheusForConditionalGeneration)
 We have create helper functions you can use to compose the model faster
 
 ```python
-compose_model() # downloads relevant folders from hub in ~2-3 minutes
+fast_download_from_hub() 
+model_name = "amuvarma/zuck-3bregconvo-automodelcompat"
+model = AutoModel.from_pretrained(model_name)
+tokenizer = AutoTokenizer.from_pretrained(model_name)
 ```
-
-<!-- We now create the 
-```python
-text_model_id= "amuvarma/3b-zuckreg-convo"
-mm_model_id = "amuvarma/3b-zuckreg-convo-projsnactune"
-
-config = OrpheusConfig(
-    text_model_id=model_id,
-    audio_token_index=156939,
-    vocab_size=156939,
-)
-orpheus = AutoModel.from_pretrained(mm_model_id, config=config, new_vocab_size=False).to(dtype=torch.bfloat16).to("cuda")
-```
- -->
-
-
