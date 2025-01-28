@@ -1,8 +1,8 @@
 # Inference
 
-#### Setup Environment
+### Setup Environment
 
-1. Installation
+####1. Installation
 Clone this repository.
 ```bash
 git clone https://github.com/amuvarma13/orpheus.git
