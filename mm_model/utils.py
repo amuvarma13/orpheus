@@ -26,3 +26,7 @@ def fast_download_from_hub(text_model_name="amuvarma/3b-zuckreg-convo", multimod
     _download_from_hub(text_model_name)
     _download_from_hub(multimodal_model_name)
 
+class OrpheusUtility():
+    def __init__(self):
+        pass
+    fast_download_from_hub = fast_download_from_hub

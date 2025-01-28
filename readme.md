@@ -27,20 +27,17 @@ from orpheus.mm_model_from_colab.model import (
     OrpheusConfig,
     OrpheusForConditionalGeneration,
 )
-from orpheus.mm_model_from_colab.utils import fast_download_from_hub
-from orpheus.mm_model_from_colab.utils import parse_output_tokens
+from orpheus.mm_model_from_colab.utils import OrpheusUtility
+my_orpheus = OrpheusUtility()
 ```
 If you are running this on a normal VM import the default version
 ```python
 from mm_model import (
     OrpheusConfig,
     OrpheusForConditionalGeneration,
-    fast_download_from_hub, 
-    format_text_input,
-    format_speech_input,
-    format_conversation,
-    parse_output_tokens
+    OrpheusUtility
 )
+my_orpheus = OrpheusUtility()
 ```
 
 
@@ -56,7 +53,7 @@ AutoModel.register(OrpheusConfig, OrpheusForConditionalGeneration)
 
 5. Instantiate Model
 ```python
-fast_download_from_hub() 
+my_orpheus.fast_download_from_hub() 
 model_name = "amuvarma/zuck-3bregconvo-automodelcompat"
 model = AutoModel.from_pretrained(model_name)
 tokenizer = AutoTokenizer.from_pretrained(model_name)
@@ -76,12 +73,12 @@ First we can pass our text based question as follows to generate our output toke
 
 # EITHER get inputs from text
 prompt = "What is an example of a healthy breakfast?"
-inputs = get_inputs_from_text(prompt)
+inputs = my_orpheus.get_inputs_from_text(prompt)
 
 # OR get inputs from speech
 speech_file = "input_speech.wav"
 y, sr = librosa.load(speech_file, sr=16000, mono=True)
-inputs = get_inputs_from_speech(y)
+inputs = my_orpheus.get_inputs_from_speech(y)
 
 #generate response
 output_tokens = model.generate(
