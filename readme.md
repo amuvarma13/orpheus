@@ -93,7 +93,7 @@ output_tokens = model.generate(
 Next we can parse our output tokens to get both text and speech responses using the helper function provided which we imported earlier shown below.
 
 ```python
-output_text, output_speech = parse_output_tokens(output_tokens)
+output_text, output_speech = my_orpheus.parse_output_tokens(output_tokens)
 print(f"Response is {output_text}")
 print(f"Shape of speech, {output_speech.shape}")
 ```
