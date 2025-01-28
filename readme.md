@@ -136,4 +136,3 @@ second_message = {
 conversation.append_message(second_message)
 text_response_2, waveform_response_2 = conversation.generate_response()
 ```
-
