@@ -112,10 +112,10 @@ sf.write("output.wav", output_speech, 16000)
 
 #### Conversational Inference (multi-turn)
 
-Multiturn Inference is the equivalent of stacking multiple single turn inferences on top of each other. We instead choose to store the existing conversation as embedding vectors, i.e. for transformers inputs_embeds. You can do this manually without too much difficulty, or use the utility function below.
+Multiturn Inference is the equivalent of stacking multiple single turn inferences on top of each other. We instead choose to store the existing conversation as embedding vectors, i.e. for transformers inputs_embeds. You can do this manually without too much difficulty, or use the utility class below.
 
 ```python
-conversation = orpheus.initialise_conversation_model() #initialise a new conversation
+conversation = orpheus.initialise_conversation_model() # initialise a new conversation
 
 # format a message object
 speech_file = "input_speech.wav"
