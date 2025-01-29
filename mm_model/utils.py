@@ -75,10 +75,10 @@ class OrpheusUtility():
             self.is_model_initialised = True
 
     def get_inputs_from_text(self, text):
-        input_ids = self.tokenizer.encode(text, return_tensors="pt")
+        input_ids = self.tokenizer.encode(text, return_tensors="pt")["input_ids"]
         input_ids = torch.cat([torch.tensor([self.special_tokens["start_of_human"]]),
                               input_ids, torch.tensor([self.special_tokens["end_of_text"], self.special_tokens["end_of_human"]])], dim=1)
-        return input_ids
+        return {"input_ids": input_ids}
 
     def initialise_conversation_model(self):
         return OrpheusConversation()

@@ -53,9 +53,10 @@ AutoModel.register(OrpheusConfig, OrpheusForConditionalGeneration)
 
 5. Instantiate Model
 ```python
+import torch
 orpheus.fast_download_from_hub() 
 model_name = "amuvarma/zuck-3bregconvo-automodelcompat"
-model = AutoModel.from_pretrained(model_name)
+model = AutoModel.from_pretrained(model_name).to("cuda").to(torch.bfloat16)
 tokenizer = AutoTokenizer.from_pretrained(model_name)
 ```
 
@@ -80,6 +81,7 @@ import librosa
 speech_file = "orpheus/assets/input_speech_0.wav"
 y, sr = librosa.load(speech_file, sr=16000, mono=True)
 inputs = orpheus.get_inputs_from_speech(y)
+inputs = inputs.to("cuda")
 
 #generate response
 output_tokens = model.generate(
