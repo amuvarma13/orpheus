@@ -82,7 +82,7 @@ speech_file = "orpheus/assets/input_speech_0.wav"
 y, sr = librosa.load(speech_file, sr=16000, mono=True)
 inputs = orpheus.get_inputs(speech=y)
 
-#generate response
+#generate response ~ 85 tokens per second of audio
 output_tokens = model.generate(
     **inputs, 
     max_new_tokens=2000, 
