@@ -91,7 +91,6 @@ output_tokens = model.generate(
     )
 ```
 
-
 Next we can parse our output tokens to get both text and speech responses using the helper function provided which we imported earlier shown below.
 
 ```python
