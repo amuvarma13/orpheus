@@ -79,10 +79,10 @@ class OrpheusUtility():
         print(torch.tensor([self.special_tokens["start_of_human"]]).shape, torch.tensor([self.special_tokens["end_of_text"], 
             self.special_tokens["end_of_human"]]).shape, input_ids.shape)
         input_ids = torch.cat([
-            torch.tensor([self.special_tokens["start_of_human"]]),
+            torch.tensor([[self.special_tokens["start_of_human"]]]),
             input_ids, 
-            torch.tensor([self.special_tokens["end_of_text"], 
-            self.special_tokens["end_of_human"]])], 
+            torch.tensor([[self.special_tokens["end_of_text"], 
+            self.special_tokens["end_of_human"]]])], 
         dim=1)
         return {"input_ids": input_ids}
 
