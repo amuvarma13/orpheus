@@ -84,6 +84,7 @@ class OrpheusUtility():
             torch.tensor([[self.special_tokens["end_of_text"], 
             self.special_tokens["end_of_human"]]])], 
         dim=1)
+        input_ids = input_ids.to("cuda")
         return {"input_ids": input_ids}
 
     def initialise_conversation_model(self):

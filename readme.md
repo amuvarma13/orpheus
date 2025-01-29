@@ -81,7 +81,6 @@ import librosa
 speech_file = "orpheus/assets/input_speech_0.wav"
 y, sr = librosa.load(speech_file, sr=16000, mono=True)
 inputs = orpheus.get_inputs_from_speech(y)
-inputs = inputs.to("cuda")
 
 #generate response
 output_tokens = model.generate(
