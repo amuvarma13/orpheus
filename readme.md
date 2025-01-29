@@ -99,7 +99,7 @@ print(f"Response is {output_text}")
 print(f"Shape of speech, {output_speech.shape}")
 ```
 
-The output speech is a numpy array of samples, which we can display using iPython if we are in a notebook environment, or save to a file.
+The output speech is a numpy array of samples, which we can display using IPython if we are in a notebook environment, or save to a wav file.
 
 ``` python
 # display using iPython
