@@ -73,11 +73,8 @@ class OrpheusUtility():
             self.model = AutoModel.from_pretrained(
                 multimodal_model_id, config=self.config, new_vocab_size=False).to(dtype=torch.bfloat16).to("cuda")
             self.is_model_initialised = True
-
-    def get_inputs_from_text(self, text):
+    def _get_input_from_text(self, text):
         input_ids = self.tokenizer.encode(text, return_tensors="pt")
-        print(torch.tensor([self.special_tokens["start_of_human"]]).shape, torch.tensor([self.special_tokens["end_of_text"], 
-            self.special_tokens["end_of_human"]]).shape, input_ids.shape)
         input_ids = torch.cat([
             torch.tensor([[self.special_tokens["start_of_human"]]]),
             input_ids, 
@@ -86,6 +83,26 @@ class OrpheusUtility():
         dim=1)
         input_ids = input_ids.to("cuda")
         return {"input_ids": input_ids}
+    
+    def _get_input_from_speech(self, speech):
+        input_ids = torch.cat([
+            torch.tensor([[self.special_tokens["start_of_speech"]]]),
+            speech, 
+            torch.tensor([[self.special_tokens["end_of_speech"]]])], 
+        dim=1)
+        input_ids = input_ids.to("cuda")
+        return {"input_ids": input_ids}
+    
+    def get_inputs(self, text=None, speech=None):
+        if text is None and speech is None:
+            raise ValueError("Either text or speech must be provided")
+        if text is not None and speech is not None:
+            raise ValueError("Only one of text or speech must be provided")
+        if text is not None:
+            return self._get_input_from_text(text)
+        else:
+            return self._get_input_from_speech(speech)
+
 
     def initialise_conversation_model(self):
         return OrpheusConversation()

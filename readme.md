@@ -68,19 +68,19 @@ This section will show you how to run inference on text inputs, speech inputs, o
 
 #### Simple Inference (1-turn)
 
-First we can pass our text based question as follows to generate our output tokens. We use the utility function provided which adds a couple of extra tokens to indicate the structure to the model.
+We can pass either text (shown below), speech(shown below), or a combination of text and speech (not shown below) to the model as an input. The utility function will return `input_ids` for text and `inputs_embeds` for speech both of which are natively supported by `model.generate` from the transformers module.
 
 ```python
 
 # EITHER get inputs from text
 prompt = "Okay, so what would be an example of a healthier breakfast option then. Can you tell me?"
-inputs = orpheus.get_inputs_from_text(prompt)
+inputs = orpheus.get_inputs(text=prompt)
 
 # OR get inputs from speech
 import librosa
 speech_file = "orpheus/assets/input_speech_0.wav"
 y, sr = librosa.load(speech_file, sr=16000, mono=True)
-inputs = orpheus.get_inputs_from_speech(y)
+inputs = orpheus.get_inputs(speech=y)
 
 #generate response
 output_tokens = model.generate(
