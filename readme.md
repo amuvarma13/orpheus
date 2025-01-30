@@ -5,7 +5,7 @@
 #### 1. Installation
 Clone this repository.
 ```bash
-pip install snac canopy-orpheus
+pip install canopy-orpheus
 ```
 
 #### 2. Import relevant Orpheus modules
@@ -76,8 +76,9 @@ with torch.no_grad()
         **inputs, 
         max_new_tokens=2000, 
         repetition_penalty=1.1, 
-        temperature=0.7
-        )
+        temperature=0.7, 
+        eos_token_id=orpheus.special_tokens["end_of_ai"]
+    )
 
 output = orpheus.parse_output_tokens(output_tokens[0])
 
