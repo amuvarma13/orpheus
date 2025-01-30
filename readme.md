@@ -119,7 +119,7 @@ conversation = orpheus.initialise_conversation_model() # initialise a new conver
 
 We can now pass our inputs to the conversation class.
 
-##### Format a message object
+##### Create a message object
 We create a conversation by adding messages to it. Messages follow a similar pattern as shown below regardless if they are text or speech for the input.
 ``` python
 from orpheus.mm_model.assets import SPEECH_WAV_PATH
@@ -133,12 +133,21 @@ first_message = {
 }
 
 conversation.append_message(first_message)
+```
+
+##### Get the response
+
+Depending on how long the output of the model is, and your hardware, this can take up to 2 minutes. We are currently working on providing an implementation of realtime streaming.
+
+``` python
 text_response_1, waveform_response_1 = conversation.generate_response()
 
 second_message = {
     "format": "text",
     "data": "Where are those foods from?"
 }
+
+```
 
 conversation.append_message(second_message)
 text_response_2, waveform_response_2 = conversation.generate_response()
