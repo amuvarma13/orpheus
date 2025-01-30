@@ -14,6 +14,7 @@ class OrpheusConversation():
         self.model = parent.model
         self.special_tokens = parent.special_tokens
         self.audio_encoder = parent.audio_encoder
+        self.tokenizer = parent.tokenizer
         self.parent = parent
 
     def append_message(self, message):
