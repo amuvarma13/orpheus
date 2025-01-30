@@ -97,7 +97,6 @@ class OrpheusConversation():
         return all_embeds
     
     def _update_existing_embeds(self, output_tokens):
-        print("updating existing embeds")
         output_embeddings = self.model.get_input_embeddings()(output_tokens)
         end_of_ai_embedding = self.model.get_input_embeddings()(torch.tensor([[self.special_tokens["end_of_ai"]]]).to(self.model.device))
         if self.existing_embeds is None:
@@ -112,8 +111,7 @@ class OrpheusConversation():
             raise ValueError("Please append a message first")
         
         embeds = self._get_embeds()
-        print("successfully retrieved embeds")
-        print("my emebds", embeds.shape)
+ 
         output_tokens = self.model.generate(
             inputs_embeds=embeds, 
             max_new_tokens=5000, 
@@ -282,9 +280,7 @@ class OrpheusUtility():
             layer_2.append(code_list[7*i+4]-(4*4096))
             layer_3.append(code_list[7*i+5]-(5*4096))
             layer_3.append(code_list[7*i+6]-(6*4096))
-        print("layer 1", layer_1)
-        print("layer 2", layer_2)
-        print("layer 3", layer_3)
+
         codes = [torch.tensor(layer_1).unsqueeze(0).to("cuda"),
                 torch.tensor(layer_2).unsqueeze(0).to("cuda"),
                 torch.tensor(layer_3).unsqueeze(0).to("cuda")]
@@ -292,8 +288,7 @@ class OrpheusUtility():
         return audio_hat
     
     def _get_waveform_from_tokens (self, output_tokens):
-        print("getting waveform", output_tokens)
-        print("waveform toks", output_tokens.shape)
+
         token_to_find = self.special_tokens["start_of_speech"]
         token_to_remove = self.special_tokens["pad_token"]
 
