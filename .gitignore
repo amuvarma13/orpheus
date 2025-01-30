@@ -3,4 +3,4 @@ tests/
 pyproject.toml
 *.pyc
 src/canopy-orpheus.egg-info/
-.DS_Store
+.DS_Store/
