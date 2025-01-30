@@ -12,12 +12,7 @@ pip install snac canopy-orpheus
 
 Due to how colab processes modules if you are on Colab import the  correct version.
 ```python
-from orpheus.mm_model_from_colab.utils import OrpheusUtility
-orpheus = OrpheusUtility()
-```
-If you are running this on a normal VM import the default version
-```python
-from mm_model import OrpheusUtility
+from orpheus import OrpheusUtility
 orpheus = OrpheusUtility()
 ```
 
@@ -54,19 +49,23 @@ prompt = "Okay, so what would be an example of a healthier breakfast option then
 inputs = orpheus.get_inputs(text=prompt)
 ```
 ##### Get inputs from speech
-``` python
-from orpheus.mm_model.assets import SPEECH_WAV_PATH
 
+We provide a speech file for you to test out the model quickly as follows:
+
+``` python
+import requests
+from io import BytesIO
 import torchaudio
-waveform, sample_rate = torchaudio.load(SPEECH_WAV_PATH)
+
+response = requests.get(orpheus.get_dummy_speech_link()) 
+audio_data = BytesIO(response.content)
+waveform, sample_rate = torchaudio.load(audio_data) # replace with your own speech
 
 #for Jupyter Notebook users listen to the input_speech
 import IPython.display as ipd 
 ipd.Audio(waveform, rate=sample_rate)
 
 inputs = orpheus.get_inputs(speech=y)
-
-
 ```
 
 The `**inputs` for text are given in the form of `input_ids`, the `**inputs` for speech provided by the utility function are in the form of `inputs_embeds`, both of which are compatible with HuggingFace Transformers.
@@ -103,7 +102,7 @@ torchaudio.save("model_output.wav", output_waveform, 24000)
 
 Multiturn Inference is the equivalent of stacking multiple single turn inferences on top of each other. We instead choose to store the existing conversation as embedding vectors, i.e. for transformers inputs_embeds. You can do this manually without too much difficulty, or use the utility class below. 
 
-*NB: The provided model hasn't been finetuned as much towards multiturn dialogues as question answering. Use the appropriate training script to appropriately tune the model.*
+*NB: The provided model hasn't been finetuned as much towards multiturn dialogues as question answering. Use the appropriate training script to tune the model to your needs.*
 
 ##### Initialise a conversation 
 ``` python
