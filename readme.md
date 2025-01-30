@@ -65,7 +65,7 @@ waveform, sample_rate = torchaudio.load(audio_data) # replace with your own spee
 import IPython.display as ipd 
 ipd.Audio(waveform, rate=sample_rate)
 
-inputs = orpheus.get_inputs(speech=y)
+inputs = orpheus.get_inputs(speech=waveform)
 ```
 
 The `**inputs` for text are given in the form of `input_ids`, the `**inputs` for speech provided by the utility function are in the form of `inputs_embeds`, both of which are compatible with HuggingFace Transformers.
