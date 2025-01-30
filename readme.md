@@ -58,7 +58,7 @@ tokenizer = AutoTokenizer.from_pretrained(model_name)
 orpheus.register_auto_model(model)
 ```
 
-### Setup Environment
+### Run Inference
 
 The model can accept both text and speech inputs and outputs both text and speech outputs. You can use this model much like any LLM found on huggingface transformers.
 
