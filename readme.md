@@ -105,9 +105,13 @@ else:
 
 print(text_output)
 
-# Either save or display the output_waveform
+# In a Jupyter environment
 import IPython.display as ipd 
-ipd.Audio(waveform, rate=sample_rate)
+ipd.Audio(output_waveform, rate=sample_rate)
+
+# Else
+import torchaudio
+torchaudio.save("model_output.wav", output_waveform, 24000)
 ```
 
 Next we can parse our output tokens to get both text and speech responses using the helper function provided which we imported earlier shown below.
