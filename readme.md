@@ -166,6 +166,7 @@ ipd.Audio(output_1["speech"], rate=24000)
 ### Inference FAQS
 <details>
   <summary><strong>Q: How do I install this project?</strong></summary>
+  
   <p>A: You can install this project by running:</p>
 
   ```sh
