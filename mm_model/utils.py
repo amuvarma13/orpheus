@@ -78,7 +78,7 @@ class OrpheusUtility():
 
     def _initialise_model(self, multimodal_model_id="amuvarma/zuck-3bregconvo-automodelcompat"):
         if not self._is_model_downloaded:
-            self.fast_download_from_hub()
+            self.initialise()
             self._is_model_downloaded = True
             print("Downloading model from hub...")
 
