@@ -32,8 +32,8 @@ class OrpheusUtility():
             "end_of_ai": 128262,
             "pad_token": 128263
         }
-        self.is_model_initialised = False
-        self.is_model_downloaded = False
+        self._is_model_initialised = False
+        self._is_model_downloaded = False
         self.audio_encoder = whisper.load_model("small")
         pass
 
@@ -58,7 +58,6 @@ class OrpheusUtility():
                 "tokenizer.*"
             ]
         )
-        self.is_model_downloaded = True
 
     def initialise(self, text_model_name="amuvarma/3b-zuckreg-convo", multimodal_model_name="amuvarma/zuck-3bregconvo-automodelcompat"):
         with ThreadPoolExecutor(max_workers=2) as executor:
@@ -68,6 +67,7 @@ class OrpheusUtility():
                 self._download_from_hub, multimodal_model_name)
             future_text.result()
             future_multimodal.result()
+        self._is_model_downloaded = True
 
         AutoConfig.register("orpheus", OrpheusConfig)
         AutoModel.register(OrpheusConfig, OrpheusForConditionalGeneration)
@@ -77,14 +77,15 @@ class OrpheusUtility():
 
 
     def _initialise_model(self, multimodal_model_id="amuvarma/zuck-3bregconvo-automodelcompat"):
-        if not self.is_model_downloaded:
+        if not self._is_model_downloaded:
             self.fast_download_from_hub()
+            self._is_model_downloaded = True
             print("Downloading model from hub...")
 
-        if not self.is_model_initialised:
+        if not self._is_model_initialised:
             self.model = AutoModel.from_pretrained(
                 multimodal_model_id, config=self.config, new_vocab_size=False).to(dtype=torch.bfloat16).to("cuda")
-            self.is_model_initialised = True
+            self._is_model_initialised = True
 
 
     def _get_input_from_text(self, text):
@@ -117,8 +118,8 @@ class OrpheusUtility():
     
     def _get_input_from_speech(self, speech):
 
-        if self.is_model_initialised == False:
-            self._initialise_model()
+
+        self._initialise_model()
 
         audio_features = speech.to(dtype=torch.bfloat16).to("cuda")
         audio_embeds = self.model.multi_modal_projector(audio_features)
