@@ -4,10 +4,8 @@ from transformers import AutoTokenizer, AutoModel
 import torch
 import whisper
 from transformers import AutoModel, AutoConfig
-
 from .model import OrpheusConfig, OrpheusForConditionalGeneration
-
-
+from snac import SNAC
 
 
 class OrpheusConversation():
@@ -35,6 +33,11 @@ class OrpheusUtility():
         self._is_model_initialised = False
         self._is_model_downloaded = False
         self.audio_encoder = whisper.load_model("small")
+
+        snac_model = SNAC.from_pretrained("hubertsiuzdak/snac_24khz")
+        snac_model = snac_model.to("cuda")
+        self.snac_model = snac_model
+
         pass
 
     def _verify_initialisation(self):
@@ -139,29 +142,85 @@ class OrpheusUtility():
         else:
             return self._get_input_from_speech(speech)
         
-
-    def _extract_tokens_after_value(tensor, target_start=128257, target_end=128258):
-        #check there is a target_start in the tensor
-        if target_start not in tensor:
-            return None
-        tensor_list = tensor.tolist()
-        start_index = tensor_list.index(target_start)
-        try:
-            end_index = tensor_list.index(target_end, start_index)
-            return tensor_list[start_index + 1:end_index]
-        except ValueError:
-            return tensor_list[start_index + 1:]
     
-    def _get_speech_waveforms(self, output_tokens):
-        start_index = output_tokens.index(self.special_tokens["start_of_speech"])
-        end_index = output_tokens.index(self.special_tokens["end_of_speech"])
-        speech_tokens = output_tokens[start_index + 1:end_index]
-        speech_waveform = torch.tensor(speech_tokens)
-        return speech_waveform
+    def _redistribute_codes(self, code_list):
+        layer_1 = []
+        layer_2 = []
+        layer_3 = []
+        for i in range((len(code_list)+1)//7):
+            layer_1.append(code_list[7*i])
+            layer_2.append(code_list[7*i+1]-4096)
+            layer_3.append(code_list[7*i+2]-(2*4096))
+            layer_3.append(code_list[7*i+3]-(3*4096))
+            layer_2.append(code_list[7*i+4]-(4*4096))
+            layer_3.append(code_list[7*i+5]-(5*4096))
+            layer_3.append(code_list[7*i+6]-(6*4096))
 
-    # def parse_output_tokens(self, output_tokens):
+        codes = [torch.tensor(layer_1).unsqueeze(0).to("cuda"),
+                torch.tensor(layer_2).unsqueeze(0).to("cuda"),
+                torch.tensor(layer_3).unsqueeze(0).to("cuda")]
+        audio_hat = self.snac_model.decode(codes)
+        return audio_hat
+    
+    def _get_waveform_from_tokens (self, output_tokens):
+
+        token_to_find = self.special_tokens["start_of_speech"]
+        token_to_remove = self.special_tokens["pad_token"]
+
+        if token_to_find not in output_tokens:
+            return None
         
+        token_indices = (output_tokens == token_to_find).nonzero(as_tuple=True)
 
+        if len(token_indices[1]) > 0:
+            last_occurrence_idx = token_indices[1][-1].item()
+            cropped_tensor = output_tokens[:, last_occurrence_idx+1:]
+        else:
+            cropped_tensor = output_tokens
+
+        mask = cropped_tensor != token_to_remove
+        cropped_tensor = cropped_tensor[mask].view(cropped_tensor.size(0), -1)
+
+        processed_tensor = cropped_tensor - 128266
+        original_shape = processed_tensor.shape
+        new_dim_1 = (original_shape[1] // 7) * 7
+        processed_tensor = processed_tensor[:, :new_dim_1]
+        code_list = processed_tensor[0].tolist()
+        samples = self._redistribute_codes(code_list)
+        waveform = samples.detach().squeeze().to("cpu").numpy()
+        return waveform
+        
+    def _get_text_from_tokens(self, output_tokens):
+        token_to_find = self.special_tokens["start_of_ai"]
+        end_token = self.special_tokens["end_of_text"]
+
+        if token_to_find not in output_tokens:
+            return None
+
+        token_indices = (output_tokens == token_to_find).nonzero(as_tuple=True)
+        
+        if len(token_indices[1]) > 0:
+            start_idx = token_indices[1][-1].item() + 1
+            end_indices = (output_tokens[:, start_idx:] == end_token).nonzero(as_tuple=True)
+            
+            if len(end_indices[1]) > 0:
+                end_idx = start_idx + end_indices[1][0].item()
+                text_tokens = output_tokens[:, start_idx:end_idx]
+                decoded_text = self.tokenizer.decode(text_tokens[0])
+                return decoded_text
+                
+        return None
+
+
+    def parse_output_tokens (self, output_tokens):
+        waveform = self._get_waveform_from_tokens(output_tokens)
+        text = self._get_text_from_tokens(output_tokens)
+        response_dict = {"waveform": waveform, "text": text}
+        if waveform is None:
+            response_dict["waveform"] = "No tokens generated to output speech, please increase number of tokens generated"
+        if text is None:
+            response_dict["text"] = "No tokens generated to output text. There may be an error, or the number of tokens this model is set to generate is too low."
+        return waveform, text
 
 
     def initialise_conversation_model(self):
