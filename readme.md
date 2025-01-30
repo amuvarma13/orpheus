@@ -117,14 +117,6 @@ import torchaudio
 torchaudio.save("model_output.wav", output_waveform, 24000)
 ```
 
-Next we can parse our output tokens to get both text and speech responses using the helper function provided which we imported earlier shown below.
-
-```python
-output_text, output_speech = orpheus.parse_output_tokens(output_tokens)
-print(f"Response is {output_text}")
-print(f"Shape of speech, {output_speech.shape}")
-```
-
 #### Conversational Inference (multi-turn)
 
 Multiturn Inference is the equivalent of stacking multiple single turn inferences on top of each other. We instead choose to store the existing conversation as embedding vectors, i.e. for transformers inputs_embeds. You can do this manually without too much difficulty, or use the utility class below.
