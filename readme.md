@@ -64,7 +64,7 @@ ipd.Audio(waveform, rate=sample_rate)
 inputs = orpheus.get_inputs(speech=waveform)
 ```
 
-##### Call `model.generate`
+##### Call model.generate
 The `**inputs` for text are given in the form of `input_ids`, the `**inputs` for speech provided by the utility function are in the form of `inputs_embeds`, both of which are compatible with HuggingFace Transformers.
 
 ``` python
