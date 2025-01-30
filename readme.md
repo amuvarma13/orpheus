@@ -142,16 +142,19 @@ Depending on how long the output of the model is, and your hardware, this can ta
 ``` python
 text_response_1, waveform_response_1 = conversation.generate_response()
 
-second_message = {
-    "format": "text",
-    "data": "Where are those foods from?"
-}
+print(text_response_1)
+ipd.Audio(waveform_response_1, rate=sample_rate)
 ```
 ##### Multiturn conversation
 
 You can now extend the conversation and all future dialogues will have context of what has been said.
 
 ``` python
+second_message = {
+    "format": "text",
+    "data": "Where are those foods from?"
+}
+
 conversation.append_message(second_message)
 text_response_2, waveform_response_2 = conversation.generate_response()
 ```
