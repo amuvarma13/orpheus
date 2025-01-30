@@ -52,7 +52,7 @@ class OrpheusConversation():
     def _get_text_embeds(self):
         text = self.current_message["data"]
         input_dict = self.model.get_inputs(text=text)
-        self.model.get_input_embeddings().to("cuda")
+        
         return output["last_hidden_state"]
 
     def generate_response(self):
@@ -64,7 +64,6 @@ class OrpheusUtility():
                  text_model_name="amuvarma/3b-zuckreg-convo",
                  multimodal_model_name="amuvarma/zuck-3bregconvo-automodelcompat"
                  ):
-        self.tokenizer = AutoTokenizer.from_pretrained(multimodal_model_name)
         self.special_tokens = {
             "start_of_text": 128000,
             "end_of_text": 128009,
@@ -129,8 +128,13 @@ class OrpheusUtility():
 
         print("Downloads complete!")
 
-    def register_auto_model(self, model):
+    def register_auto_model(self, model, tokenizer):
+
+        assert model is not None, "You must provide a model"
+        assert tokenizer is not None, "You must provide a tokenizer"
+
         self.model = model
+        self.tokenizer = tokenizer
         self._is_model_initialised = True
 
 

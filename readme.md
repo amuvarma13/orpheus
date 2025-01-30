@@ -45,7 +45,7 @@ model_name = "amuvarma/zuck-3bregconvo-automodelcompat"
 model = AutoModel.from_pretrained(model_name).to("cuda").to(torch.bfloat16)
 tokenizer = AutoTokenizer.from_pretrained(model_name)
 
-orpheus.register_auto_model(model)
+orpheus.register_auto_model(model=model, tokenizer=tokenizer)
 ```
 
 ### Run Inference
