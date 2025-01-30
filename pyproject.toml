@@ -1,6 +1,6 @@
 [project]
 name = "canopy-orpheus"
-version = "0.0.9"
+version = "0.0.10"
 authors = [
   { name="Canopy Labs", email="amu@canopylabs.ai" },
 ]

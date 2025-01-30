@@ -116,8 +116,8 @@ class OrpheusConversation():
         output_tokens = self.model.generate(
             inputs_embeds=embeds, 
             max_new_tokens=5000, 
-            temperature=0.7,
-            repetition_penalty=1.1, 
+            temperature=0.9,
+            repetition_penalty=1.2, 
             eos_token_id=self.special_tokens["end_of_speech"],
             )
         
@@ -149,7 +149,6 @@ class OrpheusUtility():
             "end_of_ai": 128262,
             "pad_token": 128263
         }
-        self.dummy_speech_link = "https://firebasestorage.googleapis.com/v0/b/speechsdk.appspot.com/o/speech.wav?alt=media&token=79d7119b-ab42-4652-b045-ad9a0578ec97"
         self._is_model_initialised = False
         self._is_model_downloaded = False
         self.audio_encoder = whisper.load_model("small")
@@ -352,16 +351,16 @@ class OrpheusUtility():
         waveform = self._get_waveform_from_tokens(output_tokens)
         print(waveform)
         text = self._get_text_from_tokens(output_tokens)
-        response_dict = {"speech": waveform, "text": text}
-        response_dict["message"] = None
+        response_dict = {"waveform": waveform, "text": text}
         if waveform is None:
-            response_dict["message"] = "No tokens generated to output speech, please increase number of tokens generated"
+            response_dict["waveform"] = "No tokens generated to output speech, please increase number of tokens generated"
         if text is None:
-            response_dict["message"] = "No tokens generated to output text. There may be an error, or the number of tokens this model is set to generate is too low."
+            response_dict["text"] = "No tokens generated to output text. There may be an error, or the number of tokens this model is set to generate is too low."
         return response_dict
 
 
     def initialise_conversation_model(self):
         return OrpheusConversation(self)
     
-
+    def get_dummy_speech_link(self, speech_path="https://firebasestorage.googleapis.com/v0/b/speechsdk.appspot.com/o/speech.wav?alt=media&token=79d7119b-ab42-4652-b045-ad9a0578ec97"):
+        return speech_path
