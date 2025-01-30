@@ -325,7 +325,7 @@ class OrpheusUtility():
             response_dict["waveform"] = "No tokens generated to output speech, please increase number of tokens generated"
         if text is None:
             response_dict["text"] = "No tokens generated to output text. There may be an error, or the number of tokens this model is set to generate is too low."
-        return waveform, text
+        return response_dict
 
 
     def initialise_conversation_model(self):
