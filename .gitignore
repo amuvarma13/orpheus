@@ -1,0 +1,5 @@
+dist/
+tests/
+pyproject.toml
+*.pyc
+src/canopy-orpheus.egg-info/
