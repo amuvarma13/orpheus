@@ -115,7 +115,7 @@ class OrpheusConversation():
             raise ValueError("Please append a message first")
         
         embeds = self._get_embeds()
-        output = self.model.generate(input_embeds=embeds)
+        output = self.model.generate(inputs_embeds=embeds)
         return output
         
 
