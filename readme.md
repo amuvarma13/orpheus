@@ -122,8 +122,11 @@ We can now pass our inputs to the conversation class.
 ##### Format your dialogue data
 ``` python
 # format a message object
-speech_file = "input_speech_0.wav"
-y, sr = librosa.load(speech_file, sr=16000, mono=True)
+from orpheus.mm_model.assets import SPEECH_WAV_PATH
+
+import torchaudio
+waveform, sample_rate = torchaudio.load(SPEECH_WAV_PATH)
+
 first_message = {
     "format":"speech",
     "data": y
