@@ -141,10 +141,10 @@ conversation.append_message(first_message)
 Depending on how long the output of the model is, and your hardware, this can take up to 2 minutes. We are currently working on providing an implementation of realtime streaming.
 
 ``` python
-text_response_1, waveform_response_1 = conversation.generate_response()
+output = conversation.generate_response()
 
-print(text_response_1)
-ipd.Audio(waveform_response_1, rate=sample_rate)
+print(output["text"])
+ipd.Audio(output["waveform"], rate=sample_rate)
 ```
 ##### Multiturn conversation
 
