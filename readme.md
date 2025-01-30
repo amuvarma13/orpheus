@@ -119,9 +119,9 @@ conversation = orpheus.initialise_conversation_model() # initialise a new conver
 
 We can now pass our inputs to the conversation class.
 
-##### Format your dialogue data
+##### Format a message object
+We create a conversation by adding messages to it. Messages follow a similar pattern as shown below regardless if they are text or speech for the input.
 ``` python
-# format a message object
 from orpheus.mm_model.assets import SPEECH_WAV_PATH
 
 import torchaudio
