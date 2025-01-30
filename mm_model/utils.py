@@ -348,6 +348,7 @@ class OrpheusUtility():
 
     def parse_output_tokens (self, output_tokens):
         waveform = self._get_waveform_from_tokens(output_tokens)
+        print(waveform)
         text = self._get_text_from_tokens(output_tokens)
         response_dict = {"waveform": waveform, "text": text}
         if waveform is None:
