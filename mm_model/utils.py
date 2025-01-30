@@ -3,6 +3,9 @@ from concurrent.futures import ThreadPoolExecutor
 from transformers import AutoTokenizer, AutoModel
 import torch
 import whisper
+from transformers import AutoModel, AutoConfig
+
+from .model import OrpheusConfig, OrpheusForConditionalGeneration
 
 
 
@@ -66,6 +69,10 @@ class OrpheusUtility():
             future_text.result()
             future_multimodal.result()
 
+        AutoConfig.register("orpheus", OrpheusConfig)
+        AutoModel.register(OrpheusConfig, OrpheusForConditionalGeneration)
+
+
         print("Downloads complete!")
 
 
@@ -78,6 +85,8 @@ class OrpheusUtility():
             self.model = AutoModel.from_pretrained(
                 multimodal_model_id, config=self.config, new_vocab_size=False).to(dtype=torch.bfloat16).to("cuda")
             self.is_model_initialised = True
+
+
     def _get_input_from_text(self, text):
         input_ids = self.tokenizer.encode(text, return_tensors="pt")
         input_ids = torch.cat([
@@ -88,6 +97,8 @@ class OrpheusUtility():
         dim=1)
         input_ids = input_ids.to("cuda")
         return {"input_ids": input_ids}
+    
+
     def _process_audio_tensor(self, audio, sample_rate=16000):
         audio = audio.to(torch.float32)
         duration_ms = (len(audio) / sample_rate) * 1000
