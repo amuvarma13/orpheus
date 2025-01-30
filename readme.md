@@ -48,7 +48,9 @@ Now we register the model so that we can use it with AutoModel and AutoTokenizer
 ```python
 import torch
 from transformers import AutoModel, AutoTokenizer
+
 orpheus.initialise()
+
 model_name = "amuvarma/zuck-3bregconvo-automodelcompat"
 model = AutoModel.from_pretrained(model_name).to("cuda").to(torch.bfloat16)
 tokenizer = AutoTokenizer.from_pretrained(model_name)
