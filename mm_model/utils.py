@@ -37,6 +37,11 @@ class OrpheusUtility():
         self.audio_encoder = whisper.load_model("small")
         pass
 
+    def _verify_initialisation(self):
+        if not self._is_model_initialised:
+            raise ValueError("Please ensure you have registered the model with the OrpheusUtility class using orpheus.register_auto_model(model)")
+        return self._is_model_initialised
+
     def _download_from_hub(self, model_name):
         snapshot_download(
             repo_id=model_name,
@@ -75,16 +80,9 @@ class OrpheusUtility():
 
         print("Downloads complete!")
 
-
-    def _initialise_model(self, multimodal_model_id="amuvarma/zuck-3bregconvo-automodelcompat"):
-        if not self._is_model_downloaded:
-            self.initialise()
-            self._is_model_downloaded = True
-            print("Downloading model from hub...")
-
-        if not self._is_model_initialised:
-            self.model = AutoModel.from_pretrained(multimodal_model_id).to(dtype=torch.bfloat16).to("cuda")
-            self._is_model_initialised = True
+    def register_auto_model(self, model):
+        self.model = model
+        self._is_model_initialised = True
 
 
     def _get_input_from_text(self, text):
@@ -116,10 +114,9 @@ class OrpheusUtility():
         return audio_feature
     
     def _get_input_from_speech(self, speech):
-        self._initialise_model()
+        self._verify_initialisation()
         audio_features = self._get_audio_features(speech)
         audio_features = audio_features.to(dtype=torch.bfloat16).to("cuda")
-        # audio_features = audio_features.unsqueeze(0)
         audio_embeds = self.model.multi_modal_projector(audio_features)
         start_token = torch.tensor([[self.special_tokens["start_of_human"]]], dtype=torch.int64)
         end_tokens = torch.tensor([[self.special_tokens["end_of_text"], self.special_tokens["end_of_human"], self.special_tokens["start_of_ai"]]], dtype=torch.int64)
@@ -136,7 +133,7 @@ class OrpheusUtility():
         all_embeds = torch.cat([start_embeds, audio_embeds, end_embeds], dim=1)
         return {"inputs_embeds": all_embeds}
     
-    def get_inputs(self, text=None, speech=None, model=None):
+    def get_inputs(self, text=None, speech=None):
         if text is None and speech is None:
             raise ValueError("Either text or speech must be provided")
         if text is not None and speech is not None:
