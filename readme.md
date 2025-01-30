@@ -119,7 +119,7 @@ conversation = orpheus.initialise_conversation_model() # initialise a new conver
 
 We can now pass our inputs to the conversation class.
 
-##### Format your dialogue data into the following format
+##### Format your dialogue data
 ``` python
 # format a message object
 speech_file = "input_speech_0.wav"
