@@ -71,7 +71,7 @@ inputs = orpheus.get_inputs(speech=waveform)
 The `**inputs` for text are given in the form of `input_ids`, the `**inputs` for speech provided by the utility function are in the form of `inputs_embeds`, both of which are compatible with HuggingFace Transformers.
 
 ``` python
-with torch.no_grad()
+with torch.no_grad():
     output_tokens = model.generate(
         **inputs, 
         max_new_tokens=2000, 
@@ -80,10 +80,10 @@ with torch.no_grad()
         eos_token_id=orpheus.special_tokens["end_of_ai"]
     )
 
-output = orpheus.parse_output_tokens(output_tokens[0])
+output = orpheus.parse_output_tokens(output_tokens)
 
-if(message in output):
-    print(f"There was an error: {output["message"]}")
+if output["message"] is not None:
+    print(f"There was an error: {output['message']}")
 else:
     text_output = output["text"]
     output_waveform = output["speech"]
@@ -92,11 +92,11 @@ print(text_output)
 
 # use IPython in a Jupyter environment 
 import IPython.display as ipd 
-ipd.Audio(output_waveform, rate=sample_rate)
+ipd.Audio(output_waveform, rate=24000)
 
 # or save/manipulate the output
-import torchaudio
-torchaudio.save("model_output.wav", output_waveform, 24000)
+from scipy.io import wavfile
+wavfile.write("output.wav", 24000, output_waveform)
 ```
 
 #### Conversational Inference (multi-turn)
