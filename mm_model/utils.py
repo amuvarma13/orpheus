@@ -48,6 +48,7 @@ class OrpheusConversation():
             return self._get_speech_embeds()
         
     def _get_text_embeds(self):
+        print("getting text embeds")
         text = self.current_message["data"]
         text_tokens = self.tokenizer(text, return_tensors="pt").input_ids
         text_tokens = text_tokens.to(self.model.device)
@@ -96,11 +97,11 @@ class OrpheusConversation():
         return all_embeds
     
     def _update_existing_embeds(self, output_tokens):
+        print("updating existing embeds")
         output_embeddings = self.model.get_input_embeddings()(output_tokens)
         end_of_ai_embedding = self.model.get_input_embeddings()(torch.tensor([[self.special_tokens["end_of_ai"]]]).to(self.model.device))
         if self.existing_embeds is None:
             self.existing_embeds = torch.cat([output_embeddings, end_of_ai_embedding], dim=1).to("cpu")
-            return
         else:
             all_embeddings = torch.cat([self.existing_embeds, output_embeddings, end_of_ai_embedding], dim=1).to("cpu")
             self.existing_embeds = all_embeddings
@@ -111,6 +112,7 @@ class OrpheusConversation():
             raise ValueError("Please append a message first")
         
         embeds = self._get_embeds()
+        print("successfully retrieved embeds")
         output_tokens = self.model.generate(
             inputs_embeds=embeds, 
             max_new_tokens=5000, 
@@ -120,6 +122,8 @@ class OrpheusConversation():
             )
         
         self._update_existing_embeds(output_tokens)
+
+        print("successffully updated existing embeds")
 
         output = self.parent.parse_output_tokens(output_tokens)
         return output
