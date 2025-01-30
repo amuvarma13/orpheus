@@ -144,7 +144,7 @@ Depending on how long the output of the model is, and your hardware, this can ta
 output = conversation.generate_response()
 
 print(output["text"])
-ipd.Audio(output["waveform"], rate=sample_rate)
+ipd.Audio(output["waveform"], rate=24000)
 ```
 ##### Multiturn conversation
 
