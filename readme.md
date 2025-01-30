@@ -193,5 +193,7 @@ ipd.Audio(output_1["speech"], rate=24000)
   <p></p>
   <p>While we have extended the training of Llama-3b on large amounts of speech and text data, there are limitations. The model is not good at niche words, numbers in numerical form, and proper nouns. It is also a very small model so it lacks textual based reasoning and knowledge (especially after it forgets some of this when trained on speech).
   
-  Since this model is small it is cheaper to finetune and we provide very simple scripts to add a high degree of customisability to the voice, emotions, intonations, personality, and knowledge of the model.</p>
+  Since this model is small it is cheaper to finetune and we provide very simple scripts to add a high degree of customisability to the voice, emotions, intonations, personality, and knowledge of the model.
+  
+  We will also soon release a bigger, more extensively trained model that doesn't have any of the above issues.</p>
 </details>
