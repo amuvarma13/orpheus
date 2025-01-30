@@ -55,7 +55,7 @@ class OrpheusConversation():
 
         text_embeds = text_embeds.to(dtype=torch.bfloat16).to(self.model.device)
         start_token = torch.tensor([[128259]], dtype=torch.int64)
-        end_tokens = torch.tensor([[128009, 128260, 128261]], dtype=torch.int64)
+        end_tokens = torch.tensor([[128009, 128260]], dtype=torch.int64)
 
         start_token = start_token.to(self.model.device)
         end_tokens = end_tokens.to(self.model.device)
