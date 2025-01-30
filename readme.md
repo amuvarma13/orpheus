@@ -165,7 +165,7 @@ ipd.Audio(output_1["speech"], rate=24000)
 
 ### Inference FAQS
 <details>
-  <summary><strong>Why is the speech is getting cut off?</strong></summary>
+  <summary><strong>Why is the speech getting cut off?</strong></summary>
   <p></p>
   <p>The model generates speech autogressively, which means that if the model terminates generation because it has hit the max_tokens criterion it will not finish generating the entire speech sample. You need to increase max_tokens to get the full generation.</p>
 </details>
