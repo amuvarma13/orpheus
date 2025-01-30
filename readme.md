@@ -72,22 +72,6 @@ We can pass either text (shown below), speech(shown below), or a combination of 
 # EITHER get inputs from text
 prompt = "Okay, so what would be an example of a healthier breakfast option then. Can you tell me?"
 inputs = orpheus.get_inputs(text=prompt)
-output_tokens = model.generate(
-    **inputs, 
-    max_new_tokens=2000, 
-    repetition_penalty=1.1, 
-    temperature=0.7
-    )
-
-output = orpheus.parse_output_tokens(output_tokens[0])
-if(message in output):
-    print(f"There was an error: {output["message"]}")
-else:
-    text_output = output["text"]
-    speech_output = output["speech"]
-
-print(text_output)
-
 ```
 
 # OR get inputs from speech
@@ -100,17 +84,31 @@ inputs = orpheus.get_inputs(speech=y)
 #for Jupyter Notebook users listen to the input_speech
 import IPython.display as ipd 
 ipd.Audio(waveform, rate=sample_rate)
+```
 
+#generate response ~ 85 tokens per second of audio
+
+``` python
 output_tokens = model.generate(
     **inputs, 
     max_new_tokens=2000, 
     repetition_penalty=1.1, 
     temperature=0.7
     )
+
+output = orpheus.parse_output_tokens(output_tokens[0])
+if(message in output):
+    print(f"There was an error: {output["message"]}")
+else:
+    text_output = output["text"]
+    output_waveform = output["speech"]
+
+print(text_output)
+
+# Either save or display the output_waveform
+import IPython.display as ipd 
+ipd.Audio(waveform, rate=sample_rate)
 ```
-
-#generate response ~ 85 tokens per second of audio
-
 
 Next we can parse our output tokens to get both text and speech responses using the helper function provided which we imported earlier shown below.
 

@@ -163,7 +163,6 @@ class OrpheusUtility():
         return audio_hat
     
     def _get_waveform_from_tokens (self, output_tokens):
-
         token_to_find = self.special_tokens["start_of_speech"]
         token_to_remove = self.special_tokens["pad_token"]
 
@@ -171,7 +170,7 @@ class OrpheusUtility():
             return None
         
         token_indices = (output_tokens == token_to_find).nonzero(as_tuple=True)
-        print("token_indices", token_indices)
+        
         if len(token_indices[-1]) > 0:
             last_occurrence_idx = token_indices[1][-1].item()
             cropped_tensor = output_tokens[:, last_occurrence_idx+1:]
