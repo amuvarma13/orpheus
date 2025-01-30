@@ -119,7 +119,7 @@ class OrpheusConversation():
             max_new_tokens=5000, 
             temperature=0.9,
             repetition_penalty=1.2, 
-            eos_token_id=self.special_tokens["end_of_ai"],
+            eos_token_id=self.special_tokens["end_of_speech"],
             )
         
         self._update_existing_embeds(output_tokens)
