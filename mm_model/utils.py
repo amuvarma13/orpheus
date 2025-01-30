@@ -83,8 +83,7 @@ class OrpheusUtility():
             print("Downloading model from hub...")
 
         if not self._is_model_initialised:
-            self.model = AutoModel.from_pretrained(
-                multimodal_model_id, config=self.config, new_vocab_size=False).to(dtype=torch.bfloat16).to("cuda")
+            self.model = AutoModel.from_pretrained(multimodal_model_id).to(dtype=torch.bfloat16).to("cuda")
             self._is_model_initialised = True
 
 
