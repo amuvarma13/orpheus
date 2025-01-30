@@ -146,6 +146,12 @@ second_message = {
     "format": "text",
     "data": "Where are those foods from?"
 }
+```
+##### Multiturn conversation
+
+You can now extend the conversation and all future dialogues will have context of what has been said.
+
+``` python
 conversation.append_message(second_message)
 text_response_2, waveform_response_2 = conversation.generate_response()
 ```
