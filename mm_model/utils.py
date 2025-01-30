@@ -1,6 +1,5 @@
 from huggingface_hub import snapshot_download
 from concurrent.futures import ThreadPoolExecutor
-from transformers import AutoTokenizer, AutoModel
 import torch
 import whisper
 from transformers import AutoModel, AutoConfig
@@ -10,7 +9,7 @@ from snac import SNAC
 
 class OrpheusConversation():
     def __init__(self, model, special_tokens):
-        self.message_embeds = []
+        self.existing_embeds = None
         self.current_message = None
         self.model = model
         self.special_tokens = special_tokens
@@ -39,24 +38,86 @@ class OrpheusConversation():
             if type(message["data"]) != str:
                 raise ValueError("Text data must be a string")
 
-    def _get_message_embeds(self):
-        if self.current_message is None:
-            raise ValueError("Please append a message first")
-        
+    def _get_embeds(self):
         if self.current_message["format"] == "text":
             return self._get_text_embeds()
-    
-        if self.current_message["format"] == "speech":
+        else:
             return self._get_speech_embeds()
         
     def _get_text_embeds(self):
         text = self.current_message["data"]
-        input_dict = self.model.get_inputs(text=text)
-        
-        return output["last_hidden_state"]
+        text_tokens = self.tokenizer(text, return_tensors="pt").input_ids
+        text_tokens = text_tokens.to(self.model.device)
+        text_embeds = self.model.get_input_embeddings()(text_tokens)
 
+        text_embeds = text_embeds.to(dtype=torch.bfloat16).to(self.model.device)
+        start_token = torch.tensor([[128259]], dtype=torch.int64)
+        end_tokens = torch.tensor([[128009, 128260, 128261]], dtype=torch.int64)
+
+        start_token = start_token.to(self.model.device)
+        end_tokens = end_tokens.to(self.model.device)
+
+        start_embeds = self.model.get_input_embeddings()(start_token)
+        end_embeds = self.model.get_input_embeddings()(end_tokens)
+
+        start_embeds = start_embeds.to(dtype=torch.bfloat16)
+        end_embeds = end_embeds.to(dtype=torch.bfloat16)
+
+        if self.existing_embeds is not None:
+            all_embeds = torch.cat([self.existing_embeds, start_embeds, text_embeds, end_embeds], dim=1)
+        else:
+            all_embeds = torch.cat([start_embeds, text_embeds, end_embeds], dim=1)
+        return all_embeds
+    
+    def _process_audio_tensor(self, audio, sample_rate=16000):
+        audio = audio.to(torch.float32)
+        duration_ms = (len(audio) / sample_rate) * 1000
+        audio = whisper.pad_or_trim(audio)
+        mel = whisper.log_mel_spectrogram(audio)
+        return mel, int(duration_ms / 20) + 1
+    
+    def _get_audio_features(self, speech):
+        audio_input = speech.squeeze(0)
+        mel, length = self._process_audio_tensor(audio_input)
+        mel = mel.to("cuda")
+        mel = mel.unsqueeze(0)
+        audio_feature = self.audio_encoder.embed_audio(mel)[0][:length]
+        audio_feature = audio_feature.unsqueeze(0)
+        return audio_feature
+    
+    def _get_speech_embeds(self):
+        audio_features = self._get_audio_features(self.current_message["data"])
+        audio_features = audio_features.to(dtype=torch.bfloat16).to(self.model.device)
+        audio_embeds = self.model.multi_modal_projector(audio_features)
+        start_token = torch.tensor([[128259]], dtype=torch.int64)
+        end_tokens = torch.tensor([[128009, 128260, 128261]], dtype=torch.int64)
+        final_tokens = torch.tensor([[128262]], dtype=torch.int64)
+        start_token = start_token.to(self.model.device)
+        end_tokens = end_tokens.to(self.model.device)
+        final_tokens = final_tokens.to(self.model.device)
+        start_embeds = self.model.get_input_embeddings()(start_token)
+        end_embeds = self.model.get_input_embeddings()(end_tokens)
+        final_embeds = self.model.get_input_embeddings()(final_tokens)
+        start_embeds = start_embeds.to(dtype=torch.bfloat16)
+        end_embeds = end_embeds.to(dtype=torch.bfloat16)
+        final_embeds = final_embeds.to(dtype=torch.bfloat16)
+        if self.existing_embeds is not None:
+            all_embeds = torch.cat([self.existing_embeds, start_embeds, audio_embeds, end_embeds], dim=1)
+        else:
+            all_embeds = torch.cat([start_embeds, audio_embeds, end_embeds], dim=1)
+
+        return all_embeds
+
+    
     def generate_response(self):
-        pass
+        if self.current_message is None:
+            raise ValueError("Please append a message first")
+        
+        embeds = self._get_embeds()
+        output = self.model.generate(input_embeds=embeds)
+        return output
+        
+
 
 
 class OrpheusUtility():
@@ -187,6 +248,8 @@ class OrpheusUtility():
             raise ValueError("Either text or speech must be provided")
         if text is not None and speech is not None:
             raise ValueError("Only one of text or speech must be provided")
+        
+
         if text is not None:
             return self._get_input_from_text(text)
         else:
