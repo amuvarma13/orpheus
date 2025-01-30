@@ -74,9 +74,10 @@ prompt = "Okay, so what would be an example of a healthier breakfast option then
 inputs = orpheus.get_inputs(text=prompt)
 ```
 
-OR get inputs from speech
+
 
 ``` python
+#OR get inputs from speech
 import torchaudio
 speech_file = "orpheus/assets/input_speech_0.wav"
 waveform, sample_rate = torchaudio.load(SPEECH_WAV_PATH)
@@ -106,11 +107,11 @@ else:
 
 print(text_output)
 
-# In a Jupyter environment 
+# use IPython in a Jupyter environment 
 import IPython.display as ipd 
 ipd.Audio(output_waveform, rate=sample_rate)
 
-# Else
+# or save/manipulate the output
 import torchaudio
 torchaudio.save("model_output.wav", output_waveform, 24000)
 ```
