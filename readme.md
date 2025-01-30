@@ -169,6 +169,11 @@ ipd.Audio(output_1["speech"], rate=24000)
   <p></p>
   <p>The model generates speech autogressively, which means that if the model terminates generation because it has hit the max_tokens criterion it will not finish generating the entire speech sample. You need to increase max_tokens to get the full generation.</p>
     <summary><strong>Why is the speech is getting cutoff?</strong></summary>
+</details>
+
+<details>
+  <summary><strong>Why is the speech is getting cutoff?</strong></summary>
   <p></p>
   <p>The model generates speech autogressively, which means that if the model terminates generation because it has hit the max_tokens criterion it will not finish generating the entire speech sample. You need to increase max_tokens to get the full generation.</p>
-
+    <summary><strong>Why is the speech is getting cutoff?</strong></summary>
+</details>
