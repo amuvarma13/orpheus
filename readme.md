@@ -115,14 +115,17 @@ We can now pass our inputs to the conversation class.
 ##### Create a message object
 We create a conversation by adding messages to it. Messages follow a similar pattern as shown below regardless if they are text or speech for the input.
 ``` python
-from orpheus.mm_model.assets import SPEECH_WAV_PATH
-
+import requests
+from io import BytesIO
 import torchaudio
-waveform, sample_rate = torchaudio.load(SPEECH_WAV_PATH)
+
+response = requests.get(orpheus.get_dummy_speech_link()) 
+audio_data = BytesIO(response.content)
+waveform, sample_rate = torchaudio.load(audio_data)
 
 first_message = {
     "format":"speech",
-    "data": y
+    "data": waveform
 }
 
 conversation.append_message(first_message)
@@ -145,7 +148,7 @@ You can now extend the conversation and all future dialogues will have context o
 ``` python
 second_message = {
     "format": "text",
-    "data": "Where are those foods from?"
+    "data": "Can you give me some ideas for lunch?"
 }
 
 conversation.append_message(second_message)
