@@ -20,7 +20,7 @@ dependencies=[
     "soundfile",
     "snac",
     "openai-whisper"
-]
+] 
 
 [project.urls]
 Homepage = "https://github.com/pypa/sampleproject"
