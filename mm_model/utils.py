@@ -126,6 +126,8 @@ class OrpheusConversation():
 
         print("successffully updated existing embeds")
 
+        print(output_tokens)
+
         output = self.parent.parse_output_tokens(output_tokens)
         return output
         
