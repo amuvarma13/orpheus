@@ -79,7 +79,7 @@ class OrpheusConversation():
         audio_features = audio_features.to(dtype=torch.bfloat16).to(self.model.device)
         audio_embeds = self.model.multi_modal_projector(audio_features)
         start_token = torch.tensor([[128259, 128000]], dtype=torch.int64)
-        end_tokens = torch.tensor([[128009, 128260, 128261]], dtype=torch.int64)
+        end_tokens = torch.tensor([[128009, 128260]], dtype=torch.int64)
         start_token = start_token.to(self.model.device)
         end_tokens = end_tokens.to(self.model.device)
         start_embeds = self.model.get_input_embeddings()(start_token)
@@ -226,7 +226,7 @@ class OrpheusUtility():
         audio_features = audio_features.to(dtype=torch.bfloat16).to("cuda")
         audio_embeds = self.model.multi_modal_projector(audio_features)
         start_token = torch.tensor([[self.special_tokens["start_of_human"], self.special_tokens["start_of_text"]]], dtype=torch.int64)
-        end_tokens = torch.tensor([[self.special_tokens["end_of_text"], self.special_tokens["end_of_human"], self.special_tokens["start_of_ai"]]], dtype=torch.int64)
+        end_tokens = torch.tensor([[self.special_tokens["end_of_text"], self.special_tokens["end_of_human"]]], dtype=torch.int64)
         start_token = start_token.to("cuda")
         end_tokens = end_tokens.to("cuda")
         start_embeds = self.model.get_input_embeddings()(start_token)
@@ -296,6 +296,7 @@ class OrpheusUtility():
         return waveform
         
     def _get_text_from_tokens(self, output_tokens):
+        
         token_to_find = self.special_tokens["start_of_ai"]
         end_token = self.special_tokens["end_of_text"]
 
