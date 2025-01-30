@@ -290,6 +290,8 @@ class OrpheusUtility():
         return audio_hat
     
     def _get_waveform_from_tokens (self, output_tokens):
+        print("getting waveform", output_tokens)
+        print("waveform toks", output_tokens.shape)
         token_to_find = self.special_tokens["start_of_speech"]
         token_to_remove = self.special_tokens["pad_token"]
 
