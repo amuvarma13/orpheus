@@ -70,11 +70,14 @@ from orpheus.mm_model.assets import SPEECH_WAV_PATH
 
 import torchaudio
 waveform, sample_rate = torchaudio.load(SPEECH_WAV_PATH)
-inputs = orpheus.get_inputs(speech=y)
 
 #for Jupyter Notebook users listen to the input_speech
 import IPython.display as ipd 
 ipd.Audio(waveform, rate=sample_rate)
+
+inputs = orpheus.get_inputs(speech=y)
+
+
 ```
 
 The `**inputs` for text are given in the form of `input_ids`, the `**inputs` for speech provided by the utility function are in the form of `inputs_embeds`, both of which are compatible with HuggingFace Transformers.
