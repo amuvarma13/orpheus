@@ -5,20 +5,10 @@
 #### 1. Installation
 Clone this repository.
 ```bash
-git clone https://github.com/amuvarma13/orpheus.git
-pip install snac openai-whisper
+pip install snac canopy-orpheus
 ```
 
-
-#### 2. Additional setup
-If you are running this model on Google Colab you can skip this step. Cuda version should be 12.X otherwise you will have conflicts with the version of `flash_attn`. These can be resolved by reverting to an earlier version of `flash_attn`. 
-```bash
-pip install torch==2.5.1 torchaudio transformers==4.47.0 librosa soundfile
-```
-
-Colab will have appropriate versions of these packages installed.
-
-#### 3. Import relevant Orpheus modules
+#### 2. Import relevant Orpheus modules
 
 Due to how colab processes modules if you are on Colab import the  correct version.
 ```python
@@ -31,7 +21,7 @@ from mm_model import OrpheusUtility
 orpheus = OrpheusUtility()
 ```
 
-#### 4. Initialise the model
+#### 3. Initialise the model
 
 Now we register the model so that we can use it with AutoModel and AutoTokenizer.
 

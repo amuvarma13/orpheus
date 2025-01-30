@@ -1,6 +1,7 @@
 from huggingface_hub import snapshot_download
 from concurrent.futures import ThreadPoolExecutor
 import torch
+import torchaudio
 import whisper
 from transformers import AutoModel, AutoConfig
 from .model import OrpheusConfig, OrpheusForConditionalGeneration
@@ -360,3 +361,6 @@ class OrpheusUtility():
 
     def initialise_conversation_model(self):
         return OrpheusConversation(self)
+    
+    def get_dummy_speech_link(self, speech_path="https://firebasestorage.googleapis.com/v0/b/speechsdk.appspot.com/o/speech.wav?alt=media&token=79d7119b-ab42-4652-b045-ad9a0578ec97"):
+        return speech_path
