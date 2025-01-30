@@ -101,7 +101,9 @@ torchaudio.save("model_output.wav", output_waveform, 24000)
 
 #### Conversational Inference (multi-turn)
 
-Multiturn Inference is the equivalent of stacking multiple single turn inferences on top of each other. We instead choose to store the existing conversation as embedding vectors, i.e. for transformers inputs_embeds. You can do this manually without too much difficulty, or use the utility class below.
+Multiturn Inference is the equivalent of stacking multiple single turn inferences on top of each other. We instead choose to store the existing conversation as embedding vectors, i.e. for transformers inputs_embeds. You can do this manually without too much difficulty, or use the utility class below. 
+
+*NB: The provided model hasn't been finetuned as much towards multiturn dialogues as question answering. Use the appropriate training script to appropriately tune the model.*
 
 ##### Initialise a conversation 
 ``` python
