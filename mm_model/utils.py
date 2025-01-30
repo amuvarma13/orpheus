@@ -337,4 +337,4 @@ class OrpheusUtility():
 
 
     def initialise_conversation_model(self):
-        return OrpheusConversation(self))
+        return OrpheusConversation(self)
