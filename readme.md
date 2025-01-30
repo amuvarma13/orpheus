@@ -172,8 +172,25 @@ ipd.Audio(output_1["speech"], rate=24000)
 </details>
 
 <details>
-  <summary><strong>Why is the speech is getting cutoff?</strong></summary>
+  <summary><strong>How many seconds of speech can I generate per inference? </strong></summary>
   <p></p>
-  <p>The model generates speech autogressively, which means that if the model terminates generation because it has hit the max_tokens criterion it will not finish generating the entire speech sample. You need to increase max_tokens to get the full generation.</p>
-    <summary><strong>Why is the speech is getting cutoff?</strong></summary>
+  <p>While there is no limit on how many seconds of speech the model can respond with, the model has been mostly trained on sequences less than a 60 seconds. Each second of speech generated requires 83 tokens. </p>
+</details>
+
+<details>
+  <summary><strong>How do I run inference in realtime? </strong></summary>
+  <p></p>
+  <p>Using an inference optimised library like vllm will allows you to run Orpheus in realtime. We are working on an implementation.</p>
+</details>
+
+<details>
+  <summary><strong>I want to customise the model can I prompt it? </strong></summary>
+  <p></p>
+  <p>Currently the best way to customise the model (and how we want developers to customise) is by finetuning it. This should be very simple with the scripts provided. The reason for this is because we want to explore better ways of post training. </p>
+</details>
+
+<details>
+  <summary><strong>What are the strengths/limitations of this model? </strong></summary>
+  <p></p>
+  <p>While we have extended the training of Llama-3b on large amounts of speech and text data, there are limitations. The model is not good at niche words, numbers in numerical form, and proper nouns. It is also a very small model so it lacks textual based reasoning and knowledge (especially after it forgets some of this when trained on speech tokens).</p>
 </details>
