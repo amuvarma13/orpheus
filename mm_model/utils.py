@@ -76,7 +76,7 @@ class OrpheusUtility():
         print("Downloads complete!")
 
 
-    def _initialise_model(self, multimodal_model_id):
+    def _initialise_model(self, multimodal_model_id="amuvarma/zuck-3bregconvo-automodelcompat"):
         if not self.is_model_downloaded:
             self.fast_download_from_hub()
             print("Downloading model from hub...")
@@ -116,6 +116,9 @@ class OrpheusUtility():
         return audio_feature
     
     def _get_input_from_speech(self, speech):
+
+        if self.is_model_initialised == False:
+            self._initialise_model()
 
         audio_features = speech.to(dtype=torch.bfloat16).to("cuda")
         audio_embeds = self.model.multi_modal_projector(audio_features)
