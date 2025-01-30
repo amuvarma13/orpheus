@@ -171,8 +171,8 @@ class OrpheusUtility():
             return None
         
         token_indices = (output_tokens == token_to_find).nonzero(as_tuple=True)
-
-        if len(token_indices[1]) > 0:
+        print("token_indices", token_indices)
+        if len(token_indices[-1]) > 0:
             last_occurrence_idx = token_indices[1][-1].item()
             cropped_tensor = output_tokens[:, last_occurrence_idx+1:]
         else:

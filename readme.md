@@ -78,6 +78,16 @@ output_tokens = model.generate(
     repetition_penalty=1.1, 
     temperature=0.7
     )
+
+output = orpheus.parse_output_tokens(output_tokens[0])
+if(message in output):
+    print(f"There was an error: {output["message"]}")
+else:
+    text_output = output["text"]
+    speech_output = output["speech"]
+
+print(text_output)
+
 ```
 
 # OR get inputs from speech
