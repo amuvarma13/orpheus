@@ -97,8 +97,12 @@ class OrpheusConversation():
     def _update_existing_embeds(self, output_tokens):
         output_embeddings = self.model.get_input_embeddings()(output_tokens)
         end_of_ai_embedding = self.model.get_input_embeddings()(torch.tensor([[self.special_tokens["end_of_ai"]]]).to(self.model.device))
-        all_embeddings = torch.cat([self.existing_embeds, output_embeddings, end_of_ai_embedding], dim=1).to("cpu")
-        self.existing_embeds = all_embeddings
+        if self.existing_embeds is None:
+            self.existing_embeds = torch.cat([output_embeddings, end_of_ai_embedding], dim=1).to("cpu")
+            return
+        else:
+            all_embeddings = torch.cat([self.existing_embeds, output_embeddings, end_of_ai_embedding], dim=1).to("cpu")
+            self.existing_embeds = all_embeddings
 
     
     def generate_response(self):
