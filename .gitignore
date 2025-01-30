@@ -5,4 +5,5 @@ pyproject.toml
 src/canopy-orpheus.egg-info/
 .DS_Store
 pyproject.toml
-./canopy_orpheus.egg-info
+src/canopy_orpheus.egg-info
+src/canopy_orpheus/.DS_Store
