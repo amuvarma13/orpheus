@@ -129,12 +129,12 @@ response = requests.get(orpheus.get_dummy_speech_link())
 audio_data = BytesIO(response.content)
 waveform, sample_rate = torchaudio.load(audio_data)
 
-first_message = {
+message_0 = {
     "format":"speech",
     "data": waveform
 }
 
-conversation.append_message(first_message)
+conversation.append_message(message_0)
 ```
 
 ##### Get the response
@@ -142,22 +142,24 @@ conversation.append_message(first_message)
 Depending on how long the output of the model is, and your hardware, this can take up to 2 minutes. We are currently working on providing an implementation of realtime streaming.
 
 ``` python
-output = conversation.generate_response()
+output_0 = conversation.generate_response()
 
-print(output["text"])
-ipd.Audio(output["waveform"], rate=24000)
+print(output_0["text"])
+ipd.Audio(output_0["speech"], rate=24000)
 ```
 ##### Multiturn conversation
 
 You can now extend the conversation and all future dialogues will have context of what has been said.
 
 ``` python
-second_message = {
+message_1 = {
     "format": "text",
     "data": "Can you give me some ideas for lunch?"
 }
 
-conversation.append_message(second_message)
-text_response_2, waveform_response_2 = conversation.generate_response()
+conversation.append_message(message_1)
+output_1 = conversation.generate_response()
+print(output_1["text"])
+ipd.Audio(output_1["speech"], rate=24000)
 ```
 
