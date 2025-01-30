@@ -118,18 +118,14 @@ class OrpheusUtility():
         audio_features = self._get_audio_features(speech)
         audio_features = audio_features.to(dtype=torch.bfloat16).to("cuda")
         audio_embeds = self.model.multi_modal_projector(audio_features)
-        start_token = torch.tensor([[self.special_tokens["start_of_human"]]], dtype=torch.int64)
+        start_token = torch.tensor([[self.special_tokens["start_of_human"], self.special_tokens["start_of_text"]]], dtype=torch.int64)
         end_tokens = torch.tensor([[self.special_tokens["end_of_text"], self.special_tokens["end_of_human"], self.special_tokens["start_of_ai"]]], dtype=torch.int64)
-        final_tokens = torch.tensor([[128262]], dtype=torch.int64)
         start_token = start_token.to("cuda")
         end_tokens = end_tokens.to("cuda")
-        final_tokens = final_tokens.to("cuda")
         start_embeds = self.model.get_input_embeddings()(start_token)
         end_embeds = self.model.get_input_embeddings()(end_tokens)
-        final_embeds = self.model.get_input_embeddings()(final_tokens)
         start_embeds = start_embeds.to(dtype=torch.bfloat16)
         end_embeds = end_embeds.to(dtype=torch.bfloat16)
-        final_embeds = final_embeds.to(dtype=torch.bfloat16)
         all_embeds = torch.cat([start_embeds, audio_embeds, end_embeds], dim=1)
         return {"inputs_embeds": all_embeds}
     
@@ -142,6 +138,30 @@ class OrpheusUtility():
             return self._get_input_from_text(text)
         else:
             return self._get_input_from_speech(speech)
+        
+
+    def _extract_tokens_after_value(tensor, target_start=128257, target_end=128258):
+        #check there is a target_start in the tensor
+        if target_start not in tensor:
+            return None
+        tensor_list = tensor.tolist()
+        start_index = tensor_list.index(target_start)
+        try:
+            end_index = tensor_list.index(target_end, start_index)
+            return tensor_list[start_index + 1:end_index]
+        except ValueError:
+            return tensor_list[start_index + 1:]
+    
+    def _get_speech_waveforms(self, output_tokens):
+        start_index = output_tokens.index(self.special_tokens["start_of_speech"])
+        end_index = output_tokens.index(self.special_tokens["end_of_speech"])
+        speech_tokens = output_tokens[start_index + 1:end_index]
+        speech_waveform = torch.tensor(speech_tokens)
+        return speech_waveform
+
+    # def parse_output_tokens(self, output_tokens):
+        
+
 
 
     def initialise_conversation_model(self):
