@@ -90,7 +90,7 @@ class OrpheusConversation():
         audio_features = self._get_audio_features(self.current_message["data"])
         audio_features = audio_features.to(dtype=torch.bfloat16).to(self.model.device)
         audio_embeds = self.model.multi_modal_projector(audio_features)
-        start_token = torch.tensor([[128259]], dtype=torch.int64)
+        start_token = torch.tensor([[128259, 128000]], dtype=torch.int64)
         end_tokens = torch.tensor([[128009, 128260, 128261]], dtype=torch.int64)
         final_tokens = torch.tensor([[128262]], dtype=torch.int64)
         start_token = start_token.to(self.model.device)
