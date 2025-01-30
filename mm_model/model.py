@@ -405,5 +405,3 @@ class OrpheusForConditionalGeneration(OrpheusPreTrainedModel):
     def _reorder_cache(self, *args, **kwargs):
         return self.language_model._reorder_cache(*args, **kwargs)
 
-# AutoConfig.register("orpheus", OrpheusConfig)
-# AutoModel.register(OrpheusConfig, OrpheusForConditionalGeneration)
