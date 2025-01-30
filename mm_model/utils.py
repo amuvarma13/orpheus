@@ -299,19 +299,26 @@ class OrpheusUtility():
         token_to_find = self.special_tokens["start_of_ai"]
         end_token = self.special_tokens["end_of_text"]
 
+        print("getting text")
+
         if token_to_find not in output_tokens:
             return None
 
         token_indices = (output_tokens == token_to_find).nonzero(as_tuple=True)
         
+        print("token indices", token_indices)
+
         if len(token_indices[1]) > 0:
+
             start_idx = token_indices[1][-1].item() + 1
             end_indices = (output_tokens[:, start_idx:] == end_token).nonzero(as_tuple=True)
             
+            print("end indices", end_indices)
             if len(end_indices[1]) > 0:
                 end_idx = start_idx + end_indices[1][0].item()
                 text_tokens = output_tokens[:, start_idx:end_idx]
                 decoded_text = self.tokenizer.decode(text_tokens[0])
+                print("decoded text", decoded_text)
                 return decoded_text
                 
         return None
