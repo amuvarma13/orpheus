@@ -107,7 +107,7 @@ Multiturn Inference is the equivalent of stacking multiple single turn inference
 
 ##### Initialise a conversation 
 ``` python
-conversation = orpheus.initialise_conversation_model() # initialise a new conversation
+conversation = orpheus.initialise_conversation() # initialise a new conversation
 ```
 
 We can now pass our inputs to the conversation class.

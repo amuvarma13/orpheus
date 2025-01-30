@@ -361,7 +361,7 @@ class OrpheusUtility():
         return response_dict
 
 
-    def initialise_conversation_model(self):
+    def initialise_conversation(self):
         return OrpheusConversation(self)
     
 
