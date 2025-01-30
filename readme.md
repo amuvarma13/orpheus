@@ -162,4 +162,12 @@ output_1 = conversation.generate_response()
 print(output_1["text"])
 ipd.Audio(output_1["speech"], rate=24000)
 ```
+<details>
+  <summary><strong>Q: How do I install this project?</strong></summary>
+  <p>A: You can install this project by running:</p>
 
+  ```sh
+  git clone https://github.com/your-repo/project.git
+  cd project
+  npm install
+  ```
