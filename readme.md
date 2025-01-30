@@ -105,7 +105,7 @@ else:
 
 print(text_output)
 
-# In a Jupyter environment
+# In a Jupyter environment 
 import IPython.display as ipd 
 ipd.Audio(output_waveform, rate=sample_rate)
 
