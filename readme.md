@@ -74,7 +74,8 @@ prompt = "Okay, so what would be an example of a healthier breakfast option then
 inputs = orpheus.get_inputs(text=prompt)
 ```
 
-# OR get inputs from speech
+OR get inputs from speech
+
 ``` python
 import torchaudio
 speech_file = "orpheus/assets/input_speech_0.wav"
@@ -86,7 +87,7 @@ import IPython.display as ipd
 ipd.Audio(waveform, rate=sample_rate)
 ```
 
-#generate response ~ 85 tokens per second of audio
+The `**inputs` for text are given in the form of `input_ids`, the `**inputs` for speech provided by the utility function are in the form of `inputs_embeds`, both of which are compatible with HuggingFace Transformers.
 
 ``` python
 output_tokens = model.generate(
