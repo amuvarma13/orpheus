@@ -43,14 +43,10 @@ This section will show you how to run inference on text inputs, speech inputs, o
 
 We can pass either text (shown below), speech(shown below), or a combination of text and speech (not shown below) to the model as an input. The utility function will return `input_ids` for text and `inputs_embeds` for speech both of which are natively supported by `model.generate` from the transformers module.
 
-##### Get inputs from text
-```python
-prompt = "Okay, so what would be an example of a healthier breakfast option then. Can you tell me?"
-inputs = orpheus.get_inputs(text=prompt)
-```
+
 ##### Get inputs from speech
 
-We provide a speech file for you to test out the model quickly as follows:
+We provide a speech file for you to test out the model quickly as follows. There is an example of how to pass text inputs into the model below.
 
 ``` python
 import requests
@@ -68,6 +64,7 @@ ipd.Audio(waveform, rate=sample_rate)
 inputs = orpheus.get_inputs(speech=waveform)
 ```
 
+##### Call `model.generate`
 The `**inputs` for text are given in the form of `input_ids`, the `**inputs` for speech provided by the utility function are in the form of `inputs_embeds`, both of which are compatible with HuggingFace Transformers.
 
 ``` python
@@ -97,6 +94,15 @@ ipd.Audio(output_waveform, rate=24000)
 # or save/manipulate the output
 from scipy.io import wavfile
 wavfile.write("output.wav", 24000, output_waveform)
+```
+
+##### Get inputs from text
+
+You can create `**inputs` from text as shown below. You call `model.generate` and parse the output tokens exactly as described above with speech.
+
+```python
+prompt = "Okay, so what would be an example of a healthier breakfast option then. Can you tell me?"
+inputs = orpheus.get_inputs(text=prompt)
 ```
 
 #### Conversational Inference (multi-turn)
