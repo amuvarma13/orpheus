@@ -8,11 +8,12 @@ from snac import SNAC
 
 
 class OrpheusConversation():
-    def __init__(self, model, special_tokens):
+    def __init__(self, parent):
         self.existing_embeds = None
         self.current_message = None
-        self.model = model
-        self.special_tokens = special_tokens
+        self.model = parent.model
+        self.special_tokens = parent.special_tokens
+        self.audio_encoder = parent.audio_encoder
 
     def append_message(self, message):
         self._validate_message(message)
