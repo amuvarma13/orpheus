@@ -192,5 +192,5 @@ ipd.Audio(output_1["speech"], rate=24000)
 <details>
   <summary><strong>What are the strengths/limitations of this model? </strong></summary>
   <p></p>
-  <p>While we have extended the training of Llama-3b on large amounts of speech and text data, there are limitations. The model is not good at niche words, numbers in numerical form, and proper nouns. It is also a very small model so it lacks textual based reasoning and knowledge (especially after it forgets some of this when trained on speech tokens).</p>
+  <p>While we have extended the training of Llama-3b on large amounts of speech and text data, there are limitations. The model is not good at niche words, numbers in numerical form, and proper nouns. It is also a very small model so it lacks textual based reasoning and knowledge (especially after it forgets some of this when trained on speech).</p>
 </details>
