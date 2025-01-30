@@ -102,8 +102,8 @@ class OrpheusUtility():
     def _process_audio_tensor(self, audio, sample_rate=16000):
         audio = audio.to(torch.float32)
         duration_ms = (len(audio) / sample_rate) * 1000
-        audio = self.audio_encoder.pad_or_trim(audio)
-        mel = self.audio_encoder.log_mel_spectrogram(audio)
+        audio = whisper.pad_or_trim(audio)
+        mel = whisper.log_mel_spectrogram(audio)
         return mel, int(duration_ms / 20) + 1
     
     def _get_audio_features(self, speech):
@@ -136,7 +136,7 @@ class OrpheusUtility():
         all_embeds = torch.cat([start_embeds, audio_embeds, end_embeds], dim=1)
         return {"inputs_embeds": all_embeds}
     
-    def get_inputs(self, text=None, speech=None):
+    def get_inputs(self, text=None, speech=None, model=None):
         if text is None and speech is None:
             raise ValueError("Either text or speech must be provided")
         if text is not None and speech is not None:
