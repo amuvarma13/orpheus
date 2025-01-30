@@ -282,7 +282,9 @@ class OrpheusUtility():
             layer_2.append(code_list[7*i+4]-(4*4096))
             layer_3.append(code_list[7*i+5]-(5*4096))
             layer_3.append(code_list[7*i+6]-(6*4096))
-
+        print("layer 1", layer_1)
+        print("layer 2", layer_2)
+        print("layer 3", layer_3)
         codes = [torch.tensor(layer_1).unsqueeze(0).to("cuda"),
                 torch.tensor(layer_2).unsqueeze(0).to("cuda"),
                 torch.tensor(layer_3).unsqueeze(0).to("cuda")]
@@ -315,6 +317,7 @@ class OrpheusUtility():
         processed_tensor = processed_tensor[:, :new_dim_1]
         code_list = processed_tensor[0].tolist()
         samples = self._redistribute_codes(code_list)
+
         waveform = samples.detach().squeeze().to("cpu").numpy()
         return waveform
         
