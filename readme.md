@@ -99,6 +99,7 @@ output_tokens = model.generate(
     )
 
 output = orpheus.parse_output_tokens(output_tokens[0])
+
 if(message in output):
     print(f"There was an error: {output["message"]}")
 else:
@@ -122,18 +123,6 @@ Next we can parse our output tokens to get both text and speech responses using 
 output_text, output_speech = orpheus.parse_output_tokens(output_tokens)
 print(f"Response is {output_text}")
 print(f"Shape of speech, {output_speech.shape}")
-```
-
-The output speech is a numpy array of samples, which we can display using IPython if we are in a notebook environment, or save to a wav file.
-
-``` python
-# display using iPython
-from IPython.display import Audio, display
-display(Audio(output_speech, rate=16000))
-
-#save to file
-import soundfile as sf
-sf.write("output.wav", output_speech, 16000)
 ```
 
 #### Conversational Inference (multi-turn)
