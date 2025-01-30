@@ -112,9 +112,12 @@ torchaudio.save("model_output.wav", output_waveform, 24000)
 
 Multiturn Inference is the equivalent of stacking multiple single turn inferences on top of each other. We instead choose to store the existing conversation as embedding vectors, i.e. for transformers inputs_embeds. You can do this manually without too much difficulty, or use the utility class below.
 
-```python
+##### Initialise a conversation 
+``` python
 conversation = orpheus.initialise_conversation_model() # initialise a new conversation
+```
 
+``` python
 # format a message object
 speech_file = "input_speech_0.wav"
 y, sr = librosa.load(speech_file, sr=16000, mono=True)
