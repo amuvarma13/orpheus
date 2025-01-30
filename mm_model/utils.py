@@ -117,7 +117,7 @@ class OrpheusUtility():
     
     def _get_input_from_speech(self, speech):
 
-        audio_features = audio_features.to(dtype=torch.bfloat16).to("cuda")
+        audio_features = speech.to(dtype=torch.bfloat16).to("cuda")
         audio_embeds = self.model.multi_modal_projector(audio_features)
         start_token = torch.tensor([[self.special_tokens["start_of_human"]]], dtype=torch.int64)
         end_tokens = torch.tensor([[self.special_tokens["end_of_text"], self.special_tokens["end_of_human"], self.special_tokens["start_of_ai"]]], dtype=torch.int64)
