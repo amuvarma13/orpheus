@@ -113,6 +113,7 @@ class OrpheusConversation():
         
         embeds = self._get_embeds()
         print("successfully retrieved embeds")
+        print("my emebds", embeds.shape)
         output_tokens = self.model.generate(
             inputs_embeds=embeds, 
             max_new_tokens=5000, 
