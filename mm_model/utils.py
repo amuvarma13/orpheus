@@ -92,16 +92,12 @@ class OrpheusConversation():
         audio_embeds = self.model.multi_modal_projector(audio_features)
         start_token = torch.tensor([[128259, 128000]], dtype=torch.int64)
         end_tokens = torch.tensor([[128009, 128260, 128261]], dtype=torch.int64)
-        final_tokens = torch.tensor([[128262]], dtype=torch.int64)
         start_token = start_token.to(self.model.device)
         end_tokens = end_tokens.to(self.model.device)
-        final_tokens = final_tokens.to(self.model.device)
         start_embeds = self.model.get_input_embeddings()(start_token)
         end_embeds = self.model.get_input_embeddings()(end_tokens)
-        final_embeds = self.model.get_input_embeddings()(final_tokens)
         start_embeds = start_embeds.to(dtype=torch.bfloat16)
         end_embeds = end_embeds.to(dtype=torch.bfloat16)
-        final_embeds = final_embeds.to(dtype=torch.bfloat16)
         if self.existing_embeds is not None:
             all_embeds = torch.cat([self.existing_embeds, start_embeds, audio_embeds, end_embeds], dim=1)
         else:
