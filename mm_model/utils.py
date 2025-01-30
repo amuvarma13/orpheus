@@ -70,24 +70,11 @@ class OrpheusConversation():
             all_embeds = torch.cat([start_embeds, text_embeds, end_embeds], dim=1)
         return all_embeds
     
-    def _process_audio_tensor(self, audio, sample_rate=16000):
-        audio = audio.to(torch.float32)
-        duration_ms = (len(audio) / sample_rate) * 1000
-        audio = whisper.pad_or_trim(audio)
-        mel = whisper.log_mel_spectrogram(audio)
-        return mel, int(duration_ms / 20) + 1
-    
-    def _get_audio_features(self, speech):
-        audio_input = speech.squeeze(0)
-        mel, length = self._process_audio_tensor(audio_input)
-        mel = mel.to("cuda")
-        mel = mel.unsqueeze(0)
-        audio_feature = self.audio_encoder.embed_audio(mel)[0][:length]
-        audio_feature = audio_feature.unsqueeze(0)
-        return audio_feature
+
+
     
     def _get_speech_embeds(self):
-        audio_features = self._get_audio_features(self.current_message["data"])
+        audio_features = self.parent._get_audio_features(self.current_message["data"])
         audio_features = audio_features.to(dtype=torch.bfloat16).to(self.model.device)
         audio_embeds = self.model.multi_modal_projector(audio_features)
         start_token = torch.tensor([[128259, 128000]], dtype=torch.int64)
@@ -111,13 +98,15 @@ class OrpheusConversation():
             raise ValueError("Please append a message first")
         
         embeds = self._get_embeds()
-        output = self.model.generate(
+        output_tokens = self.model.generate(
             inputs_embeds=embeds, 
             max_new_tokens=100, 
             temperature=0.9,
             repetition_penalty=1.2, 
             eos_token_id=self.special_tokens["end_of_ai"],
             )
+        
+        output = self.parent.parse_output_tokens(output_tokens)
         return output
         
 
