@@ -58,14 +58,12 @@ This section will show you how to run inference on text inputs, speech inputs, o
 
 We can pass either text (shown below), speech(shown below), or a combination of text and speech (not shown below) to the model as an input. The utility function will return `input_ids` for text and `inputs_embeds` for speech both of which are natively supported by `model.generate` from the transformers module.
 
+##### Get inputs from text
 ```python
-# EITHER get inputs from text
 prompt = "Okay, so what would be an example of a healthier breakfast option then. Can you tell me?"
 inputs = orpheus.get_inputs(text=prompt)
 ```
-
-
-
+##### Get inputs from speech
 ``` python
 #OR get inputs from speech
 from orpheus.mm_model.assets import SPEECH_WAV_PATH
