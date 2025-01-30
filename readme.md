@@ -65,7 +65,6 @@ inputs = orpheus.get_inputs(text=prompt)
 ```
 ##### Get inputs from speech
 ``` python
-#OR get inputs from speech
 from orpheus.mm_model.assets import SPEECH_WAV_PATH
 
 import torchaudio
