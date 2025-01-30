@@ -55,7 +55,7 @@ class OrpheusConversation():
 
         text_embeds = text_embeds.to(dtype=torch.bfloat16).to(self.model.device)
         start_token = torch.tensor([[128259]], dtype=torch.int64)
-        end_tokens = torch.tensor([[128009, 128260]], dtype=torch.int64)
+        end_tokens = torch.tensor([[128009, 128260, 128261]], dtype=torch.int64)
 
         start_token = start_token.to(self.model.device)
         end_tokens = end_tokens.to(self.model.device)
@@ -93,6 +93,12 @@ class OrpheusConversation():
             all_embeds = torch.cat([start_embeds, audio_embeds, end_embeds], dim=1)
 
         return all_embeds
+    
+    def _update_existing_embeds(self, output_tokens):
+        output_embeddings = self.model.get_input_embeddings()(output_tokens)
+        end_of_ai_embedding = self.model.get_input_embeddings()(torch.tensor([[self.special_tokens["end_of_ai"]]]).to(self.model.device))
+        all_embeddings = torch.cat([self.existing_embeds, output_embeddings, end_of_ai_embedding], dim=1).to("cpu")
+        self.existing_embeds = all_embeddings
 
     
     def generate_response(self):
@@ -102,12 +108,14 @@ class OrpheusConversation():
         embeds = self._get_embeds()
         output_tokens = self.model.generate(
             inputs_embeds=embeds, 
-            max_new_tokens=100, 
+            max_new_tokens=5000, 
             temperature=0.9,
             repetition_penalty=1.2, 
             eos_token_id=self.special_tokens["end_of_ai"],
             )
         
+        self._update_existing_embeds(output_tokens)
+
         output = self.parent.parse_output_tokens(output_tokens)
         return output
         
