@@ -57,7 +57,7 @@ class OrpheusUtility():
         )
         self.is_model_downloaded = True
 
-    def fast_download_from_hub(self, text_model_name="amuvarma/3b-zuckreg-convo", multimodal_model_name="amuvarma/zuck-3bregconvo-automodelcompat"):
+    def initialise(self, text_model_name="amuvarma/3b-zuckreg-convo", multimodal_model_name="amuvarma/zuck-3bregconvo-automodelcompat"):
         with ThreadPoolExecutor(max_workers=2) as executor:
             future_text = executor.submit(
                 self._download_from_hub, text_model_name)
@@ -67,6 +67,7 @@ class OrpheusUtility():
             future_multimodal.result()
 
         print("Downloads complete!")
+
 
     def _initialise_model(self, multimodal_model_id):
         if not self.is_model_downloaded:

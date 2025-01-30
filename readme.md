@@ -6,7 +6,7 @@
 Clone this repository.
 ```bash
 git clone https://github.com/amuvarma13/orpheus.git
-pip install snac
+pip install snac openai-whisper
 ```
 
 
@@ -41,23 +41,23 @@ orpheus = OrpheusUtility()
 ```
 
 
-#### 4. Register the model type with transformers
+#### 4. Initialise the model
 
 Now we register the model so that we can use it with AutoModel and AutoTokenizer.
 
 ```python
-from transformers import AutoModel, AutoTokenizer, AutoConfig
-AutoConfig.register("orpheus", OrpheusConfig)
-AutoModel.register(OrpheusConfig, OrpheusForConditionalGeneration)
+import torch
+from transformers import AutoModel, AutoTokenizer
+orpheus.initialise() # fast downloads and registers model config with transformers
+model = AutoModel.from_pretrained(model_name).to("cuda").to(torch.bfloat16)
+tokenizer = AutoTokenizer.from_pretrained(model_name)
 ```
 
 5. Instantiate Model
 ```python
 import torch
-orpheus.fast_download_from_hub() 
 model_name = "amuvarma/zuck-3bregconvo-automodelcompat"
-model = AutoModel.from_pretrained(model_name).to("cuda").to(torch.bfloat16)
-tokenizer = AutoTokenizer.from_pretrained(model_name)
+
 ```
 
 ### Setup Environment
