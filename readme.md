@@ -53,7 +53,7 @@ import requests
 from io import BytesIO
 import torchaudio
 
-response = requests.get(orpheus.get_dummy_speech_link()) 
+response = requests.get(orpheus.dummy_speech_link) 
 audio_data = BytesIO(response.content)
 waveform, sample_rate = torchaudio.load(audio_data) # replace with your own speech
 
