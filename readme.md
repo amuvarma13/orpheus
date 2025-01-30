@@ -82,12 +82,13 @@ inputs = orpheus.get_inputs(speech=y)
 The `**inputs` for text are given in the form of `input_ids`, the `**inputs` for speech provided by the utility function are in the form of `inputs_embeds`, both of which are compatible with HuggingFace Transformers.
 
 ``` python
-output_tokens = model.generate(
-    **inputs, 
-    max_new_tokens=2000, 
-    repetition_penalty=1.1, 
-    temperature=0.7
-    )
+with torch.no_grad()
+    output_tokens = model.generate(
+        **inputs, 
+        max_new_tokens=2000, 
+        repetition_penalty=1.1, 
+        temperature=0.7
+        )
 
 output = orpheus.parse_output_tokens(output_tokens[0])
 

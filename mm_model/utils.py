@@ -9,8 +9,54 @@ from snac import SNAC
 
 
 class OrpheusConversation():
-    def __init__(self):
+    def __init__(self, model, special_tokens):
         self.message_embeds = []
+        self.current_message = None
+        self.model = model
+        self.special_tokens = special_tokens
+
+    def append_message(self, message):
+        self._validate_message(message)
+        self.current_message = message
+
+    def _validate_message(self, message):
+        if "format" not in message:
+            raise ValueError("Message must contain a 'format' key")
+        
+        if "data" not in message:
+            raise ValueError("Message must contain a 'data' key")
+
+        if message["format"] not in ["text", "speech"]:
+            raise ValueError("Message format must be either 'text' or 'speech'")
+        
+        if message["format"] == "speech":
+            if type(message["data"]) != torch.Tensor:
+                raise ValueError("Speech data must be a torch.Tensor")
+            if message["data"].shape[0] != 1:
+                raise ValueError("Speech data must be a 1D tensor")
+            
+        if message["format"] == "text":
+            if type(message["data"]) != str:
+                raise ValueError("Text data must be a string")
+
+    def _get_message_embeds(self):
+        if self.current_message is None:
+            raise ValueError("Please append a message first")
+        
+        if self.current_message["format"] == "text":
+            return self._get_text_embeds()
+    
+        if self.current_message["format"] == "speech":
+            return self._get_speech_embeds()
+        
+    def _get_text_embeds(self):
+        text = self.current_message["data"]
+        input_dict = self.model.get_inputs(text=text)
+        self.model.get_input_embeddings().to("cuda")
+        return output["last_hidden_state"]
+
+    def generate_response(self):
+        pass
 
 
 class OrpheusUtility():
@@ -170,7 +216,7 @@ class OrpheusUtility():
             return None
         
         token_indices = (output_tokens == token_to_find).nonzero(as_tuple=True)
-        
+
         if len(token_indices[-1]) > 0:
             last_occurrence_idx = token_indices[1][-1].item()
             cropped_tensor = output_tokens[:, last_occurrence_idx+1:]
@@ -223,4 +269,4 @@ class OrpheusUtility():
 
 
     def initialise_conversation_model(self):
-        return OrpheusConversation()
+        return OrpheusConversation(self.model, self.special_tokens)
