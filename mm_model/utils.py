@@ -115,7 +115,13 @@ class OrpheusConversation():
             raise ValueError("Please append a message first")
         
         embeds = self._get_embeds()
-        output = self.model.generate(inputs_embeds=embeds, max_new_tokens=100)
+        output = self.model.generate(
+            inputs_embeds=embeds, 
+            max_new_tokens=100, 
+            temperature=0.9,
+            repetition_penalty=1.2, 
+            eos_token_id=self.special_tokens["end_of_ai"],
+            )
         return output
         
 
