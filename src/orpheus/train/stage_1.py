@@ -29,7 +29,6 @@ class Stage_1_Trainer():
         self.text_dataset = text_dataset
         self.num_threads = multiprocessing.cpu_count()
         self.tokenizer = tokenizer
-        self.preprocessed_text_dataset = self._process_text_dataset(text_dataset)
 
         self.speech_dataset = speech_dataset
         self.model = model
@@ -43,13 +42,6 @@ class Stage_1_Trainer():
         self.learning_rate = 5.0e-6
 
         self.num_gpus = torch.cuda.device_count()
-
-        self.dataset = BatchedAlternatingDataset(self.preprocessed_text_dataset, speech_dataset, batch_total=self.batch_size*self.num_gpus)
-
-        
-
-        
-
         self.tokeniser_length = 128256
         self.start_of_text = 128000
         self.end_of_text = 128009
@@ -74,6 +66,10 @@ class Stage_1_Trainer():
 
 
         self.save_folder = save_folder
+        self.preprocessed_text_dataset = self._process_text_dataset(text_dataset)
+        self.dataset = BatchedAlternatingDataset(self.preprocessed_text_dataset, speech_dataset, batch_total=self.batch_size*self.num_gpus)
+
+
         pass
 
     def _create_question_tokens(self, example):
