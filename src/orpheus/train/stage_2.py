@@ -165,7 +165,6 @@ class Stage_2_Trainer():
 
 
     def _preserve_patches(self, example):
-        print(example)
         input_ids = example['input_ids']
         text_labels = [-100] * len(input_ids)
         inside_patch = False
