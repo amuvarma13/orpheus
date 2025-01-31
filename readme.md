@@ -243,7 +243,7 @@ Here is an example speech dataset and an example text dataset.
 ``` python
 from orpheus import OrpheusTrainer
 
-orpehus = OrpheusTrainer()
+orpheus = OrpheusTrainer()
 
 speech_dataset_name = "amuvarma/stage_1_speech_dataset"
 text_dataset_name = "amuvarma/stage_1_text_dataset"
