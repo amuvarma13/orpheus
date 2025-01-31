@@ -227,14 +227,16 @@ At this stage we tune:
 - The style of speech (i.e. is it over emotional, should it be able to whisper, should it speak monotonically etc ...)
 - Should it have a personality (i.e. pretend to be someone, give long answer, be rude/funny etc ...)
 
-We require 2 datasets
-1. `text_dataset`
+We require 2 datasets:
 
+1. `speech_dataset`: 
 Your speech_dataset should have the columns `question` [String], `answer` [String], `answer_audio` [Audio element or Dict with keys "sampling_rate", "array"]. Aim for at least 1000 rows - and upwards of 10000 rows should better learning.
 
+
+2. `text_dataset`
 [OPTIONAL] Your text_dataset should have the columns `question` [String], `answer` [String]. Aim for atleast as many examples in speech_dataset. You can also leave this blank if you are happy to use the default dataset we provide. You would do this if you do not want to tune the personality/text-based ability of the model and are only focused on the speech.
 
-Here is an example dataset used to train one of the demos consisting of synthentically generated speech data.
+Here is an example speech dataset and an example text dataset.
 
 ##### GPU requirements: minimum of 2 gpus with 80gb of vram each for ~10-45 minutes training time.
 
