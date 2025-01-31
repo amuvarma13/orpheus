@@ -435,6 +435,10 @@ push_name = "adapted_stage_1_for_stage_4" # change this but keep it for the next
 processed_dataset.push_to_hub(push_name)
 ```
 
+``` bash
+python my_script.py
+```
+
 Now we can use this adapted dataset to train our model
 
 #### Option 1: Use our highlevel API
