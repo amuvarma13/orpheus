@@ -191,8 +191,8 @@ class Stage_2_Trainer():
         processed_dataset_speech = processed_dataset.select(range(processed_dataset_length//2, processed_dataset_length))
         processed_dataset_text = processed_dataset_text.map(self._preserve_patches, num_proc=1,  desc="Processing dataset, Step 3 of 3")
 
-        self.processed_dataset_text = processed_dataset_text
-        self.processed_dataset_speech = processed_dataset_speech
+        self.processed_text_dataset = processed_dataset_text
+        self.processed_speech_dataset = processed_dataset_speech
         pass
 
 
