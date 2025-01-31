@@ -105,6 +105,13 @@ class OrpheusTrainer():
             assert dataset_name is not None, "Please pass dataset_name."
             assert model_name is not None, "Please pass the name of the model you trained in stage 1."
 
+            self._training_class = Stage_2_Trainer(
+                model = self.model,
+                dataset = self.dataset,
+                tokenizer = self.tokenizer,
+                pad_token = self.pad_token
+            )
+
 
         if stage == "stage_3":
             assert model_name is not None, "Please pass model_name."
