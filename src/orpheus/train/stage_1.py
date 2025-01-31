@@ -58,7 +58,10 @@ class Stage_1_Trainer():
 
         self.save_folder = save_folder
 
-        self.snac_model = SNAC.from_pretrained("hubertsiuzdak/snac_24khz")
+        #get cuda device
+        self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+        self.snac_model = SNAC.from_pretrained("hubertsiuzdak/snac_24khz").to(self.device)
 
         self.processed_speech_dataset = self._process_speech_dataset(self.speech_dataset)
         self.processed_text_dataset = self._process_text_dataset(self.text_dataset)
