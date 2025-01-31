@@ -219,7 +219,7 @@ Here we tune the speech model on question-answer pairs, in the voice and style w
 - The style of speech (i.e. is it over emotional, should it be able to whisper, should it speak monotonically etc ...)
 - Should it have a personality (i.e. pretend to be someone, give long answer, be rude/funny etc ...)
 
-
+Your dataset should have the columns `question` [String], `answer` [String], `answer_audio` [Audio element or Dict with keys "sampling_rate", "array"]. Here is an example.
 
 ##### Option 1: Use HuggingFace transformers
 
