@@ -60,7 +60,6 @@ class Stage_1_Trainer():
             bf16=True,
             output_dir=f"./{self.save_folder}",
             fsdp="auto_wrap",
-            report_to=self.report_to, 
             save_steps=self.save_steps,
             remove_unused_columns=True, 
             learning_rate=self.learning_rate,
