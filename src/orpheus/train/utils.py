@@ -1,6 +1,7 @@
 from huggingface_hub import HfApi, snapshot_download
 from datasets import load_dataset
 from .stage_1 import Stage_1_Trainer
+from .stage_2 import Stage_2_Trainer
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
 class OrpheusTrainer():
