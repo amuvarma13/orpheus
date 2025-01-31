@@ -300,6 +300,8 @@ orpheus.fast_push_model_and_tokenizer(checkpoint=checkpoint_name, push_name=push
 #### Testing out your tuned model [OPTIONAL]
 You can pass text inputs to your model to test out inference (not speech inputs). You can use the inference library as presented above to test out your model.
 
+https://github.com/amuvarma13/orpheus?tab=readme-ov-file#setup-environment
+
 ### Stage 2 [OPTIONAL]
 
 You can also train the dataset on conversational data if you want it to be able to carry multiturn conversations rather than question-answering.
@@ -347,8 +349,6 @@ push_name = "canopy-tune-stage_2"
 orpheus.fast_push_to_hub(checkpoint=checkpoint_name, push_name=push_name)
 ```
 
-#### Testing out your tuned model [OPTIONAL]
-You can pass text inputs to your model to test out inference (not speech inputs). You can use the inference library as presented above to test out your model.
 
 
 ### Stage 3
@@ -356,6 +356,7 @@ You can pass text inputs to your model to test out inference (not speech inputs)
 Now we need to train the speech projector.
 
 ##### GPU requirements: minimum of 1 gpu with 80gb of vram
+##### Additional requirements: Aim to have at least 1 TB of disk space ideally more.
 
 You can use more GPUs to train faster. The model converges very quickly and you don't need to train it on the entire datasets (which we provide). The total training time if you were to train it on the entire dataset would be 16 H100-hours.
 
