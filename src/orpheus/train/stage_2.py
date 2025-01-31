@@ -24,6 +24,8 @@ class Stage_2_Trainer():
         self.max_length = max_length
 
         self.pad_token = pad_token
+
+        dataset = dataset.select(range(50))
         
         # some default values that can be overridden in the .train() method
         self.batch_size = 1
@@ -149,7 +151,7 @@ class Stage_2_Trainer():
         ds = Dataset.from_dict({"input_ids": flat_input_ids})
         return ds
     
-    def create_mask_and_labels(self, example):
+    def _create_mask_and_labels(self, example):
 
         if len(example['input_ids']) > self.max_length:
             example['attention_mask'] = [1] * self.max_length
@@ -182,11 +184,11 @@ class Stage_2_Trainer():
         lists = self._dataset_to_list_of_lists(dataset)
         all_input_ids = self._assemble_input_ids(lists)
         processed_dataset = self._convert_to_hf_dataset(all_input_ids)
-        processed_dataset = processed_dataset.map(self._create_mask_and_labels, num_proc=1)
+        processed_dataset = processed_dataset.map(self._create_mask_and_labels, num_proc=1, desc="Processing dataset, Step 2 of 3")
         processed_dataset_length = len(processed_dataset)
         processed_dataset_text = dataset.select(range(processed_dataset_length//2))
         processed_dataset_speech = dataset.select(range(processed_dataset_length//2, processed_dataset_length))
-        processed_dataset_text = processed_dataset_text.map(self._preserve_patches, num_proc=1)
+        processed_dataset_text = processed_dataset_text.map(self._preserve_patches, num_proc=1,  desc="Processing dataset, Step 3 of 3")
 
         self.processed_dataset_text = processed_dataset_text
         self.processed_dataset_speech = processed_dataset_speech
@@ -196,7 +198,7 @@ class Stage_2_Trainer():
         
     def _process_dataset(self, dataset):
         self.sr = dataset[0]["answer_audio"]["sampling_rate"]
-        dataset = dataset.map(self._add_codes, remove_columns=["answer_audio"], desc="Processing speech dataset, Step 1 of 3")
+        dataset = dataset.map(self._add_codes, remove_columns=["answer_audio"], desc="Processing dataset, Step 1 of 3")
         dataset = dataset.filter(lambda x: x['question'] and x['answer'] and x['codes_list'])
         dataset = dataset.filter(lambda x: len(x['codes_list']) < self.max_length)
         self._create_input_ids(dataset)
