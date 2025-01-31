@@ -233,7 +233,28 @@ Here is an example dataset used to train one of the demos consisting of synthent
 
 ##### GPU requirements: minimum of 2 gpus with 80gb of vram each for ~10-45 minutes training time.
 
-#### Option 1: Use HuggingFace transformers
+#### Option 1: Use our highlevel API
+
+``` python
+from orpheus import OrpheusTrainer
+
+orpehus = OrpheusTrainer()
+
+dataset_name = "amuvarma/stage_1_training_example"
+
+orpheus.initialise(
+    stage = "stage_1",
+    dataset = dataset, 
+    use_wandb = True, # optional, defaults to False
+    model = None # optional, defaults to Canopy's pretrained model
+)
+
+orpheus_trainer = orpheus.create_trainer() # subclasses Trainer => you can pass any additional params Trainer accepts
+
+orpheus_trainer.train()
+```
+
+#### Option 2: Use HuggingFace transformers
 
 You can see and modify the script found in src/train/stage_1.py and add your dataset/hyperparameters/config to the src/train/stage_1_config.yaml file.
 
@@ -241,9 +262,12 @@ You can see and modify the script found in src/train/stage_1.py and add your dat
 accelerate launch stage_1.py
 ```
 
-#### Option 2: Use our highlevel API
+You can also save checkpoints in the hub with:
 
 ``` python
+orpheus.fast_push_to_hub()
+```
+
 
 
 
