@@ -49,7 +49,6 @@ class OrpheusConversation():
             return self._get_speech_embeds()
         
     def _get_text_embeds(self):
-        print("getting text embeds")
         text = self.current_message["data"]
         text_tokens = self.tokenizer(text, return_tensors="pt").input_ids
         text_tokens = text_tokens.to(self.model.device)

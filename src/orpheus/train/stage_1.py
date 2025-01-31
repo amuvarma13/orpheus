@@ -13,6 +13,7 @@ import wandb
 from .components import FSDPTrainer, BatchedAlternatingDataset
 from transformers import AutoModel, TrainingArguments
 
+
 class Stage_1_Trainer():
     def __init__(
             self, 
@@ -27,7 +28,6 @@ class Stage_1_Trainer():
         ):
         self.text_dataset = text_dataset
         self.speech_dataset = speech_dataset
-        self.dataset = BatchedAlternatingDataset(text_dataset, speech_dataset)
         self.model = model
         
         # some default values that can be overridden in the .train() method
@@ -35,6 +35,11 @@ class Stage_1_Trainer():
         self.epochs = 1
         self.save_steps = 2000
         self.learning_rate = 5.0e-6
+
+        self.num_gpus = torch.cuda.device_count()
+
+        self.dataset = BatchedAlternatingDataset(text_dataset, speech_dataset, batch_total=self.batch_size*self.num_gpus)
+
 
         if use_wandb:
             wandb.init(project=wandb_project_name, name=wandb_run_name)
@@ -45,7 +50,7 @@ class Stage_1_Trainer():
         pass
     
     def _calculate_default_hyperparameters(self):
-        self.num_gpus = torch.cuda.device_count()
+        
 
         assert self.num_gpus > 1, "At least 2 GPUs should be available for training, to allow FSDP."
 
@@ -64,7 +69,8 @@ class Stage_1_Trainer():
             lr_scheduler_type="cosine"
         )
     
-    def _data_collator(features):
+    def _data_collator(**kwargs):
+        print("data_collator", kwargs)
         input_ids = [f["input_ids"] for f in features]
 
         if any("attention_mask" not in f for f in features):
@@ -83,17 +89,23 @@ class Stage_1_Trainer():
 
         return {"input_ids": input_ids, "attention_mask": attention_mask, "labels": labels}
         
+    def _compute_metrics(eval_pred):
+        predictions, labels = eval_pred
+        predictions = np.argmax(predictions, axis=1)
+        accuracy = (predictions == labels).mean()
+        return {"accuracy": accuracy} 
+
 
     
     def create_trainer(
-            self, 
-            model,
+            self,
         ):
         self._calculate_default_hyperparameters()
         trainer = FSDPTrainer(
-            model=model,
+            model=self.model,
             args=self.training_args,
             train_dataset=self.dataset,
+            compute_metrics=self._compute_metrics,
             data_collator=self._data_collator,
         )
         return trainer
