@@ -434,7 +434,7 @@ push_name = "adapted_stage_1_for_stage_4" # change this but keep it for the next
 
 processed_dataset.push_to_hub(push_name)
 ```
-
+Launch your script
 ``` bash
 python my_script.py
 ```
