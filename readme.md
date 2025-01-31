@@ -438,7 +438,7 @@ orpheus.initialise(
 
 )
 
-orpheus_trainer = orpheus.create_trainer() # subclasses Trainer => you can pass any additional params Trainer accepts
+orpheus_trainer = orpheus.create_trainer() # subclasses Trainer => you can pass any additional params Trainer accepts in the .train(**args) below
 
 orpheus_trainer.train()
 ```
