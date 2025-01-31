@@ -222,12 +222,17 @@ pip install canopy-orpheus
 
 ### Stage 1
 
-Here we tune the speech model on question-answer pairs, in the voice and style we want our final model to have. Things to include in the dataset:
+At this stage we tune:
 - The voice of the model
 - The style of speech (i.e. is it over emotional, should it be able to whisper, should it speak monotonically etc ...)
 - Should it have a personality (i.e. pretend to be someone, give long answer, be rude/funny etc ...)
 
-Your dataset should have the columns `question` [String], `answer` [String], `answer_audio` [Audio element or Dict with keys "sampling_rate", "array"]. Aim for at least 1000 rows - and upwards of 10000 rows should better learning.
+We require 2 datasets
+1. `text_dataset`
+
+Your speech_dataset should have the columns `question` [String], `answer` [String], `answer_audio` [Audio element or Dict with keys "sampling_rate", "array"]. Aim for at least 1000 rows - and upwards of 10000 rows should better learning.
+
+[OPTIONAL] Your text_dataset should have the columns `question` [String], `answer` [String]. Aim for atleast as many examples in speech_dataset. You can also leave this blank if you are happy to use the default dataset we provide. You would do this if you do not want to tune the personality/text-based ability of the model and are only focused on the speech.
 
 Here is an example dataset used to train one of the demos consisting of synthentically generated speech data.
 
@@ -240,15 +245,20 @@ from orpheus import OrpheusTrainer
 
 orpehus = OrpheusTrainer()
 
-dataset_name = "amuvarma/stage_1_training_example"
+speech_dataset_name = "amuvarma/stage_1_speech_dataset"
+text_dataset_name = "amuvarma/stage_1_text_dataset"
+
+
 
 orpheus.initialise(
     stage = "stage_1",
-    dataset = dataset_name, 
+    speech_dataset_name = speech_dataset_name,
+    text_dataset = text_dataset_name, 
+    speech_dataset = 
     use_wandb = True, # optional, defaults to False
     wandb_project_name = None, # optional defaults to "orpheus-stage-1"
     wandb_run_name = None, # optional defaults to "r0"
-    model = None # optional, defaults to Canopy's pretrained model
+    model_name = None # optional, defaults to Canopy's pretrained model
 )
 
 orpheus_trainer = orpheus.create_trainer() # subclasses Trainer => you can pass any additional params Trainer accepts
