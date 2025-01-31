@@ -165,6 +165,7 @@ class Stage_2_Trainer():
 
 
     def _preserve_patches(self, example):
+        print(example)
         input_ids = example['input_ids']
         text_labels = [-100] * len(input_ids)
         inside_patch = False
@@ -188,6 +189,7 @@ class Stage_2_Trainer():
         processed_dataset_length = len(processed_dataset)
         processed_dataset_text = dataset.select(range(processed_dataset_length//2))
         processed_dataset_speech = dataset.select(range(processed_dataset_length//2, processed_dataset_length))
+        print(processed_dataset_text)
         processed_dataset_text = processed_dataset_text.map(self._preserve_patches, num_proc=1,  desc="Processing dataset, Step 3 of 3")
 
         self.processed_dataset_text = processed_dataset_text
