@@ -27,7 +27,7 @@ class Stage_1_Trainer():
 
         ):
         self.text_dataset = text_dataset
-        self.num_threads = multiprocessing.cpu_count()
+        self.num_threads = 16
         self.tokenizer = tokenizer
 
         self.speech_dataset = speech_dataset
