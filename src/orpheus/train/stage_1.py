@@ -108,13 +108,13 @@ class Stage_1_Trainer():
     
         text_dataset = text_dataset.map(
             self._create_answers_tokens,
-            num_proc=self._num_threads,
+            num_proc=self.num_threads,
             desc="Preprocessing your text dataset, Step 2 of 3",
         )
 
         text_dataset = text_dataset.map(
             self._create_input_ids,
-            num_proc=self._num_threads,
+            num_proc=self.num_threads,
             desc="Preprocessing your text dataset, Step 3 of 3",
         )
 
