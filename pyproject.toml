@@ -13,13 +13,15 @@ classifiers = [
     "Operating System :: OS Independent",
 ]
 dependencies=[
-    "torch",
+    "torch==2.5.1",
     "transformers",
     "torchaudio",
     "librosa",
     "soundfile",
     "snac",
-    "openai-whisper"
+    "openai-whisper", 
+    "trl", 
+    "datasets", 
 ] 
 
 [project.urls]
