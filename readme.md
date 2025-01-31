@@ -240,8 +240,6 @@ Here is an example speech dataset and an example text dataset.
 
 ##### GPU requirements: minimum of 2 gpus with 80gb of vram each for ~10-45 minutes training time.
 
-#### Option 1: Use our highlevel API
-
 ``` python
 from orpheus import OrpheusTrainer
 
@@ -249,8 +247,6 @@ orpehus = OrpheusTrainer()
 
 speech_dataset_name = "amuvarma/stage_1_speech_dataset"
 text_dataset_name = "amuvarma/stage_1_text_dataset"
-
-
 
 orpheus.initialise(
     stage = "stage_1",
@@ -274,14 +270,6 @@ Launch your script with a distributed command like accelerate, torchrun etc...
 accelerate launch my_script.py
 ```
 
-#### Option 2: Use HuggingFace transformers
-
-You can see and modify the script found in src/train/stage_1.py and add your dataset/hyperparameters/config to the src/train/stage_1_config.yaml file.
-
-``` bash
-accelerate launch stage_1.py
-```
-
 #### Saving models remotely [OPTIONAL]
 You can also save checkpoints in the hub. 
 First log into the hub with:
@@ -290,14 +278,13 @@ First log into the hub with:
 huggingface-cli login --token=<HF-API-TOKEN>
 ```
 
-[OPTIONAL] You can push your model with:
+You can push your model with:
 
 ``` python
 checkpoint_name = "checkpoints/checkpoint-<TRAINING STEPS>" # find <TRAINING STEPS> in checkpoints/
 push_name = "canopy-tune-stage_1
 orpheus.fast_push_to_hub(checkpoint=checkpoint_name, push_name=push_name)
 ```
-
 
 ### Stage 2 [OPTIONAL]
 
@@ -309,7 +296,6 @@ Here is an example dataset
 
 ##### GPU requirements: minimum of 2 gpus with 80gb of vram each for ~5-15 minutes training time.
 
-#### Option 1: Use our highlevel API
 
 ``` python
 from orpheus import OrpheusTrainer
@@ -338,15 +324,7 @@ Launch your script with a distributed command like accelerate, torchrun etc...
 accelerate launch my_script.py
 ```
 
-#### Option 2: Use HuggingFace transformers
-
-You can see and modify the script found in src/train/stage_2.py and add your dataset/hyperparameters/config to the src/train/stage_2_config.yaml file.
-
-``` bash
-accelerate launch stage_2.py
-```
-
-[OPTIONAL] You can push your model with:
+You can push your model with:
 
 ``` python
 checkpoint_name = "checkpoints/checkpoint-<TRAINING STEPS>" # find <TRAINING STEPS> in checkpoints/
@@ -364,8 +342,6 @@ Now we need to train the speech projector.
 You can use more GPUs to train faster. The model converges very quickly and you don't need to train it on the entire datasets (which we provide). The total training time if you were to train it on the entire dataset would be 16 H100-hours.
 
 You should use the dataset we provide unless you have a reason not to.
-
-#### Option 1: Use our highlevel API
 
 ``` python
 from orpheus import OrpheusTrainer
@@ -395,16 +371,7 @@ Launch your script with a distributed command like accelerate, torchrun etc...
 accelerate launch my_script.py
 ```
 
-
-#### Option 2: Use HuggingFace transformers
-
-You can see and modify the script found in src/train/stage_3.py and add your dataset/hyperparameters/config to the src/train/stage_3_config.yaml file.
-
-``` bash
-accelerate launch stage_3.py
-```
-
-[OPTIONAL] You can push your model with:
+You can push your model with:
 
 ``` python
 checkpoint_name = "checkpoints/checkpoint-<TRAINING STEPS>" # find <TRAINING STEPS> in checkpoints/
@@ -448,8 +415,6 @@ python my_script.py
 
 Now we can use this adapted dataset to train our model
 
-#### Option 1: Use our highlevel API
-
 ``` python
 from orpheus import OrpheusTrainer
 
@@ -484,10 +449,10 @@ Launch your script with a distributed command like accelerate, torchrun etc...
 accelerate launch my_script.py
 ```
 
-#### Option 2: Use HuggingFace transformers
+You can push your model with:
 
-You can see and modify the script found in src/train/stage_4.py and add your dataset/hyperparameters/config to the src/train/stage_4_config.yaml file.
-
-``` bash
-accelerate launch stage_4.py
+``` python
+checkpoint_name = "checkpoints/checkpoint-<TRAINING STEPS>" # find <TRAINING STEPS> in checkpoints/
+push_name = "canopy-tune-stage_4
+orpheus.fast_push_to_hub(checkpoint=checkpoint_name, push_name=push_name)
 ```
