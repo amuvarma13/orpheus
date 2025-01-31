@@ -51,7 +51,8 @@ class OrpheusTrainer():
                     use_wandb = True,
                     model_name = "amuvarma/3b-10m-pretrain-full", 
                     base_model_name = None,
-                    pad_token = None
+                    pad_token = None, 
+                    tokenizer_name = "amuvarma/3b-10m-pretrain-full"
                 ):
 
         self.use_wandb = use_wandb
@@ -61,6 +62,8 @@ class OrpheusTrainer():
         if model_name is not None:
             self._load_model(model_name)
             self.model = self._load_model(model_name)
+        
+        if tokenizer_name is not None:
             self.tokenizer = self._load_tokenizer(model_name)
         
         if base_model_name is not None:
@@ -89,7 +92,6 @@ class OrpheusTrainer():
             assert text_dataset_name is not None, "Please pass text_dataset_name."
             assert speech_dataset_name is not None, "Please pass speech_dataset_name."
 
-            print("my toke",self.tokenizer)
             self._training_class = Stage_1_Trainer(
                 model = self.model,  
                 text_dataset=self.text_dataset, 

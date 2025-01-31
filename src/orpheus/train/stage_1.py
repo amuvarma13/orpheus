@@ -28,6 +28,7 @@ class Stage_1_Trainer():
         ):
         self.text_dataset = text_dataset
         self.num_threads = multiprocessing.cpu_count()
+        self.tokenizer = tokenizer
         self.preprocessed_text_dataset = self._process_text_dataset(text_dataset)
 
         self.speech_dataset = speech_dataset
@@ -47,7 +48,7 @@ class Stage_1_Trainer():
 
         
 
-        self.tokenizer = tokenizer
+        
 
         self.tokeniser_length = 128256
         self.start_of_text = 128000
