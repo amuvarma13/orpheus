@@ -98,7 +98,7 @@ class Stage_1_Trainer():
             self,
             **kwargs
         ):
-        self._calculate_default_hyperparameters(**kwargs)
+        self._create_training_args(**kwargs)
         trainer = InterleavedFSDPTrainer(
             model=self.model,
             args=self.training_args,
