@@ -212,8 +212,10 @@ We've attached scripts and sample datasets for tuning the model as shown in the 
 
 We provide both high level training classes and the core training scripts which leverage the transformers library for standard practice.
 
-### Installation
+### Setup
+
 Clone this repository.
+
 ```bash
 pip install canopy-orpheus
 ```
