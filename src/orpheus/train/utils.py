@@ -1,12 +1,43 @@
+from huggingface_hub import HfApi, snapshot_download
+from datasets import load_dataset
 class OrpheusTrainer():
     def __init__(self):
         self.dataset = None
+        self._training_stage = None
         pass
 
     def _load_dataset(self, dataset_name):
-        pass
+        snapshot_download(
+            repo_id=dataset_name,
+            repo_type="dataset",   
+            revision="main",        
+            max_workers=64         
+        )
+        return load_dataset(dataset_name, split="train")
 
     def _load_model(self, model_name):
+        snapshot_download(
+            repo_id=model_name,
+            allow_patterns=[
+                "config.json",
+                "*.safetensors",
+                "model.safetensors.index.json",
+            ],
+            ignore_patterns=[
+                "optimizer.pt",
+                "pytorch_model.bin",
+                "training_args.bin",
+                "scheduler.pt",
+                "tokenizer.json",
+                "tokenizer_config.json",
+                "special_tokens_map.json",
+                "vocab.json",
+                "merges.txt",
+                "tokenizer.*"
+            ]
+        )
+
+    def create_trainer(self):
         pass
 
     def initialise (self, 
@@ -46,11 +77,14 @@ class OrpheusTrainer():
             assert dataset_name is not None, "Please pass dataset_name."
             assert model_name is not None, "Please pass the name of the model you trained in stage 1."
 
+
         if stage == "stage_3":
             assert model_name is not None, "Please pass model_name."
             assert base_model_name is not None, "Please pass the name of the model you trained in stage 1 or stage 2 if you chose to do stage 2."
-
+        
         if stage == "stage_4":
             assert dataset_name is not None, "Please pass the name of the processed dataset."
             assert model_name is not None, "Please pass model_name you trained in stage 3."
             assert base_model_name is not None, "Please pass the name of the model you trained in stage 1 or stage 2 "
+
+        self._training_stage = stage
