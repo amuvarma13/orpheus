@@ -342,11 +342,6 @@ push_name = "canopy-tune-stage_2
 orpheus.fast_push_to_hub(checkpoint=checkpoint_name, push_name=push_name)
 ```
 
-Launch your script with a distributed command like accelerate, torchrun etc...
-
-``` bash
-accelerate launch my_script.py
-```
 
 ### Stage 3
 
