@@ -201,11 +201,24 @@ ipd.Audio(output_1["speech"], rate=24000)
 
 # Training
 
+##### Overview
 You may wish to customise this model to you use case. In a few simple steps you can teach the model to speak with emotion, certain niche words, give it a personality, and more. You should view tuning this model as an identical to tuning an LLM.
 
 Training is generally in 2 stages: first we train the language model to speak/behave with certain properties, then we train the speech modules so that the model can accept speech. 
 
 We've attached scripts and sample datasets for tuning the model as shown in the demos at the top of the page. Also below are training costs.
 
+We provide both high level training classes and the core training scripts which leverage the transformers library for standard practice.
+
+### Stage 1
+
+Here we tune the speech model on question-answer pairs, in the voice and style we want our final model to have. Things to include in the dataset:
+- The voice of the model
+- The style of speech (i.e. is it over emotional, should it be able to whisper, should it speak monotonically etc ...)
+- Should it have a personality (i.e. pretend to be someone, give long answer, be rude/funny etc ...)
+
+
+
+##### Option 1: Use HuggingFace transformers
 
 
