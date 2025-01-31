@@ -197,3 +197,15 @@ ipd.Audio(output_1["speech"], rate=24000)
   
   We will also soon release a bigger, more extensively trained model that doesn't have any of the above issues.</p>
 </details>
+
+
+# Training
+
+You may wish to customise this model to you use case. In a few simple steps you can teach the model to speak with emotion, certain niche words, give it a personality, and more. You should view tuning this model as an identical to tuning an LLM.
+
+Training is generally in 2 stages: first we train the language model to speak/behave with certain properties, then we train the speech modules so that the model can accept speech. 
+
+We've attached scripts and sample datasets for tuning the model as shown in the demos at the top of the page. Also below are training costs.
+
+
+
