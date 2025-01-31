@@ -163,11 +163,47 @@ class Stage_1_Trainer():
             print(f"Skipping row due to error: {e}")
 
         return {"codes_list": codes_list}
+    
+
+
+    # Map the function in parallel
+    def _tokenize_fn(self, example):
+        user_ids = self.tokenizer.encode(example["question"], add_special_tokens=True)
+        answer_ids = self.tokenizer.encode(example["answer"], add_special_tokens=True)
+        user_ids.append(self.end_of_text)
+        answer_ids.append(self.end_of_text)
+        example["user_tokens"] = user_ids
+        example["answer_tokens"] = answer_ids
+        return example
+
+    def _speech_create_input_ids(self, example):
+        input_ids = (
+            [self.start_of_human]
+            + example["user_tokens"]
+            + [self.end_of_human]
+            + [self.start_of_ai]
+            + example["answer_tokens"]
+            + [self.start_of_speech]
+            + example["codes_list"]
+            + [self.end_of_speech]
+            + [self.end_of_ai]
+        )
+        example["input_ids"] = input_ids
+        example["labels"] = input_ids
+        example["attention_mask"] = [1] * len(input_ids)
+        return example
 
         
     def _process_speech_dataset(self, speech_dataset):
         self.sr = speech_dataset[0]["answer_audio"]["sampling_rate"]
-        speech_dataset = speech_dataset.map(self._add_codes, remove_columns=["answer_audio"])
+        speech_dataset = speech_dataset.map(self._add_codes, remove_columns=["answer_audio"], desc="Processing speech dataset, Step 1 of 3")
+        speech_dataset = speech_dataset.filter(lambda x: x['question'] and x['answer'] and x['codes_list'])
+        speech_dataset = speech_dataset.filter(lambda x: len(x['codes_list']) < 8192)
+        speech_dataset = speech_dataset.map(self._tokenize_fn, num_proc=self.num_threads, desc="Processing speech dataset, Step 2 of 3")
+        speech_dataset = speech_dataset.map(self._speech_create_input_ids, num_proc=1, desc="Processing speech dataset, Step 3 of 3")
+        columns_to_keep = ["input_ids", "labels",   "attention_mask"]
+        columns_to_remove = [col for col in speech_dataset.column_names if col not in columns_to_keep]
+        speech_dataset = speech_dataset.remove_columns(columns_to_remove)
         return speech_dataset
     
     def _create_training_args (self, **kwargs):
