@@ -391,7 +391,7 @@ accelerate launch my_script.py
 
 #### Option 2: Use HuggingFace transformers
 
-You can see and modify the script found in src/train/stage_2.py and add your dataset/hyperparameters/config to the src/train/stage_2_config.yaml file.
+You can see and modify the script found in src/train/stage_3.py and add your dataset/hyperparameters/config to the src/train/stage_3_config.yaml file.
 
 ``` bash
 accelerate launch stage_3.py
@@ -475,4 +475,12 @@ Launch your script with a distributed command like accelerate, torchrun etc...
 
 ``` bash
 accelerate launch my_script.py
+```
+
+#### Option 2: Use HuggingFace transformers
+
+You can see and modify the script found in src/train/stage_4.py and add your dataset/hyperparameters/config to the src/train/stage_4_config.yaml file.
+
+``` bash
+accelerate launch stage_4.py
 ```
