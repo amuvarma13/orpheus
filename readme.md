@@ -262,6 +262,7 @@ You can see and modify the script found in src/train/stage_1.py and add your dat
 accelerate launch stage_1.py
 ```
 
+#### Saving models remotely
 You can also save checkpoints in the hub with:
 
 ``` python
