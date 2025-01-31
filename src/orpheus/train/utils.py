@@ -1,9 +1,12 @@
 from huggingface_hub import HfApi, snapshot_download
 from datasets import load_dataset
+from .stage_1 import Stage_1_Trainer
+
 class OrpheusTrainer():
     def __init__(self):
         self.dataset = None
         self._training_stage = None
+        self._training_class = None
         pass
 
     def _load_dataset(self, dataset_name):
@@ -38,7 +41,7 @@ class OrpheusTrainer():
         )
 
     def create_trainer(self):
-        pass
+        return self._training_class.create_trainer()
 
     def initialise (self, 
                     stage="stage_1", 
@@ -51,6 +54,10 @@ class OrpheusTrainer():
                     model_name = None, 
                     base_model_name = None,
                 ):
+        
+        self.use_wandb = use_wandb
+        self.wandb_project_name = wandb_project_name
+        self.wandb_run_name = wandb_run_name
         
         if model_name is not None:
             self._load_model(model_name)
@@ -73,6 +80,15 @@ class OrpheusTrainer():
             assert text_dataset_name is not None, "Please pass text_dataset_name."
             assert speech_dataset_name is not None, "Please pass speech_dataset_name."
 
+            self._training_class = Stage_1_Trainer(
+                model_name = self.model_name,  
+                text_dataset=self.text_dataset, 
+                speech_dataset = self.speech_dataset, 
+                use_wandb = self.use_wandb,
+                wandb_project_name = self.wandb_project_name,
+                wandb_run_name = self.wandb_run_name,
+            )
+
         if stage == "stage_2":
             assert dataset_name is not None, "Please pass dataset_name."
             assert model_name is not None, "Please pass the name of the model you trained in stage 1."
@@ -88,3 +104,7 @@ class OrpheusTrainer():
             assert base_model_name is not None, "Please pass the name of the model you trained in stage 1 or stage 2 "
 
         self._training_stage = stage
+
+    
+
+    

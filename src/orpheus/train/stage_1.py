@@ -85,7 +85,7 @@ class Stage_1_Trainer():
         
 
     
-    def _create_trainer(
+    def create_trainer(
             self, 
             model,
         ):
@@ -96,4 +96,5 @@ class Stage_1_Trainer():
             train_dataset=self.dataset,
             data_collator=self._data_collator,
         )
+        return trainer
             
