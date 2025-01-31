@@ -66,8 +66,9 @@ class Stage_1_Trainer():
 
 
         self.save_folder = save_folder
-        self.preprocessed_text_dataset = self._process_text_dataset(text_dataset)
-        self.dataset = BatchedAlternatingDataset(self.preprocessed_text_dataset, speech_dataset, batch_total=self.batch_size*self.num_gpus)
+
+        self._process_text_dataset(self.text_dataset)
+        self.dataset = BatchedAlternatingDataset(text_dataset, speech_dataset, batch_total=self.batch_size*self.num_gpus)
 
 
         pass
