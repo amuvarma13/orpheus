@@ -27,6 +27,7 @@ class Stage_1_Trainer():
 
         ):
         self.text_dataset = text_dataset
+        self.num_threads = multiprocessing.cpu_count()
         self.preprocessed_text_dataset = self._process_text_dataset(text_dataset)
 
         self.speech_dataset = speech_dataset
@@ -44,7 +45,7 @@ class Stage_1_Trainer():
 
         self.dataset = BatchedAlternatingDataset(self.preprocessed_text_dataset, speech_dataset, batch_total=self.batch_size*self.num_gpus)
 
-        self.num_threads = multiprocessing.cpu_count()
+        
 
         self.tokenizer = tokenizer
 
