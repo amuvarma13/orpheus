@@ -61,12 +61,11 @@ class Stage_2_Trainer():
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
         self.snac_model = SNAC.from_pretrained("hubertsiuzdak/snac_24khz").to(self.device)
+        self.dataset = dataset
 
-        self._process_dataset(self.speech_dataset)
+        self._process_dataset(self.dataset)
         
         self.dataset = BatchedAlternatingDataset(self.processed_text_dataset, self.processed_speech_dataset, batch_total=self.batch_size*self.num_gpus)
-
-
         pass
 
 
