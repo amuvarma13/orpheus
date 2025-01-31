@@ -268,10 +268,10 @@ orpheus.initialise(
 )
 
 orpheus_trainer = orpheus.create_trainer(
-  report_to = "wandb" # pass any TrainingArgs in here
+  report_to = "wandb" # pass any 🤗 TrainingArgs in here
 ) 
 
-orpheus_trainer.train() # orpheus_trainer subclasses Trainer
+orpheus_trainer.train() # orpheus_trainer subclasses 🤗 Trainer
 ```
 
 Launch your script with a distributed command like accelerate, torchrun etc...
@@ -311,22 +311,23 @@ Here is an example dataset
 ``` python
 from orpheus import OrpheusTrainer
 
+# optionally use wandb
+import wandb
+wandb.init(project="orpheusdeblib", name="s1")
+
 orpehus = OrpheusTrainer()
 
 dataset_name = "amuvarma/stage_2_training_example"
 
-orpheus.initialise(
+orpheus = OrpheusTrainer(
     stage = "stage_2",
-    dataset = dataset_name, 
-    use_wandb = True, # optional, defaults to False
-    wandb_project_name = None, # optional defaults to "orpheus-stage-2"
-    wandb_run_name = None, # optional defaults to "r0"
-    model = "amuvarma/stage-1-tuned-example-model" # pass a huggingface model or local checkpoint folder
+    dataset_name = dataset_name,
+    model_name = model_name # optional, defaults to Canopy's pretrained model
 )
 
-orpheus_trainer = orpheus.create_trainer() # subclasses Trainer 
+orpheus_trainer = orpheus.create_trainer(report_to = "wandb") # pass any 🤗 TrainingArgs in here
 
-orpheus_trainer.train() # pass any additional params Trainer accepts in the X.train(**args)
+orpheus_trainer.train()  # orpheus_trainer subclasses 🤗 Trainer
 ```
 
 Launch your script with a distributed command like accelerate, torchrun etc...
