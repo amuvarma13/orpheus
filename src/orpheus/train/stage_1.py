@@ -1,18 +1,9 @@
 import torch
-from datasets import load_dataset
-from transformers import AutoModelForCausalLM, Trainer, TrainingArguments, AutoTokenizer
 import numpy as np
-from torch.distributed.fsdp.fully_sharded_data_parallel import FullStateDictConfig
-from torch.distributed.fsdp import (FullyShardedDataParallel as FSDP, FullStateDictConfig, StateDictType)
-from torch.utils.data import DataLoader, Dataset
-from torch.utils.data.distributed import DistributedSampler
-from tqdm import tqdm
-import os
-import yaml
 from .components import InterleavedFSDPTrainer, BatchedAlternatingDataset
-from transformers import AutoModel, TrainingArguments
-
-import multiprocessing
+from transformers import TrainingArguments
+from snac import SNAC
+import torchaudio.transforms as T
 
 
 class Stage_1_Trainer():
@@ -67,6 +58,8 @@ class Stage_1_Trainer():
 
         self.save_folder = save_folder
 
+        self.snac_model = SNAC.from_pretrained("hubertsiuzdak/snac_24khz")
+
         self.processed_text_dataset = self._process_text_dataset(self.text_dataset)
         self.dataset = BatchedAlternatingDataset(self.processed_text_dataset, speech_dataset, batch_total=self.batch_size*self.num_gpus)
 
@@ -88,7 +81,6 @@ class Stage_1_Trainer():
 
             [self.start_of_human] +
             example['question_text'] +
-            [self.end_of_text] +
             [self.end_of_human] +
             [self.start_of_ai] +
             example['answer_text']
@@ -126,8 +118,52 @@ class Stage_1_Trainer():
         print(text_dataset[0]["input_ids"])
 
         return text_dataset.remove_columns(columns_to_remove)
+    
+    def _tokenise_audio(self, waveform):
+        waveform = torch.from_numpy(waveform).unsqueeze(0)
+        waveform = waveform.to(dtype=torch.float32)
+
+        # resample_transform = T.Resample(orig_freq=original_sample_rate, new_freq=16000)
+        # waveform = resample_transform(waveform)
+        resample_transform = T.Resample(orig_freq=self.sr, new_freq=24000)
+        waveform = resample_transform(waveform)
+
+        waveform = waveform.unsqueeze(0).to("cuda")
+        #generate the codes from snac
+        with torch.inference_mode():
+            codes = model.encode(waveform)
+
+        all_codes = []
+        for i in range(codes[0].shape[1]):
+            all_codes.append(codes[0][0][i].item()+128266)
+            all_codes.append(codes[1][0][2*i].item()+128266+4096)
+            all_codes.append(codes[2][0][4*i].item()+128266+(2*4096))
+            all_codes.append(codes[2][0][(4*i)+1].item()+128266+(3*4096))
+            all_codes.append(codes[1][0][(2*i)+1].item()+128266+(4*4096))
+            all_codes.append(codes[2][0][(4*i)+2].item()+128266+(5*4096))
+            all_codes.append(codes[2][0][(4*i)+3].item()+128266+(6*4096))
 
 
+        return all_codes
+    
+    def _add_codes(self, example):
+        codes_list = None
+
+        try:
+            answer_audio = example.get("answer_audio")
+            if answer_audio and "array" in answer_audio:
+                audio_array = answer_audio["array"]
+                codes_list = self._tokenise_audio(audio_array)
+        except Exception as e:
+            print(f"Skipping row due to error: {e}")
+
+        return {"codes_list": codes_list}
+
+        
+    def _process_speech_dataset(self, speech_dataset):
+        self.sr = speech_dataset[0]["answer_audio"]["sampling_rate"]
+        speech_dataset = speech_dataset.map(self._add_codes, remove_columns=["answer_audio"])
+        return speech_dataset
     
     def _create_training_args (self, **kwargs):
         
