@@ -69,8 +69,7 @@ class Stage_1_Trainer():
             lr_scheduler_type="cosine"
         )
     
-    def _data_collator(**kwargs):
-        print("data_collator", kwargs)
+    def _data_collator(self, features):
         input_ids = [f["input_ids"] for f in features]
 
         if any("attention_mask" not in f for f in features):
