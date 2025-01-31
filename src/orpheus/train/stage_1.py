@@ -88,6 +88,7 @@ class Stage_1_Trainer():
 
             [self.start_of_human] +
             example['question_text'] +
+            [self.end_of_text] +
             [self.end_of_human] +
             [self.start_of_ai] +
             example['answer_text']
@@ -121,6 +122,8 @@ class Stage_1_Trainer():
         columns_to_keep = ["input_ids", "attention_mask", "labels"]
         all_columns = text_dataset.column_names
         columns_to_remove = [col for col in all_columns if col not in columns_to_keep]
+
+        print(text_dataset[0]["input_ids"])
 
         return text_dataset.remove_columns(columns_to_remove)
 
