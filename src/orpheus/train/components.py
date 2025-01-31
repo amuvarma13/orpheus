@@ -31,9 +31,9 @@ class InterleavedFSDPTrainer(Trainer):
         if self.is_world_process_zero():
             global_step = self.state.global_step
             if global_step % 2 == 0:
-                wandb.log({"text_loss": logs["loss"], "step": global_step})
-            else:
                 wandb.log({"audio_loss": logs["loss"], "step": global_step})
+            else:
+                wandb.log({"text_loss": logs["loss"], "step": global_step})
 
     def save_model(self, output_dir=None, _internal_call=False):
         if output_dir is None:
@@ -46,6 +46,7 @@ class InterleavedFSDPTrainer(Trainer):
             cpu_state_dict = self.model.state_dict()
         self.model.save_pretrained(output_dir, state_dict=cpu_state_dict)
 
+
 class AlternatingDistributedSampler(DistributedSampler):
     def __init__(self, dataset, num_replicas=None, rank=None, shuffle=False):
         super().__init__(dataset, num_replicas=num_replicas, rank=rank, shuffle=shuffle)
@@ -55,6 +56,7 @@ class AlternatingDistributedSampler(DistributedSampler):
         indices = list(range(len(self.dataset)))
         indices = indices[self.rank:self.total_size:self.num_replicas]
         return iter(indices)
+
 
 class BatchedAlternatingDataset(Dataset):
     def __init__(self, dataset1, dataset2, batch_total):
