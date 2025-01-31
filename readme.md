@@ -244,8 +244,10 @@ dataset_name = "amuvarma/stage_1_training_example"
 
 orpheus.initialise(
     stage = "stage_1",
-    dataset = dataset, 
+    dataset = dataset_name, 
     use_wandb = True, # optional, defaults to False
+    wandb_project_name = None, # optional defaults to "orpheus-stage-1"
+    wandb_run_name = None, # optional defaults to "r0"
     model = None # optional, defaults to Canopy's pretrained model
 )
 
@@ -299,9 +301,11 @@ dataset_name = "amuvarma/stage_2_training_example"
 
 orpheus.initialise(
     stage = "stage_2",
-    dataset = dataset, 
+    dataset = dataset_name, 
     use_wandb = True, # optional, defaults to False
-    model = "amuvarma/stage-1-tuned-example-model" # pass a huggingface model
+    wandb_project_name = None, # optional defaults to "orpheus-stage-2"
+    wandb_run_name = None, # optional defaults to "r0"
+    model = "amuvarma/stage-1-tuned-example-model" # pass a huggingface model or local checkpoint folder
 )
 
 orpheus_trainer = orpheus.create_trainer() # subclasses Trainer => you can pass any additional params Trainer accepts
@@ -325,4 +329,34 @@ push_name = "canopy-tune-stage_2
 orpheus.fast_push_to_hub(checkpoint=checkpoint_name, push_name=push_name)
 ```
 
+### Stage 3
 
+Now we need to train the speech projector.
+
+##### GPU requirements: minimum of 1 gpu with 80gb of vram
+
+You can use more GPUs to train faster. The model converges very quickly and you don't need to train it on the entire datasets (which we provide). The total training time if you were to train it on the entire dataset would be 16 H100-hours.
+
+#### Option 1: Use our highlevel API
+
+``` python
+from orpheus import OrpheusTrainer
+
+orpehus = OrpheusTrainer()
+
+dataset_name = "amuvarma/orpheus_stage_3"
+
+orpheus.initialise(
+    stage = "stage_3",
+    dataset = dataset_name, 
+    train_on_fraction = 0.9, #i.e. trains on 90% the dataset defaults to 1 - use for lower costs
+    use_wandb = True, # optional, defaults to False
+    wandb_project_name = None, # optional defaults to "orpheus-stage-2"
+    wandb_run_name = None, # optional defaults to "r0"
+    model = "amuvarma/stage-2-tuned-example-model" # pass a huggingface model or local checkpoint folder
+)
+
+orpheus_trainer = orpheus.create_trainer() # subclasses Trainer => you can pass any additional params Trainer accepts
+
+orpheus_trainer.train()
+```
