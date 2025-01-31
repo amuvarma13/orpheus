@@ -438,9 +438,9 @@ orpheus.initialise(
 
 )
 
-orpheus_trainer = orpheus.create_trainer() # subclasses Trainer => you can pass any additional params Trainer accepts in the .train(**args) below
+orpheus_trainer = orpheus.create_trainer() # subclasses Trainer 
 
-orpheus_trainer.train()
+orpheus_trainer.train() # => you can pass any additional params Trainer accepts in the .train(**args) below
 ```
 
 Launch your script with a distributed command like accelerate, torchrun etc...
