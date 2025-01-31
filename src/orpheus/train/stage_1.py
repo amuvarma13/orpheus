@@ -101,7 +101,7 @@ class Stage_1_Trainer():
     def _process_text_dataset(self, text_dataset):
         return text_dataset.map(
             self._process_single_example,
-            num_proc=self.num_threads,
+            num_proc=1,
             desc="Preprocessing your text dataset"
         )
 
