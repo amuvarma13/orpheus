@@ -1,7 +1,7 @@
 from huggingface_hub import HfApi, snapshot_download
 from datasets import load_dataset
 from .stage_1 import Stage_1_Trainer
-from transformers import AutoModelForCausalLM
+from transformers import AutoModelForCausalLM, AutoTokenizer
 
 class OrpheusTrainer():
     def _load_dataset(self, dataset_name):
@@ -36,6 +36,9 @@ class OrpheusTrainer():
         )
 
         return AutoModelForCausalLM.from_pretrained(model_name)
+    
+    def _load_tokenizer(self, model_name):
+        return AutoTokenizer.from_pretrained(model_name)
 
     def create_trainer(self, **kwargs):
         return self._training_class.create_trainer(**kwargs)
@@ -58,6 +61,7 @@ class OrpheusTrainer():
         if model_name is not None:
             self._load_model(model_name)
             self.model = self._load_model(model_name)
+            self.tokenizer = self._load_tokenizer(model_name)
         
         if base_model_name is not None:
             self._load_model(base_model_name)
@@ -75,6 +79,8 @@ class OrpheusTrainer():
             self._load_dataset(speech_dataset_name)
             self.speech_dataset = self._load_dataset(speech_dataset_name)
 
+        
+
         self.pad_token = pad_token
         
         assert stage in ["stage_1", "stage_2", "stage_3", "stage_4"], "Please pass valid stage."
@@ -87,7 +93,8 @@ class OrpheusTrainer():
                 model = self.model,  
                 text_dataset=self.text_dataset, 
                 speech_dataset = self.speech_dataset, 
-                pad_token = self.pad_token
+                pad_token = self.pad_token, 
+                tokenizer=self.tokenizer
             )
 
         if stage == "stage_2":
