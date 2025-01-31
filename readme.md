@@ -1,3 +1,5 @@
+*We include information for inference and training*
+
 # Inference
 
 ### Setup Environment
