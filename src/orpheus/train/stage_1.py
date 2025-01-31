@@ -9,7 +9,6 @@ from torch.utils.data.distributed import DistributedSampler
 from tqdm import tqdm
 import os
 import yaml
-import wandb
 from .components import InterleavedFSDPTrainer, BatchedAlternatingDataset
 from transformers import AutoModel, TrainingArguments
 
@@ -20,7 +19,6 @@ class Stage_1_Trainer():
             model,  
             text_dataset=None, 
             speech_dataset = None, 
-            use_wandb = False,
             save_folder = "checkpoints",
             pad_token = None
 
@@ -45,10 +43,7 @@ class Stage_1_Trainer():
         if pad_token is None:
             self.pad_token = 128263
 
-        if use_wandb:
-            self.report_to = "wandb"
-        else:
-            self.report_to = None
+
         self.save_folder = save_folder
         pass
     

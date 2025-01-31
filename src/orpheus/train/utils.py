@@ -87,7 +87,6 @@ class OrpheusTrainer():
                 model = self.model,  
                 text_dataset=self.text_dataset, 
                 speech_dataset = self.speech_dataset, 
-                use_wandb = self.use_wandb,
                 pad_token = self.pad_token
             )
 
