@@ -73,57 +73,37 @@ class Stage_1_Trainer():
 
         pass
 
-    def _create_question_tokens(self, example):
-        text_tokens = self.tokenizer.encode(example['question'], add_special_tokens=True)
-        text_tokens.append(self.end_of_text)  # Append token 1 to the end
-        return {'question_text': text_tokens}
-    
-    def _create_answers_tokens(self, example):
-        text_tokens = self.tokenizer.encode(example['answer'], add_special_tokens=True)
-        text_tokens.append(self.end_of_text)  # Append token 1 to the end
-        return {'answer_text': text_tokens}
-    
-    def _create_input_ids(self, example):
+    def _process_single_example(self, example):
+        # Create question tokens
+        question_tokens = self.tokenizer.encode(example['question'], add_special_tokens=True)
+        question_tokens.append(self.end_of_text)
+        
+        # Create answer tokens
+        answer_tokens = self.tokenizer.encode(example['answer'], add_special_tokens=True)
+        answer_tokens.append(self.end_of_text)
+        
+        # Create input ids
         input_ids = (
-
             [self.start_of_human] +
-            example['question_text'] +
+            question_tokens +
             [self.end_of_human] +
             [self.start_of_ai] +
-            example['answer_text']
+            answer_tokens
         )
-
-        example['input_ids'] = input_ids
-        example["attention_mask"] = [1] * len(input_ids)
-        example["labels"] = input_ids
-        return example
+        
+        # Return only the needed columns
+        return {
+            "input_ids": input_ids,
+            "attention_mask": [1] * len(input_ids),
+            "labels": input_ids
+        }
 
     def _process_text_dataset(self, text_dataset):
-
-        text_dataset = text_dataset.map(
-                self._create_question_tokens,
-                num_proc=self.num_threads,
-                desc="Preprocessing your text dataset, Step 1 of 3",
-            )
-    
-        text_dataset = text_dataset.map(
-            self._create_answers_tokens,
-            num_proc=self._num_threads,
-            desc="Preprocessing your text dataset, Step 2 of 3",
+        return text_dataset.map(
+            self._process_single_example,
+            num_proc=self.num_threads,
+            desc="Preprocessing your text dataset"
         )
-
-        text_dataset = text_dataset.map(
-            self._create_input_ids,
-            num_proc=self._num_threads,
-            desc="Preprocessing your text dataset, Step 3 of 3",
-        )
-
-        columns_to_keep = ["input_ids", "attention_mask", "labels"]
-        all_columns = text_dataset.column_names
-        columns_to_remove = [col for col in all_columns if col not in columns_to_keep]
-
-        return text_dataset.remove_columns(columns_to_remove)
-
 
     
     def _create_training_args (self, **kwargs):
