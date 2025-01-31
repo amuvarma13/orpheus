@@ -131,7 +131,7 @@ class Stage_1_Trainer():
         waveform = waveform.unsqueeze(0).to("cuda")
         #generate the codes from snac
         with torch.inference_mode():
-            codes = model.encode(waveform)
+            codes = self.snac_model.encode(waveform)
 
         all_codes = []
         for i in range(codes[0].shape[1]):
