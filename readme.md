@@ -20,7 +20,7 @@ orpheus = OrpheusUtility()
 
 #### 3. Initialise the model
 
-Now we register the model so that we can use it with AutoModel and AutoTokenizer.
+Now we initialise the model and register it.
 
 ```python
 import torch
@@ -262,12 +262,12 @@ You can see and modify the script found in src/train/stage_1.py and add your dat
 accelerate launch stage_1.py
 ```
 
-#### Saving models remotely
+#### Saving models remotely [OPTIONAL]
 You can also save checkpoints in the hub. 
 First log into the hub with:
 
 ``` bash
-huggingface-cli login <HF-API-Key>
+huggingface-cli login --token=<HF-API-TOKEN>
 ```
 
 Now push:
@@ -278,6 +278,51 @@ push_name = "canopy-tune-stage_1
 orpheus.fast_push_to_hub(checkpoint=checkpoint_name, push_name=push_name)
 ```
 
+### Stage 2 [OPTIONAL]
 
+You can also train the dataset on conversational data if you want it to be able to carry multiturn conversations rather than question-answering.
+
+Your dataset should have the columns `question` [String], `answer` [String], `answer_audio` [Audio element or Dict with keys "sampling_rate", "array"] `message_index` [Int], `conversation_index` [Int]. Aim for at least 500 multiturn conversations (i.e. ~2500 rows for 5 turns/conversation and 500 conversations)
+
+Here is an example dataset
+
+##### GPU requirements: minimum of 2 gpus with 80gb of vram each for ~5-15 minutes training time.
+
+#### Option 1: Use our highlevel API
+
+``` python
+from orpheus import OrpheusTrainer
+
+orpehus = OrpheusTrainer()
+
+dataset_name = "amuvarma/stage_2_training_example"
+
+orpheus.initialise(
+    stage = "stage_2",
+    dataset = dataset, 
+    use_wandb = True, # optional, defaults to False
+    model = "amuvarma/stage-1-tuned-example-model" # pass a huggingface model
+)
+
+orpheus_trainer = orpheus.create_trainer() # subclasses Trainer => you can pass any additional params Trainer accepts
+
+orpheus_trainer.train()
+```
+
+#### Option 2: Use HuggingFace transformers
+
+You can see and modify the script found in src/train/stage_2.py and add your dataset/hyperparameters/config to the src/train/stage_2_config.yaml file.
+
+``` bash
+accelerate launch stage_2.py
+```
+
+You can push your model with:
+
+``` python
+checkpoint_name = "checkpoints/checkpoint-<TRAINING STEPS>" # find <TRAINING STEPS> in checkpoints/
+push_name = "canopy-tune-stage_2
+orpheus.fast_push_to_hub(checkpoint=checkpoint_name, push_name=push_name)
+```
 
 
