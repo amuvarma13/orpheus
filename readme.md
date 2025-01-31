@@ -259,9 +259,9 @@ orpheus.initialise(
     model_name = None # optional, defaults to Canopy's pretrained model
 )
 
-orpheus_trainer = orpheus.create_trainer() # subclasses Trainer => you can pass any additional params Trainer accepts
+orpheus_trainer = orpheus.create_trainer() # subclasses Trainer 
 
-orpheus_trainer.train()
+orpheus_trainer.train() # pass any additional params Trainer accepts in the X.train(**args)
 ```
 
 Launch your script with a distributed command like accelerate, torchrun etc...
@@ -313,9 +313,9 @@ orpheus.initialise(
     model = "amuvarma/stage-1-tuned-example-model" # pass a huggingface model or local checkpoint folder
 )
 
-orpheus_trainer = orpheus.create_trainer() # subclasses Trainer => you can pass any additional params Trainer accepts
+orpheus_trainer = orpheus.create_trainer() # subclasses Trainer 
 
-orpheus_trainer.train()
+orpheus_trainer.train() # pass any additional params Trainer accepts in the X.train(**args)
 ```
 
 Launch your script with a distributed command like accelerate, torchrun etc...
@@ -360,9 +360,9 @@ orpheus.initialise(
     model = "amuvarma/stage-2-tuned-example-model" # pass a huggingface model or local checkpoint folder
 )
 
-orpheus_trainer = orpheus.create_trainer() # subclasses Trainer => you can pass any additional params Trainer accepts
+orpheus_trainer = orpheus.create_trainer() # subclasses Trainer 
 
-orpheus_trainer.train()
+orpheus_trainer.train() # pass any additional params Trainer accepts in the X.train(**args)
 ```
 
 Launch your script with a distributed command like accelerate, torchrun etc...
