@@ -223,9 +223,9 @@ Your dataset should have the columns `question` [String], `answer` [String], `an
 
 Here is an example dataset used to train one of the demos consisting of synthentically generated speech data.
 
-###### GPU requirements: minimum of 2 gpus with 80gb of vram each for ~10-45 minutes training time.
+##### GPU requirements: minimum of 2 gpus with 80gb of vram each for ~10-45 minutes training time.
 
-##### Option 1: Use HuggingFace transformers
+#### Option 1: Use HuggingFace transformers
 
 You can see and modify the script found in src/train/stage_1.py and add your dataset/hyperparameters to the stage_1.yaml file.
 
