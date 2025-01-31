@@ -272,7 +272,7 @@ First log into the hub with:
 huggingface-cli login --token=<HF-API-TOKEN>
 ```
 
-Now push:
+[OPTIONAL] You can push your model with:
 
 ``` python
 checkpoint_name = "checkpoints/checkpoint-<TRAINING STEPS>" # find <TRAINING STEPS> in checkpoints/
@@ -321,7 +321,7 @@ You can see and modify the script found in src/train/stage_2.py and add your dat
 accelerate launch stage_2.py
 ```
 
-You can push your model with:
+[OPTIONAL] You can push your model with:
 
 ``` python
 checkpoint_name = "checkpoints/checkpoint-<TRAINING STEPS>" # find <TRAINING STEPS> in checkpoints/
@@ -369,7 +369,7 @@ You can see and modify the script found in src/train/stage_2.py and add your dat
 accelerate launch stage_3.py
 ```
 
-You can push your model with:
+[OPTIONAL] You can push your model with:
 
 ``` python
 checkpoint_name = "checkpoints/checkpoint-<TRAINING STEPS>" # find <TRAINING STEPS> in checkpoints/
