@@ -292,8 +292,9 @@ You can push your model with:
 
 ``` python
 checkpoint_name = "checkpoints/checkpoint-<TRAINING STEPS>" # find <TRAINING STEPS> in checkpoints/
+tokenizer_name = "amuvarma/3b-10m-pretrain-full"
 push_name = "canopy-tune-stage_1
-orpheus.fast_push_to_hub(checkpoint=checkpoint_name, push_name=push_name)
+orpheus.fast_push_model_and_tokenizer(checkpoint=checkpoint_name, push_name=push_name)
 ```
 
 ### Stage 2 [OPTIONAL]
