@@ -220,6 +220,13 @@ Clone this repository.
 pip install canopy-orpheus
 ```
 
+Now install Flash Attention. Depending on your version of CUDA and torch you may need to try a few different versions if you get the error.
+
+```
+pip install flash_attn
+```
+
+
 ### Stage 1
 
 At this stage we tune:
