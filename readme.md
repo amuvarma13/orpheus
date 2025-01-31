@@ -208,7 +208,7 @@ You may wish to customise this model to you use case. In a few simple steps you 
 
 Training is generally in 2 stages: first we train the language model to speak/behave with certain properties, then we train the speech modules so that the model can accept speech. 
 
-We've attached scripts and sample datasets for tuning the model as shown in the demos at the top of the page. Also below are training costs.
+We've attached scripts and sample datasets for tuning the model as shown in the demos at the top of the page. Also below are training costs, but generally should be less than $75.
 
 We provide both high level training classes and the core training scripts which leverage the transformers library for standard practice.
 
@@ -219,8 +219,14 @@ Here we tune the speech model on question-answer pairs, in the voice and style w
 - The style of speech (i.e. is it over emotional, should it be able to whisper, should it speak monotonically etc ...)
 - Should it have a personality (i.e. pretend to be someone, give long answer, be rude/funny etc ...)
 
-Your dataset should have the columns `question` [String], `answer` [String], `answer_audio` [Audio element or Dict with keys "sampling_rate", "array"]. Here is an example.
+Your dataset should have the columns `question` [String], `answer` [String], `answer_audio` [Audio element or Dict with keys "sampling_rate", "array"]. Aim for at least 1000 rows - and upwards of 10000 rows should better learning.
+
+Here is an example dataset used to train one of the demos consisting of synthentically generated speech data.
+
+###### GPU requirements: minimum of 2 gpus with 80gb of vram each for ~10-45 minutes training time.
 
 ##### Option 1: Use HuggingFace transformers
+
+You can see and modify the script found in src/train/stage_1.py and add your dataset/hyperparameters to the stage_1.yaml file.
 
 
