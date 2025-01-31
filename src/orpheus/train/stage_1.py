@@ -16,9 +16,9 @@ from transformers import AutoModel, TrainingArguments
 class Stage_1_Trainer():
     def __init__(
             self, 
-            model_name,  
-            text_dataset="amuvarma/5k-qa-pairs-tttts", 
-            speech_dataset = "amuvarma/va-320k-330k-snac-no-identity-QA_TTTTS", 
+            model,  
+            text_dataset=None, 
+            speech_dataset = None, 
             use_wandb = False,
             wandb_project_name = None,
             wandb_run_name = None,
@@ -28,7 +28,7 @@ class Stage_1_Trainer():
         self.text_dataset = text_dataset
         self.speech_dataset = speech_dataset
         self.dataset = BatchedAlternatingDataset(text_dataset, speech_dataset)
-        self.model = AutoModel.from_pretrained(model_name)
+        self.model = model
         
         # some default values that can be overridden in the .train() method
         self.batch_size = 1

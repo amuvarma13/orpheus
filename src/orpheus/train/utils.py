@@ -1,14 +1,9 @@
 from huggingface_hub import HfApi, snapshot_download
 from datasets import load_dataset
 from .stage_1 import Stage_1_Trainer
+from transformers import AutoModel
 
 class OrpheusTrainer():
-    def __init__(self):
-        self.dataset = None
-        self._training_stage = None
-        self._training_class = None
-        pass
-
     def _load_dataset(self, dataset_name):
         snapshot_download(
             repo_id=dataset_name,
@@ -40,10 +35,12 @@ class OrpheusTrainer():
             ]
         )
 
+        return AutoModel.from_pretrained(model_name)
+
     def create_trainer(self):
         return self._training_class.create_trainer()
 
-    def initialise (self, 
+    def __init__ (self, 
                     stage="stage_1", 
                     text_dataset_name="amuvarma/stage_1_training_example",
                     speech_dataset_name="amuvarma/stage_1_training_example",
@@ -54,25 +51,30 @@ class OrpheusTrainer():
                     model_name = "amuvarma/3b-10m-pretrain-full", 
                     base_model_name = None,
                 ):
-        
+
         self.use_wandb = use_wandb
         self.wandb_project_name = wandb_project_name
         self.wandb_run_name = wandb_run_name
         
         if model_name is not None:
             self._load_model(model_name)
+            self.model = self._load_model(model_name)
         
         if base_model_name is not None:
             self._load_model(base_model_name)
+            self.base_model = self._load_model(base_model_name)
 
         if dataset_name is not None:
             self._load_dataset(dataset_name)
+            self.dataset = self._load_dataset(dataset_name)
         
         if text_dataset_name is not None:
             self._load_dataset(text_dataset_name)
+            self.text_dataset = self._load_dataset(text_dataset_name)
         
         if speech_dataset_name is not None:
             self._load_dataset(speech_dataset_name)
+            self.speech_dataset = self._load_dataset(speech_dataset_name)
         
         assert stage in ["stage_1", "stage_2", "stage_3", "stage_4"], "Please pass valid stage."
 
@@ -81,7 +83,7 @@ class OrpheusTrainer():
             assert speech_dataset_name is not None, "Please pass speech_dataset_name."
 
             self._training_class = Stage_1_Trainer(
-                model_name = self.model_name,  
+                model = self.model,  
                 text_dataset=self.text_dataset, 
                 speech_dataset = self.speech_dataset, 
                 use_wandb = self.use_wandb,
