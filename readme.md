@@ -212,6 +212,12 @@ We've attached scripts and sample datasets for tuning the model as shown in the 
 
 We provide both high level training classes and the core training scripts which leverage the transformers library for standard practice.
 
+### Installation
+Clone this repository.
+```bash
+pip install canopy-orpheus
+```
+
 ### Stage 1
 
 Here we tune the speech model on question-answer pairs, in the voice and style we want our final model to have. Things to include in the dataset:
@@ -227,6 +233,15 @@ Here is an example dataset used to train one of the demos consisting of synthent
 
 #### Option 1: Use HuggingFace transformers
 
-You can see and modify the script found in src/train/stage_1.py and add your dataset/hyperparameters to the stage_1.yaml file.
+You can see and modify the script found in src/train/stage_1.py and add your dataset/hyperparameters/config to the src/train/stage_1_config.yaml file.
+
+``` bash
+accelerate launch stage_1.py
+```
+
+#### Option 2: Use our highlevel API
+
+``` python
+
 
 
