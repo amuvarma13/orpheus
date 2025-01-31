@@ -258,7 +258,6 @@ text_dataset_name = "amuvarma/stage_1_text_dataset"
 orpheus.initialise(
     stage = "stage_1",
     speech_dataset_name = speech_dataset_name,
-    speech_dataset = speech_dataset_name, 
     text_dataset_name = text_dataset_name, # optional, defaults to generic QA dataset for LLM tuning
     use_wandb = True, # optional, defaults to False
     wandb_project_name = None, # optional defaults to "orpheus-stage-1"

@@ -51,7 +51,7 @@ class OrpheusTrainer():
                     use_wandb = True,
                     wandb_project_name = None, 
                     wandb_run_name = None, 
-                    model_name = None, 
+                    model_name = "amuvarma/3b-10m-pretrain-full", 
                     base_model_name = None,
                 ):
         
