@@ -297,6 +297,9 @@ push_name = "canopy-tune-stage_1"
 orpheus.fast_push_model_and_tokenizer(checkpoint=checkpoint_name, push_name=push_name)
 ```
 
+#### Testing out your tuned model [OPTIONAL]
+You can pass text inputs to your model to test out inference (not speech inputs). You can use the inference library as presented above to test out your model.
+
 ### Stage 2 [OPTIONAL]
 
 You can also train the dataset on conversational data if you want it to be able to carry multiturn conversations rather than question-answering.
@@ -343,6 +346,9 @@ checkpoint_name = "checkpoints/checkpoint-<TRAINING STEPS>" # find <TRAINING STE
 push_name = "canopy-tune-stage_2"
 orpheus.fast_push_to_hub(checkpoint=checkpoint_name, push_name=push_name)
 ```
+
+#### Testing out your tuned model [OPTIONAL]
+You can pass text inputs to your model to test out inference (not speech inputs). You can use the inference library as presented above to test out your model.
 
 
 ### Stage 3
