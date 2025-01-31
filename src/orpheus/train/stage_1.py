@@ -47,7 +47,7 @@ class Stage_1_Trainer():
         self.save_folder = save_folder
         pass
     
-    def _calculate_default_hyperparameters(self):
+    def _create_training_args (self, **kwargs):
         
 
         assert self.num_gpus > 1, "At least 2 GPUs should be available for training, to allow FSDP."
@@ -63,7 +63,8 @@ class Stage_1_Trainer():
             save_steps=self.save_steps,
             remove_unused_columns=True, 
             learning_rate=self.learning_rate,
-            lr_scheduler_type="cosine"
+            lr_scheduler_type="cosine", 
+            **kwargs
         )
     
     def _data_collator(self, features):
@@ -95,8 +96,9 @@ class Stage_1_Trainer():
     
     def create_trainer(
             self,
+            **kwargs
         ):
-        self._calculate_default_hyperparameters()
+        self._calculate_default_hyperparameters(**kwargs)
         trainer = InterleavedFSDPTrainer(
             model=self.model,
             args=self.training_args,
