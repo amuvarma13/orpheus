@@ -25,7 +25,7 @@ class Stage_2_Trainer():
 
         self.pad_token = pad_token
 
-        dataset = dataset.select(range(50))
+        dataset = dataset.select(range(49))
         
         # some default values that can be overridden in the .train() method
         self.batch_size = 1
