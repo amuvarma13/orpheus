@@ -81,8 +81,7 @@ class OrpheusTrainer():
             self._load_dataset(speech_dataset_name)
             self.speech_dataset = self._load_dataset(speech_dataset_name)
 
-        if pad_token is not None:
-            self.pad_token = pad_token
+        self.pad_token = pad_token
         
         assert stage in ["stage_1", "stage_2", "stage_3", "stage_4"], "Please pass valid stage."
 
