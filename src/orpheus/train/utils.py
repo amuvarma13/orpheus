@@ -46,18 +46,12 @@ class OrpheusTrainer():
                     speech_dataset_name="amuvarma/stage_1_training_example",
                     dataset_name = None,
                     use_wandb = True,
-                    wandb_project_name = None, 
-                    wandb_run_name = None, 
                     model_name = "amuvarma/3b-10m-pretrain-full", 
                     base_model_name = None,
                     pad_token = None
                 ):
 
         self.use_wandb = use_wandb
-        self.wandb_project_name = wandb_project_name
-        self.wandb_run_name = wandb_run_name
-
-
 
 
         
@@ -94,8 +88,6 @@ class OrpheusTrainer():
                 text_dataset=self.text_dataset, 
                 speech_dataset = self.speech_dataset, 
                 use_wandb = self.use_wandb,
-                wandb_project_name = self.wandb_project_name,
-                wandb_run_name = self.wandb_run_name,
                 pad_token = self.pad_token
             )
 

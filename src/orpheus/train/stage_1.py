@@ -21,8 +21,6 @@ class Stage_1_Trainer():
             text_dataset=None, 
             speech_dataset = None, 
             use_wandb = False,
-            wandb_project_name = None,
-            wandb_run_name = None,
             save_folder = "checkpoints",
             pad_token = None
 
@@ -48,7 +46,6 @@ class Stage_1_Trainer():
             self.pad_token = 128263
 
         if use_wandb:
-            wandb.init(project=wandb_project_name, name=wandb_run_name)
             self.report_to = "wandb"
         else:
             self.report_to = None
