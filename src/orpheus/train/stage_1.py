@@ -24,7 +24,7 @@ class Stage_1_Trainer():
             wandb_project_name = None,
             wandb_run_name = None,
             save_folder = "checkpoints",
-            pad_token = 128263
+            pad_token = None
 
         ):
         self.text_dataset = text_dataset
@@ -43,6 +43,9 @@ class Stage_1_Trainer():
 
         self.dataset = BatchedAlternatingDataset(text_dataset, speech_dataset, batch_total=self.batch_size*self.num_gpus)
 
+
+        if pad_token is None:
+            self.pad_token = 128263
 
         if use_wandb:
             wandb.init(project=wandb_project_name, name=wandb_run_name)
