@@ -187,9 +187,8 @@ class Stage_2_Trainer():
         processed_dataset = self._convert_to_hf_dataset(all_input_ids)
         processed_dataset = processed_dataset.map(self._create_mask_and_labels, num_proc=1, desc="Processing dataset, Step 2 of 3")
         processed_dataset_length = len(processed_dataset)
-        processed_dataset_text = dataset.select(range(processed_dataset_length//2))
-        processed_dataset_speech = dataset.select(range(processed_dataset_length//2, processed_dataset_length))
-        print(processed_dataset_text)
+        processed_dataset_text = processed_dataset.select(range(processed_dataset_length//2))
+        processed_dataset_speech = processed_dataset.select(range(processed_dataset_length//2, processed_dataset_length))
         processed_dataset_text = processed_dataset_text.map(self._preserve_patches, num_proc=1,  desc="Processing dataset, Step 3 of 3")
 
         self.processed_dataset_text = processed_dataset_text
