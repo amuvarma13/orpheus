@@ -89,6 +89,7 @@ class OrpheusTrainer():
             assert text_dataset_name is not None, "Please pass text_dataset_name."
             assert speech_dataset_name is not None, "Please pass speech_dataset_name."
 
+            print("my toke",self.tokenizer)
             self._training_class = Stage_1_Trainer(
                 model = self.model,  
                 text_dataset=self.text_dataset, 
