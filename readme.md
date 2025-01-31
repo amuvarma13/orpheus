@@ -263,10 +263,19 @@ accelerate launch stage_1.py
 ```
 
 #### Saving models remotely
-You can also save checkpoints in the hub with:
+You can also save checkpoints in the hub. 
+First log into the hub with:
+
+``` bash
+huggingface-cli login <HF-API-Key>
+```
+
+Now push:
 
 ``` python
-orpheus.fast_push_to_hub()
+checkpoint_name = "checkpoints/checkpoint-<TRAINING STEPS>" # find <TRAINING STEPS> in checkpoints/
+push_name = "canopy-tune-stage_1
+orpheus.fast_push_to_hub(checkpoint=checkpoint_name, push_name=push_name)
 ```
 
 
