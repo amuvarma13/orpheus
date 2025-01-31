@@ -360,3 +360,19 @@ orpheus_trainer = orpheus.create_trainer() # subclasses Trainer => you can pass 
 
 orpheus_trainer.train()
 ```
+
+#### Option 2: Use HuggingFace transformers
+
+You can see and modify the script found in src/train/stage_2.py and add your dataset/hyperparameters/config to the src/train/stage_2_config.yaml file.
+
+``` bash
+accelerate launch stage_3.py
+```
+
+You can push your model with:
+
+``` python
+checkpoint_name = "checkpoints/checkpoint-<TRAINING STEPS>" # find <TRAINING STEPS> in checkpoints/
+push_name = "canopy-tune-stage_3
+orpheus.fast_push_to_hub(checkpoint=checkpoint_name, push_name=push_name)
+```
