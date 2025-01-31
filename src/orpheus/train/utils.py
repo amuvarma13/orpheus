@@ -70,22 +70,28 @@ class OrpheusTrainer():
             self.tokenizer = self._load_tokenizer(model_name)
         
         if base_model_name is not None:
-            self.base_model = self._load_model(base_model_name)
+            if stage == "stage_3" or stage == "stage_4":
+                self.base_model = self._load_model(base_model_name)
 
         if dataset_name is not None:
-            self.dataset = self._load_dataset(dataset_name)
+            if stage == "stage_2" or stage == "stage_4":
+                self.dataset = self._load_dataset(dataset_name)
         
         if text_dataset_name is not None:
-            self.text_dataset = self._load_dataset(text_dataset_name)
+            if stage == "stage_1":
+                self.text_dataset = self._load_dataset(text_dataset_name)
         
         if speech_dataset_name is not None:
-            self.speech_dataset = self._load_dataset(speech_dataset_name)
+            if stage == "stage_1":
+                self.speech_dataset = self._load_dataset(speech_dataset_name)
 
         if transcription_dataset is not None:
-            self.transcription_dataset = self._load_dataset(transcription_dataset)
+            if stage == "stage_3":
+                self.transcription_dataset = self._load_dataset(transcription_dataset)
 
         if qa_dataset is not None:
-            self.qa_dataset = self._load_dataset(qa_dataset)
+            if stage == "stage_3":
+                self.qa_dataset = self._load_dataset(qa_dataset)
 
         
 
@@ -119,8 +125,7 @@ class OrpheusTrainer():
 
         if stage == "stage_3":
             assert model_name is not None, "Please pass model_name."
-            assert base_model_name is not None, "Please pass the name of the model you trained in stage 1 or stage 2 if you chose to do stage 2."
-
+            
             self._training_class = Stage_3_Trainer(
                 model = self.model,
                 transcription_dataset = self.transcription_dataset,
