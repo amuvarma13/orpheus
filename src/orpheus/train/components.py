@@ -5,7 +5,7 @@ import torch
 from transformers import Trainer
 import wandb
 
-class FSDPTrainer(Trainer):
+class InterleavedFSDPTrainer(Trainer):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
     
@@ -16,9 +16,6 @@ class FSDPTrainer(Trainer):
             rank=torch.distributed.get_rank(),
             shuffle=False, 
         )
-
-        print("data collator", self.data_collator)
-
         return DataLoader(
             self.train_dataset,
             batch_size=self.args.per_device_train_batch_size,

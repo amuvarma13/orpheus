@@ -10,7 +10,7 @@ from tqdm import tqdm
 import os
 import yaml
 import wandb
-from .components import FSDPTrainer, BatchedAlternatingDataset
+from .components import InterleavedFSDPTrainer, BatchedAlternatingDataset
 from transformers import AutoModel, TrainingArguments
 
 
@@ -24,11 +24,14 @@ class Stage_1_Trainer():
             wandb_project_name = None,
             wandb_run_name = None,
             save_folder = "checkpoints",
+            pad_token = 128263
 
         ):
         self.text_dataset = text_dataset
         self.speech_dataset = speech_dataset
         self.model = model
+
+        self.pad_token = pad_token
         
         # some default values that can be overridden in the .train() method
         self.batch_size = 1
@@ -82,7 +85,7 @@ class Stage_1_Trainer():
         else:
             labels = [f["labels"] for f in features]
 
-        input_ids = torch.nn.utils.rnn.pad_sequence([torch.tensor(i, dtype=torch.long) for i in input_ids], batch_first=True, padding_value=pad_token)
+        input_ids = torch.nn.utils.rnn.pad_sequence([torch.tensor(i, dtype=torch.long) for i in input_ids], batch_first=True, padding_value=self.pad_token)
         attention_mask = torch.nn.utils.rnn.pad_sequence([torch.tensor(m, dtype=torch.long) for m in attention_mask], batch_first=True, padding_value=0)
         labels = torch.nn.utils.rnn.pad_sequence([torch.tensor(l, dtype=torch.long) for l in labels], batch_first=True, padding_value=-100)
 
@@ -100,7 +103,7 @@ class Stage_1_Trainer():
             self,
         ):
         self._calculate_default_hyperparameters()
-        trainer = FSDPTrainer(
+        trainer = InterleavedFSDPTrainer(
             model=self.model,
             args=self.training_args,
             train_dataset=self.dataset,

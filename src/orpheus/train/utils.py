@@ -50,11 +50,16 @@ class OrpheusTrainer():
                     wandb_run_name = None, 
                     model_name = "amuvarma/3b-10m-pretrain-full", 
                     base_model_name = None,
+                    pad_token = None
                 ):
 
         self.use_wandb = use_wandb
         self.wandb_project_name = wandb_project_name
         self.wandb_run_name = wandb_run_name
+
+
+
+
         
         if model_name is not None:
             self._load_model(model_name)
@@ -75,6 +80,9 @@ class OrpheusTrainer():
         if speech_dataset_name is not None:
             self._load_dataset(speech_dataset_name)
             self.speech_dataset = self._load_dataset(speech_dataset_name)
+
+        if pad_token is not None:
+            self.pad_token = pad_token
         
         assert stage in ["stage_1", "stage_2", "stage_3", "stage_4"], "Please pass valid stage."
 
@@ -89,6 +97,7 @@ class OrpheusTrainer():
                 use_wandb = self.use_wandb,
                 wandb_project_name = self.wandb_project_name,
                 wandb_run_name = self.wandb_run_name,
+                pad_token = self.pad_token
             )
 
         if stage == "stage_2":
