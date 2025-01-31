@@ -37,8 +37,8 @@ class OrpheusTrainer():
 
         return AutoModelForCausalLM.from_pretrained(model_name)
 
-    def create_trainer(self):
-        return self._training_class.create_trainer()
+    def create_trainer(self, **kwargs):
+        return self._training_class.create_trainer(**kwargs)
 
     def __init__ (self, 
                     stage="stage_1", 
