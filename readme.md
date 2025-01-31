@@ -293,7 +293,7 @@ You can push your model with:
 ``` python
 checkpoint_name = "checkpoints/checkpoint-<TRAINING STEPS>" # find <TRAINING STEPS> in checkpoints/
 tokenizer_name = "amuvarma/3b-10m-pretrain-full"
-push_name = "canopy-tune-stage_1
+push_name = "canopy-tune-stage_1"
 orpheus.fast_push_model_and_tokenizer(checkpoint=checkpoint_name, push_name=push_name)
 ```
 
@@ -340,7 +340,7 @@ You can push your model with:
 
 ``` python
 checkpoint_name = "checkpoints/checkpoint-<TRAINING STEPS>" # find <TRAINING STEPS> in checkpoints/
-push_name = "canopy-tune-stage_2
+push_name = "canopy-tune-stage_2"
 orpheus.fast_push_to_hub(checkpoint=checkpoint_name, push_name=push_name)
 ```
 
@@ -353,26 +353,21 @@ Now we need to train the speech projector.
 
 You can use more GPUs to train faster. The model converges very quickly and you don't need to train it on the entire datasets (which we provide). The total training time if you were to train it on the entire dataset would be 16 H100-hours.
 
-You should use the dataset we provide unless you have a reason not to.
+You **should** use the default dataset unless you have a reason not to.
 
 ``` python
 from orpheus import OrpheusTrainer
 
 orpehus = OrpheusTrainer()
 
-dataset_name = "amuvarma/orpheus_stage_3"
-
+#** loading the datasets can take a while, even up to an hour **
 orpheus.initialise(
     stage = "stage_3",
-    dataset = dataset_name, 
     train_on_fraction = 0.9, #i.e. trains on 90% the dataset defaults to 1 - use for lower costs
-    use_wandb = True, # optional, defaults to False
-    wandb_project_name = None, # optional defaults to "orpheus-stage-2"
-    wandb_run_name = None, # optional defaults to "r0"
     model = "amuvarma/stage-2-tuned-example-model" # pass a huggingface model or local checkpoint folder
 )
 
-orpheus_trainer = orpheus.create_trainer() # subclasses Trainer 
+orpheus_trainer = orpheus.create_trainer( report_to="wandb" ) # subclasses Trainer 
 
 orpheus_trainer.train() # pass any additional params Trainer accepts in the X.train(**args)
 ```

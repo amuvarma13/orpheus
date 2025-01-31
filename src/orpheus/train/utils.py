@@ -2,6 +2,7 @@ from huggingface_hub import HfApi, snapshot_download
 from datasets import load_dataset
 from .stage_1 import Stage_1_Trainer
 from .stage_2 import Stage_2_Trainer
+from .stage_3 import Stage_3_Trainer
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
 class OrpheusTrainer():
@@ -53,7 +54,9 @@ class OrpheusTrainer():
                     model_name = "amuvarma/3b-10m-pretrain-full", 
                     base_model_name = None,
                     pad_token = None, 
-                    tokenizer_name = "amuvarma/3b-10m-pretrain-full"
+                    tokenizer_name = "amuvarma/3b-10m-pretrain-full", 
+                    transcription_dataset = "amuvarma/mls-eng-10k-500k-projection_prep",
+                    qa_dataset = None
                 ):
 
         self.use_wandb = use_wandb
@@ -61,27 +64,28 @@ class OrpheusTrainer():
 
         
         if model_name is not None:
-            self._load_model(model_name)
             self.model = self._load_model(model_name)
         
         if tokenizer_name is not None:
             self.tokenizer = self._load_tokenizer(model_name)
         
         if base_model_name is not None:
-            self._load_model(base_model_name)
             self.base_model = self._load_model(base_model_name)
 
         if dataset_name is not None:
-            self._load_dataset(dataset_name)
             self.dataset = self._load_dataset(dataset_name)
         
         if text_dataset_name is not None:
-            self._load_dataset(text_dataset_name)
             self.text_dataset = self._load_dataset(text_dataset_name)
         
         if speech_dataset_name is not None:
-            self._load_dataset(speech_dataset_name)
             self.speech_dataset = self._load_dataset(speech_dataset_name)
+
+        if transcription_dataset is not None:
+            self.transcription_dataset = self._load_dataset(transcription_dataset)
+
+        if qa_dataset is not None:
+            self.qa_dataset = self._load_dataset(qa_dataset)
 
         
 
@@ -116,6 +120,14 @@ class OrpheusTrainer():
         if stage == "stage_3":
             assert model_name is not None, "Please pass model_name."
             assert base_model_name is not None, "Please pass the name of the model you trained in stage 1 or stage 2 if you chose to do stage 2."
+
+            self._training_class = Stage_3_Trainer(
+                model = self.model,
+                transcription_dataset = self.transcription_dataset,
+                qa_dataset = self.qa_dataset,
+                tokenizer = self.tokenizer,
+                pad_token = self.pad_token
+            )
         
         if stage == "stage_4":
             assert dataset_name is not None, "Please pass the name of the processed dataset."
