@@ -1,7 +1,7 @@
 from huggingface_hub import HfApi, snapshot_download
 from datasets import load_dataset
 from .stage_1 import Stage_1_Trainer
-from transformers import AutoModel
+from transformers import AutoModelForCausalLM
 
 class OrpheusTrainer():
     def _load_dataset(self, dataset_name):
@@ -35,7 +35,7 @@ class OrpheusTrainer():
             ]
         )
 
-        return AutoModel.from_pretrained(model_name)
+        return AutoModelForCausalLM.from_pretrained(model_name)
 
     def create_trainer(self):
         return self._training_class.create_trainer()
