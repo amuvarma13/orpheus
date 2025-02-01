@@ -166,9 +166,7 @@ class OrpheusTrainer():
             )
         
         if stage == "stage_4":
-            assert dataset_name is not None, "Please pass the name of the processed dataset."
             assert model_name is not None, "Please pass model_name you trained in stage 3."
-            assert base_model_name is not None, "Please pass the name of the model you trained in stage 1 or stage 2."
 
             if self.dataset is None:
                 self.dataset = self._load_dataset("gpt-omni/VoiceAssistant-400K")
