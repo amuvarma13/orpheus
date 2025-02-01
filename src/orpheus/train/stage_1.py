@@ -248,8 +248,6 @@ class Stage_1_Trainer():
         predictions = np.argmax(predictions, axis=1)
         accuracy = (predictions == labels).mean()
         return {"accuracy": accuracy} 
-
-
     
     def create_trainer(
             self,

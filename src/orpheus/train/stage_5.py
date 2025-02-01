@@ -132,6 +132,9 @@ class Stage_5_Trainer():
         self.start_of_speech = self.tokeniser_length + 1
         self.end_of_speech = self.tokeniser_length + 2
 
+        self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+
         self.start_of_human = self.tokeniser_length + 3
         self.end_of_human = self.tokeniser_length + 4
 
@@ -144,7 +147,7 @@ class Stage_5_Trainer():
 
         self.audio_tokens_start = self.tokeniser_length + 10
         self.sr = 16000
-        
+
         self.snac_model = SNAC.from_pretrained("hubertsiuzdak/snac_24khz").to(self.device)
 
 
