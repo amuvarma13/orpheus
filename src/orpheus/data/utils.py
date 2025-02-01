@@ -4,11 +4,13 @@ from functools import partial
 from datasets import load_dataset
 from huggingface_hub import snapshot_download
 from kokoro import KPipeline
+import torchaudio.transforms as T
 
 class OrpheusDataProcessor():
     def __init__(self):
         self.voices = ["af_alloy", "af_aoede", "af_bella", "af_heart", "af_jessica", "af_kore", "af_nicole", "af_nova", "af_river", "af_sarah", "af_sky", "am_adam", "am_echo", "am_eric", "am_fenrir", "am_liam", "am_michael", "am_onyx", "am_puck", "am_santa", "bf_alice", "bf_emma", "bf_isabella", "bf_lily", "bm_daniel", "bm_fable", "bm_george", "bm_lewis"]
         self.pipeline = KPipeline(lang_code='b') 
+        self.resampler = T.Resample(orig_freq=24000, new_freq=16000)
 
         
         pass
@@ -47,12 +49,18 @@ class OrpheusDataProcessor():
             text = example[column_name]
             
             voice = random.choice(self.voices)
- 
-            
-            wav_16k = librosa.resample(wav, orig_sr=24000, target_sr=target_sr)
+
+            generator = self.pipeline(
+                text, voice=voice, # <= change voice here
+                speed=1, split_pattern=r'\n+'
+            )
+
+            (gs, ps, audio) = next(generator)
+
+            resampled_audio = self.resampler(audio)
 
             example[audio_column_name] = {
-                'audio': wav_16k,
+                'audio': resampled_audio.to('cpu').numpy(),
                 'sampling_rate': 16000
             }
             return example

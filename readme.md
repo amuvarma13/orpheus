@@ -427,15 +427,15 @@ GPU requirements:
 - 2 vram >= 80gb for training
 
 ##### Adapt your dataset
-You will need to first adapt your stage_1 dataset and save it to huggingface before starting the training. The input question will need to be speech. We provide a simple utility function which uses the StyleTTS2 model to TTS and restructure the appropriate parts of your dataset.
+You will need to first adapt your stage_1 dataset and save it to huggingface before starting the training. The input question will need to be speech. We provide a simple utility function which uses the Kokoro model to TTS and restructure the appropriate parts of your dataset.
 
-First we download the extra dependencies required for StyleTTS2:
+First we download the extra dependencies required for Kokoro:
 
 ```bash
-pip install munch pydub pyyaml nltk matplotlib accelerate einops einops-exts typing typing-extensions cached-path tortoise-tts phonemizer git+https://github.com/resemble-ai/monotonic_align.git transformers==4.47.0
+pip install -q kokoro>=0.3.1
 ```
 ```bash
-apt install espeak espeak-ng
+apt-get -qq -y install espeak-ng > /dev/null 2>&1
 ```
 
 If you have issues with the installation check out the StyleTTS2 github.

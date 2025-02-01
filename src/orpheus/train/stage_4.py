@@ -63,11 +63,11 @@ class AudioChatDataCollator:
 
     def __call__(self, features):
         audio = torch.tensor([features[0]["question_audio"]["array"]])
-        assistant_response = features[0]["assistant"]
-        user_response = features[0]["user"]
+        assistant_response = features[0]["question"]
+        user_response = features[0]["answer"]
 
         if "<|audio|>" in user_response:
-            user_response = features[0]["user"]
+            user_response = features[0]["answer"]
         else:
             user_response = "<|audio|>"
 
