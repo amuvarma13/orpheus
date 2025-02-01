@@ -88,7 +88,9 @@ class DistributedTrainer(Trainer):
     def log(self, logs, start_time=None):
         super().log(logs, start_time)
         if self.is_world_process_zero():
+            
             global_step = self.state.global_step
+
             if "loss" not in logs:
                 return
             
