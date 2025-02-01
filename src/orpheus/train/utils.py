@@ -102,8 +102,9 @@ class OrpheusTrainer():
                 self.model = self._load_model(model_name)
             elif stage == "stage_3":
                 self.model = self._load_orpheus_model(model_name)
-            elif stage == "stage_4":
+            elif stage == "stage_4" or stage == "stage_5":
                 self.model = self._load_orpheus_model_from_orpheus(model_name)
+            
         
         if tokenizer_name is not None:
             self.tokenizer = self._load_tokenizer(model_name)
