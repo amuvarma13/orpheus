@@ -24,7 +24,7 @@ class AudioChatDataCollator:
         mel = whisper.log_mel_spectrogram(audio)
         return mel, int(duration_ms / 20) + 1
 
-    def _inference_collator(self, audio_input, user_res, ass_res, snac_tokens):
+    def _inference_collator(self, audio_input, user_res, ass_res, snac_tokens=[]):
         user_input_ids = self.tokenizer(
             user_res, return_tensors="pt").input_ids
         assistant_input_ids = self.tokenizer(
