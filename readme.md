@@ -226,7 +226,15 @@ Now install Flash Attention. Depending on your version of CUDA and torch you may
 pip install flash_attn
 ```
 
-After each stage, you should push your model with:
+
+##### Saving your model
+After each stage, you can save your model to the hub.
+
+First log into huggingface hub:
+
+```bash 
+huggingface-cli login --token=<WRITE-TOKEN>
+```
 
 You can push your model with:
 
@@ -238,10 +246,7 @@ orpheus = OrpheusUtility()
 checkpoint_name = "checkpoints/checkpoint-<TRAINING STEPS>" # find <TRAINING STEPS> in checkpoints/
 push_name = "canopy-tune-stage_2"
 orpheus.fast_push_to_hub(checkpoint=checkpoint_name, push_name=push_name)
-
 ```
-
-
 
 ### Stage 1
 
@@ -296,22 +301,6 @@ Launch your script with a distributed command like accelerate, torchrun etc...
 accelerate launch my_script.py
 ```
 
-#### Saving models remotely [OPTIONAL]
-You can also save checkpoints in the hub. 
-First log into the hub with:
-
-``` bash
-huggingface-cli login --token=<HF-API-TOKEN>
-```
-
-Push your model with the utility function provided in setup.
-
-``` python
-checkpoint_name = "checkpoints/checkpoint-<TRAINING STEPS>" # find <TRAINING STEPS> in checkpoints/
-tokenizer_name = "amuvarma/3b-10m-pretrain-full"
-push_name = "canopy-tune-stage_1"
-orpheus.fast_push_model_and_tokenizer(checkpoint=checkpoint_name, push_name=push_name)
-```
 
 #### Testing out your tuned model [OPTIONAL]
 You can pass text inputs to your model to test out inference (not speech inputs). You can use the inference library as presented above to test out your model.
@@ -358,7 +347,6 @@ accelerate launch my_script.py
 ```
 
 
-
 ### Stage 3
 
 Now we need to train the speech projector.
@@ -392,12 +380,6 @@ accelerate launch my_script.py
 ```
 
 You can push your model with:
-
-``` python
-checkpoint_name = "checkpoints/checkpoint-<TRAINING STEPS>" # find <TRAINING STEPS> in checkpoints/
-push_name = "canopy-tune-stage_3
-orpheus.fast_push_to_hub(checkpoint=checkpoint_name, push_name=push_name)
-```
 
 #### Testing out your tuned model [OPTIONAL]
 It isn't as straightforward/useful to test out your model at this stage. Instead compare the shape and values on your loss curve with those found in this blog post.
