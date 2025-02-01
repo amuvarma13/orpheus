@@ -207,6 +207,7 @@ class Stage_5_Trainer():
         return {"codes_list": codes_list}
     
     def _add_codes_to_dataset(self, dataset):
+        self.sr = dataset[0]["answer_audio"]["sampling_rate"]
         dataset = dataset.map(self._add_codes)
         return dataset
     
