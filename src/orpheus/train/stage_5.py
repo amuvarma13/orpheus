@@ -238,11 +238,6 @@ class Stage_5_Trainer():
             **kwargs
         )
 
-    def _compute_metrics(eval_pred):
-        predictions, labels = eval_pred
-        predictions = np.argmax(predictions, axis=1)
-        accuracy = (predictions == labels).mean()
-        return {"accuracy": accuracy}
 
     def create_trainer(
         self,
@@ -253,7 +248,6 @@ class Stage_5_Trainer():
             model=self.model,
             args=self.training_args,
             train_dataset=self.processed_dataset,
-            compute_metrics=self._compute_metrics,
             data_collator=AudioChatDataCollator(self.tokenizer,self.model),
         )
         return trainer
