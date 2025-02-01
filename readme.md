@@ -424,12 +424,10 @@ We train the speech projector for a final time.
 You can use the same dataset you used in Stage 1, and it should have the same format.
 
 GPU requirements: 
-- 1 V100/A100/H100 for adaptation
 - 2 vram >= 80gb for training
 
-#### Adapt Stage 1 dataset for Stage 5
-
-You will need to first adapt your stage_1 dataset and save it to huggingface before starting the training. The input question will need to be speech. We provide a simple utility function which uses the StyleTTS2 model to turn this into speech.
+##### Adapt your dataset
+You will need to first adapt your stage_1 dataset and save it to huggingface before starting the training. The input question will need to be speech. We provide a simple utility function which uses the StyleTTS2 model to TTS and restructure the appropriate parts of your dataset.
 
 First we download the extra dependencies required for StyleTTS2:
 
