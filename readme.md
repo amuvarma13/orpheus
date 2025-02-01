@@ -365,13 +365,15 @@ You **should** use the default dataset unless you have a reason not to.
 ``` python
 from orpheus import OrpheusTrainer
 
-orpehus = OrpheusTrainer()
+orpheus = OrpheusTrainer()
 
-#** loading the datasets can take a while, even up to an hour **
-orpheus.initialise(
+#** loading the datasets can take a while, even up to 30 mins **
+orpheus = OrpheusTrainer(
     stage = "stage_3",
-    train_on_fraction = 0.5, #i.e. trains on 90% the dataset defaults to 1 - use for lower costs
+    model_name = model_name,
+    batch_size = 8, # use batch_size * number_of_gpus = 64 for quickest training
     model = "amuvarma/stage-2-tuned-example-model" # pass a huggingface model or local checkpoint folder
+
 )
 
 orpheus_trainer = orpheus.create_trainer( report_to="wandb" ) # subclasses Trainer 
