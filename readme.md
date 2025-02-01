@@ -437,6 +437,8 @@ $ pip install pip install munch pydub pyyaml nltk matplotlib accelerate einops e
 $ apt install espeak espeak-ng
 ```
 
+If you have issues with the installation check out the StyleTTS2 github.
+
 ``` python
 from orpheus import OrpheusTrainer, OrpheusDataProcessor
 
