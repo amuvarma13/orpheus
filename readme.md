@@ -399,7 +399,7 @@ You **should** use the default dataset unless you have a reason not to.
 from orpheus import OrpheusTrainer
 
 #** loading the datasets can take a while, even up to an hour **
-orpehus = OrpheusTrainer(    
+orpheus = OrpheusTrainer(    
     stage = "stage_4",
     model_name = model_name,
     batch_size = 21, # use batch_size * number_of_gpus = 64 for quickest training

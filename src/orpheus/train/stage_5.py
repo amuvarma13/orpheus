@@ -215,6 +215,7 @@ class Stage_5_Trainer():
             answer_audio = example.get("answer_audio")
             if answer_audio and "array" in answer_audio:
                 audio_array = answer_audio["array"]
+                print("sampling rate: ", answer_audio["sampling_rate"])
                 codes_list = self._tokenise_audio(audio_array)
         except Exception as e:
             print(f"Skipping row due to error: {e}")
@@ -233,7 +234,7 @@ class Stage_5_Trainer():
             per_device_train_batch_size=self.batch_size,
             gradient_accumulation_steps=self.gradient_accumulation_steps,
             num_train_epochs=1,
-            learning_rate=2e-3,  # Changed to 2*10^-3
+            learning_rate=0,
             logging_steps=1,
             evaluation_strategy="no",
             push_to_hub=False,
