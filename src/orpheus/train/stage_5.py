@@ -227,7 +227,7 @@ class Stage_5_Trainer():
             per_device_train_batch_size=1,
             gradient_accumulation_steps=1,
             num_train_epochs=1,
-            learning_rate=0,
+            learning_rate=2e-3,
             logging_steps=1,
             evaluation_strategy="no",
             push_to_hub=False,
