@@ -16,8 +16,8 @@ class OrpheusTrainer():
             max_workers=64         
         )
         return load_dataset(dataset_name, split="train")
-
-    def _load_model(self, model_name):
+    
+    def _download_model(self, model_name):
         snapshot_download(
             repo_id=model_name,
             allow_patterns=[
@@ -39,29 +39,24 @@ class OrpheusTrainer():
             ]
         )
 
+    def _load_model(self, model_name):
+        self._download_model(model_name)
         return AutoModelForCausalLM.from_pretrained(model_name)
     
     def _load_orpheus_model(self, model_name):
-        snapshot_download(
-            repo_id=model_name,
-            allow_patterns=[
-                "config.json",
-                "*.safetensors",
-                "model.safetensors.index.json",
-            ],
-            ignore_patterns=[
-                "optimizer.pt",
-                "pytorch_model.bin",
-                "training_args.bin",
-                "scheduler.pt",
-                "tokenizer.json",
-                "tokenizer_config.json",
-                "special_tokens_map.json",
-                "vocab.json",
-                "merges.txt",
-                "tokenizer.*"
-            ]
+        self._download_model(model_name)
+        config = OrpheusConfig(
+            text_model_id=model_name,
+            audio_token_index=156939,
+            vocab_size=156939,
         )
+
+        model = OrpheusForConditionalGeneration(config)
+
+        return model
+
+    def _load_orpheus_model_from_orpheus(self, model_name, base_model_name):
+        self._download_model(model_name)
         config = OrpheusConfig(
             text_model_id=model_name,
             audio_token_index=156939,

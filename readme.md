@@ -356,9 +356,9 @@ orpheus.fast_push_to_hub(checkpoint=checkpoint_name, push_name=push_name)
 Now we need to train the speech projector.
 
 ##### GPU requirements: minimum of 1 gpu with 80gb of vram
-##### Additional requirements: Aim to have at least 1 TB of disk space ideally more.
+##### Additional requirements: Aim to have at least 1 TB of disk space, ideally more.
 
-You can use more GPUs to train faster. The model converges very quickly and you don't need to train it on the entire dataset (which we provide). The total training time if you were to train it on the entire dataset would be 8 H100-hours.
+You can use more GPUs to train faster. The model converges very quickly and you don't need to train it on the entire dataset (which we provide). The total training time should be around an hour.
 
 You **should** use the default dataset unless you have a reason not to.
 
@@ -403,9 +403,9 @@ It isn't as straightforward/useful to test out your model at this stage. Instead
 We continue to train the speech projector.
 
 ##### GPU requirements: minimum of 1 gpu with 80gb of vram
-##### Additional requirements: Aim to have at least 1 TB of disk space ideally more.
+##### Additional requirements: Aim to have at least 1 TB of disk space, ideally more.
 
-You can use more GPUs to train faster. The model converges very quickly and you don't need to train it on the entire dataset (which we provide). The total training time if you were to train it on the entire dataset would be 7 H100-hours.
+You can use more GPUs to train faster. The total training time should be around an hour.
 
 You **should** use the default dataset unless you have a reason not to.
 
