@@ -24,7 +24,7 @@ class AudioChatDataCollator:
         mel = whisper.log_mel_spectrogram(audio)
         return mel, int(duration_ms / 20) + 1
 
-    def _inference_collator(self, audio_input, user_res, ass_res):
+    def _inference_collator(self, audio_input, user_res, ass_res, snac_tokens):
         user_input_ids = self.tokenizer(
             user_res, return_tensors="pt").input_ids
         assistant_input_ids = self.tokenizer(
@@ -215,8 +215,8 @@ class Stage_5_Trainer():
 
         self.training_args = TrainingArguments(
             output_dir=self.save_folder,
-            per_device_train_batch_size=self.batch_size,
-            gradient_accumulation_steps=self.gradient_accumulation_steps,
+            per_device_train_batch_size=1,
+            gradient_accumulation_steps=1,
             num_train_epochs=1,
             learning_rate=0,
             logging_steps=1,
