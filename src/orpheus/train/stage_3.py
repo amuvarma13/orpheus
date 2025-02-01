@@ -171,7 +171,6 @@ class Stage_3_Trainer():
             learning_rate=2e-3,  # Changed to 2*10^-3
             logging_steps=1,
             evaluation_strategy="no",
-            report_to="wandb",
             push_to_hub=False,
             dataloader_pin_memory=False,
             remove_unused_columns=False,
