@@ -391,7 +391,7 @@ We continue to train the speech projector.
 ##### GPU requirements: minimum of 1 gpu with 80gb of vram
 ##### Additional requirements: Aim to have at least 1 TB of disk space, ideally more.
 
-You can use more GPUs to train faster. The total training time should be around an hour.
+You can use more GPUs to train faster. The total training time should be around an hour, however data loading time will also be around an hour.
 
 You **should** use the default dataset unless you have a reason not to.
 
