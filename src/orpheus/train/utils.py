@@ -90,14 +90,12 @@ class OrpheusTrainer():
                 ):
 
         assert dataset is None or dataset_name is None, "Please pass either dataset or dataset_name, not both."
-        
+
         self.dataset = None
         if dataset is not None:
             self.dataset = dataset
 
         self.use_wandb = use_wandb
-        self._load_dataset("gpt-omni/VoiceAssistant-400K")
-
         
         if model_name is not None:
             if stage == "stage_1" or stage == "stage_2":
