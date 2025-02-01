@@ -19,7 +19,7 @@ class AudioChatDataCollator:
         
         pass
 
-    def _process_audio_tensor(audio, sample_rate=16000):
+    def _process_audio_tensor(self, audio, sample_rate=16000):
         audio = audio.to(torch.float32)
         duration_ms = (len(audio) / sample_rate) * 1000
         audio = whisper.pad_or_trim(audio)
