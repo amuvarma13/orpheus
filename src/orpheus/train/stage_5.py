@@ -72,6 +72,7 @@ class AudioChatDataCollator:
         audio = torch.tensor([features[0]["question_audio"]["array"]])
         assistant_response = features[0]["question"]
         user_response = features[0]["answer"]
+        snac_tokens = features[0]["codes_list"]
 
         if "<|audio|>" in user_response:
             user_response = features[0]["answer"]
@@ -79,7 +80,7 @@ class AudioChatDataCollator:
             user_response = "<|audio|>"
 
         batch = self._inference_collator(
-            audio, user_response, assistant_response)
+            audio, user_response, assistant_response, snac_tokens)
 
         return {
             "audio_values": batch["audio_values"].cpu(),
