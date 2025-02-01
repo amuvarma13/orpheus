@@ -49,7 +49,6 @@ class AudioChatDataCollator:
 
         audio_input = audio_input.squeeze(0)
         mel, length = self._process_audio_tensor(audio_input)
-        print("whisper_model.device", whisper_model.device)
         mel = mel.to(whisper_model.device)
         mel = mel.unsqueeze(0)
         audio_feature = whisper_model.embed_audio(mel)[0][:length]
