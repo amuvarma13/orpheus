@@ -147,7 +147,7 @@ class Stage_3_Trainer():
 
         pass
 
-    def _prepare_model(self):
+    def _prepare_model(self, model):
         self.model = self.model.to(torch.bfloat16)
         for param in self.model.parameters():
             param.requires_grad = False
