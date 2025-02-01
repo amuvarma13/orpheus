@@ -114,7 +114,6 @@ class Stage_3_Trainer():
         self.gradient_accumulation_steps = 64//(self.num_gpus*self.batch_size)
 
         # some default values that can be overridden in the .train() method
-        self.batch_size = 1
         self.epochs = 1
         self.save_steps = 2000
         self.learning_rate = 5.0e-6
