@@ -176,6 +176,7 @@ class OrpheusTrainer():
 
             if self.dataset is None:
                 self.dataset = self._load_dataset("gpt-omni/VoiceAssistant-400K")
+            
 
             self._training_class = Stage_4_Trainer(
                 model = self.model,

@@ -15,7 +15,6 @@ class AudioChatDataCollator:
         self.tokenizer = tokenizer
         self.whisper_model = whisper_model.to("cuda")
         self.model = model
-        self.call_index = 0
         pass
 
     def _process_audio_tensor(self, audio, sample_rate=16000):
@@ -25,26 +24,20 @@ class AudioChatDataCollator:
         mel = whisper.log_mel_spectrogram(audio)
         return mel, int(duration_ms / 20) + 1
 
-    def _inference_collator(self, audio_input, user_res, ass_res, snac_tokens):
-
-        user_input_ids = self.tokenizer(user_res, return_tensors="pt").input_ids
-        assistant_input_ids = self.tokenizer(ass_res, return_tensors="pt").input_ids
+    def _inference_collator(self, audio_input, user_res, ass_res):
+        user_input_ids = self.tokenizer(
+            user_res, return_tensors="pt").input_ids
+        assistant_input_ids = self.tokenizer(
+            ass_res, return_tensors="pt").input_ids
 
         start_token = torch.tensor([[128259]], dtype=torch.int64)
-        end_tokens = torch.tensor([[128009, 128260, 128261]], dtype=torch.int64)
-        final_tokens = torch.tensor([[128009, 128257 ]], dtype=torch.int64)
-        post_assistant_tokens = torch.tensor([[128258, 128262]])
+        end_tokens = torch.tensor(
+            [[128009, 128260, 128261]], dtype=torch.int64)
+        final_tokens = torch.tensor([[128009]], dtype=torch.int64)
 
         user_tokens = torch.cat(
             [start_token, user_input_ids, end_tokens], dim=1)
-        snac_tokens_tensor = torch.tensor([snac_tokens], dtype=torch.int64)
 
-        # if len(snac_tokens) > 0:
-
-        #     labels = torch.cat([start_token, user_input_ids, end_tokens,
-        #                     assistant_input_ids, final_tokens, snac_tokens_tensor, post_assistant_tokens], dim=1)
-            
-        # else:
         labels = torch.cat([start_token, user_input_ids, end_tokens,
                             assistant_input_ids, final_tokens], dim=1)
 
@@ -55,11 +48,11 @@ class AudioChatDataCollator:
 
         audio_input = audio_input.squeeze(0)
         mel, length = self._process_audio_tensor(audio_input)
-        
         mel = mel.to(whisper_model.device)
         mel = mel.unsqueeze(0)
         audio_feature = whisper_model.embed_audio(mel)[0][:length]
         audio_feature = audio_feature.unsqueeze(0)
+
 
         return {
             "audio_values": audio_feature.to(self.model.device).to(self.model.dtype),
@@ -69,33 +62,24 @@ class AudioChatDataCollator:
         }
 
     def __call__(self, features):
-            audio = torch.tensor([features[0]["question_audio"]["array"]])
-            assistant_response = features[0]["answer"]
-            user_response = features[0]["question"]
+        audio = torch.tensor([features[0]["question_audio"]["array"]])
+        assistant_response = features[0]["question"]
+        user_response = features[0]["answer"]
 
-            if "<|audio|>" in user_response:
-                user_response = features[0]["question"]
-            else:
-                user_response = "<|audio|>"
-                
-            snac_tokens = []
-            if("codes_list" in features[0] and self.call_index % 2 == 0):
-                snac_tokens = features[0]["codes_list"]
+        if "<|audio|>" in user_response:
+            user_response = features[0]["answer"]
+        else:
+            user_response = "<|audio|>"
 
-            batch = self._inference_collator(audio, user_response, assistant_response, snac_tokens)
-            self.call_index += 1
+        batch = self._inference_collator(
+            audio, user_response, assistant_response)
 
-            print(self.call_index)
-
-            print(batch["input_ids"])
-            print(batch["labels"])
-
-            return {
-                "audio_values": batch["audio_values"].cpu(),
-                "input_ids": batch["input_ids"].cpu(),
-                "labels": batch["labels"].cpu(),
-                "attention_mask": batch["attention_mask"].cpu()
-            }
+        return {
+            "audio_values": batch["audio_values"].cpu(),
+            "input_ids": batch["input_ids"].cpu(),
+            "labels": batch["labels"].cpu(),
+            "attention_mask": batch["attention_mask"].cpu()
+        }
 
 
 
