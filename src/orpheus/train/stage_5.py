@@ -252,7 +252,7 @@ class Stage_5_Trainer():
         trainer = DistributedTrainer(
             model=self.model,
             args=self.training_args,
-            train_dataset=self.dataset,
+            train_dataset=self.processed_dataset,
             compute_metrics=self._compute_metrics,
             data_collator=AudioChatDataCollator(self.tokenizer,self.model),
         )
