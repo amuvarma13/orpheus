@@ -4,6 +4,7 @@ from .stage_1 import Stage_1_Trainer
 from .stage_2 import Stage_2_Trainer
 from .stage_3 import Stage_3_Trainer
 from .stage_4 import Stage_4_Trainer
+from .stage_5 import Stage_5_Trainer
 from transformers import AutoModelForCausalLM, AutoTokenizer
 from ..model import OrpheusForConditionalGeneration
 from ..config import OrpheusConfig
@@ -124,7 +125,7 @@ class OrpheusTrainer():
 
         self.pad_token = pad_token
         
-        assert stage in ["stage_1", "stage_2", "stage_3", "stage_4"], "Please pass valid stage."
+        assert stage in ["stage_1", "stage_2", "stage_3", "stage_4", "stage_5"], "Please pass valid stage."
 
         if stage == "stage_1":
             assert text_dataset_name is not None, "Please pass text_dataset_name."
@@ -172,6 +173,17 @@ class OrpheusTrainer():
                 self.dataset = self._load_dataset("gpt-omni/VoiceAssistant-400K")
 
             self._training_class = Stage_4_Trainer(
+                model = self.model,
+                dataset = self.dataset,
+                tokenizer = self.tokenizer,
+                pad_token = self.pad_token,
+                batch_size = batch_size
+            )
+
+        if stage == "stage_5":
+            assert model_name is not None, "Please pass model_name you trained in stage 4."
+
+            self._training_class = Stage_5_Trainer(
                 model = self.model,
                 dataset = self.dataset,
                 tokenizer = self.tokenizer,
