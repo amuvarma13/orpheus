@@ -114,7 +114,7 @@ class Stage_5_Trainer():
         if batch_size is not None:
             self.batch_size = batch_size
         else:
-            self.batch_size = 8
+            self.batch_size = 1
 
         self.num_gpus = torch.cuda.device_count()
 
