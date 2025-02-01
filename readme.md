@@ -368,7 +368,7 @@ orpheus = OrpheusTrainer(
     batch_size = 8, # use batch_size * number_of_gpus = 64 for quickest training
 )
 
-orpheus_trainer = orpheus.create_trainer( report_to="wandb" ) # subclasses Trainer 
+orpheus_trainer = orpheus.create_trainer( report_to="wandb" ) # subclasses 🤗 Trainer 
 
 orpheus_trainer.train()
 ```
@@ -405,9 +405,9 @@ orpehus = OrpheusTrainer(
     batch_size = 21, # use batch_size * number_of_gpus = 64 for quickest training
     )
 
-orpheus_trainer = orpheus.create_trainer( report_to="wandb" ) # subclasses Trainer 
+orpheus_trainer = orpheus.create_trainer( report_to="wandb" )
 
-orpheus_trainer.train() # pass any additional params Trainer accepts in the X.train(**args)
+orpheus_trainer.train() # subclasses 🤗 Trainer
 ```
 
 Launch your script with a distributed command like accelerate, torchrun etc...
@@ -432,7 +432,9 @@ You will need to first adapt your stage_1 dataset and save it to huggingface bef
 First we download the extra dependencies required for StyleTTS2:
 
 ```bash
-pip install 
+$ pip install pip install munch pydub pyyaml nltk matplotlib accelerate einops einops-exts typing typing-extensions cached-path tortoise-tts phonemizer
+
+$ apt install espeak espeak-ng
 ```
 
 ``` python
@@ -450,12 +452,12 @@ processed_dataset = data_processor.adapt_stage_1_to_stage_5_dataset(dataset)
 orpheus.initialise(
     stage = "stage_5",
     dataset = processed_dataset, 
-    model_name = "amuvarma/stage-4-tuned-example-model" # pass a huggingface model or local checkpoint folder
+    model_name = "amuvarma/stage-4-tuned-example-model" # pass a 🤗 model or local checkpoint folder
 )
 
-orpheus_trainer = orpheus.create_trainer() # subclasses Trainer 
+orpheus_trainer = orpheus.create_trainer() 
 
-orpheus_trainer.train() # pass any additional params Trainer accepts in the X.train(**args)
+orpheus_trainer.train() # sublasses 🤗 Trainer
 ```
 
 Launch your script with a distributed command like accelerate, torchrun etc...
