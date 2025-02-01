@@ -92,6 +92,7 @@ class OrpheusTrainer():
                     tokenizer_name = "amuvarma/3b-10m-pretrain-full", 
                     batch_size = None,
                 ):
+        self.dataset = None
 
         self.use_wandb = use_wandb
 
