@@ -7,7 +7,7 @@ from collections import defaultdict
 from datasets import load_dataset, Dataset
 import whisper
 from transformers import Trainer
-
+from snac import SNAC
 whisper_model = whisper.load_model("small")
 
 class AudioChatDataCollator:
@@ -144,6 +144,9 @@ class Stage_5_Trainer():
 
         self.audio_tokens_start = self.tokeniser_length + 10
         self.sr = 16000
+        
+        self.snac_model = SNAC.from_pretrained("hubertsiuzdak/snac_24khz").to(self.device)
+
 
         if pad_token is None:
             self.pad_token = 128263
