@@ -143,6 +143,7 @@ class Stage_5_Trainer():
         self.end_of_system = self.tokeniser_length + 9
 
         self.audio_tokens_start = self.tokeniser_length + 10
+        self.sr = 16000
 
         if pad_token is None:
             self.pad_token = 128263
