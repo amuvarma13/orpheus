@@ -7,7 +7,36 @@ from huggingface_hub import snapshot_download
 
 class OrpheusDataProcessor():
     def __init__(self):
-        self.voices = self._compute_voices()
+        self.voices = [
+            "af_alloy",
+            "af_aoede",
+            "af_bella",
+            "af_heart",
+            "af_jessica",
+            "af_kore",
+            "af_nicole",
+            "af_nova",
+            "af_river",
+            "af_sarah", 
+            "af_sky",
+            "am_adam",
+            "am_echo",
+            "am_eric",
+            "am_fenrir",
+            "am_liam",
+            "am_michael",
+            "am_onyx",
+            "am_puck",
+            "am_santa",
+            "bf_alice",
+            "bf_emma",
+            "bf_isabella",
+            "bf_lily",
+            "bm_daniel",
+            "bm_fable",
+            "bm_george",
+            "bm_lewis", 
+]
         pass
 
     def fast_load_dataset(self, dataset_name, split="train"):
@@ -36,23 +65,13 @@ class OrpheusDataProcessor():
 
 
 
-    def _compute_voices(self):
-        voices_strings = ["f-us-1.wav", "f-us-2.wav", "f-us-3.wav", "f-us-4.wav", "m-us-1.wav", "m-us-2.wav", "m-us-3.wav", "m-us-4.wav"]
-        voices = [compute_style("voices/"+voice) for voice in voices_strings]
-        return voices
+
 
     def _add_audio(self, example, column_name, audio_column_name, target_sr=16000):
         try:
             text = example[column_name]
             voice = random.choice(self.voices)
-            wav = inference(
-                text, 
-                voice, 
-                alpha=0.3, 
-                beta=0.7, 
-                diffusion_steps=7, 
-                embedding_scale=1
-            )
+ 
             
             wav_16k = librosa.resample(wav, orig_sr=24000, target_sr=target_sr)
 
