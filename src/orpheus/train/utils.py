@@ -4,6 +4,8 @@ from .stage_1 import Stage_1_Trainer
 from .stage_2 import Stage_2_Trainer
 from .stage_3 import Stage_3_Trainer
 from transformers import AutoModelForCausalLM, AutoTokenizer
+from ..model import OrpheusForConditionalGeneration
+from ..config import OrpheusConfig
 
 class OrpheusTrainer():
     def _load_dataset(self, dataset_name):
@@ -39,6 +41,39 @@ class OrpheusTrainer():
 
         return AutoModelForCausalLM.from_pretrained(model_name)
     
+    def _load_orpheus_model(self, model_name):
+        snapshot_download(
+            repo_id=model_name,
+            allow_patterns=[
+                "config.json",
+                "*.safetensors",
+                "model.safetensors.index.json",
+            ],
+            ignore_patterns=[
+                "optimizer.pt",
+                "pytorch_model.bin",
+                "training_args.bin",
+                "scheduler.pt",
+                "tokenizer.json",
+                "tokenizer_config.json",
+                "special_tokens_map.json",
+                "vocab.json",
+                "merges.txt",
+                "tokenizer.*"
+            ]
+        )
+        config = OrpheusConfig(
+            text_model_id=model_name,
+            audio_token_index=156939,
+            vocab_size=156939,
+        )
+
+        model = OrpheusForConditionalGeneration(config)
+
+        return model
+
+
+    
     def _load_tokenizer(self, model_name):
         return AutoTokenizer.from_pretrained(model_name)
 
@@ -55,8 +90,7 @@ class OrpheusTrainer():
                     base_model_name = None,
                     pad_token = None, 
                     tokenizer_name = "amuvarma/3b-10m-pretrain-full", 
-                    transcription_dataset = "amuvarma/mls-eng-10k-500k-projection_prep",
-                    qa_dataset = None
+                    batch_size = None,
                 ):
 
         self.use_wandb = use_wandb
@@ -64,7 +98,10 @@ class OrpheusTrainer():
 
         
         if model_name is not None:
-            self.model = self._load_model(model_name)
+            if stage == "stage_1" or stage == "stage_2":
+                self.model = self._load_model(model_name)
+            elif stage == "stage_3":
+                self.model = self._load_orpheus_model(model_name)
         
         if tokenizer_name is not None:
             self.tokenizer = self._load_tokenizer(model_name)
@@ -85,13 +122,6 @@ class OrpheusTrainer():
             if stage == "stage_1":
                 self.speech_dataset = self._load_dataset(speech_dataset_name)
 
-        if transcription_dataset is not None:
-            if stage == "stage_3":
-                self.transcription_dataset = self._load_dataset(transcription_dataset)
-
-        if qa_dataset is not None:
-            if stage == "stage_3":
-                self.qa_dataset = self._load_dataset(qa_dataset)
 
         
 
@@ -125,13 +155,17 @@ class OrpheusTrainer():
 
         if stage == "stage_3":
             assert model_name is not None, "Please pass model_name."
+
+            if self.dataset is None:
+                self.dataset = self._load_dataset("amuvarma/mls-eng-10k-500k-projection_prep")
             
+
             self._training_class = Stage_3_Trainer(
                 model = self.model,
-                transcription_dataset = self.transcription_dataset,
-                qa_dataset = self.qa_dataset,
+                dataset = self.dataset,
                 tokenizer = self.tokenizer,
-                pad_token = self.pad_token
+                pad_token = self.pad_token, 
+                batch_size = batch_size
             )
         
         if stage == "stage_4":

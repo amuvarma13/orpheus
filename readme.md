@@ -358,7 +358,7 @@ Now we need to train the speech projector.
 ##### GPU requirements: minimum of 1 gpu with 80gb of vram
 ##### Additional requirements: Aim to have at least 1 TB of disk space ideally more.
 
-You can use more GPUs to train faster. The model converges very quickly and you don't need to train it on the entire datasets (which we provide). The total training time if you were to train it on the entire dataset would be 16 H100-hours.
+You can use more GPUs to train faster. The model converges very quickly and you don't need to train it on the entire dataset (which we provide). The total training time if you were to train it on the entire dataset would be 8 H100-hours.
 
 You **should** use the default dataset unless you have a reason not to.
 
@@ -370,8 +370,53 @@ orpehus = OrpheusTrainer()
 #** loading the datasets can take a while, even up to an hour **
 orpheus.initialise(
     stage = "stage_3",
-    train_on_fraction = 0.9, #i.e. trains on 90% the dataset defaults to 1 - use for lower costs
+    train_on_fraction = 0.5, #i.e. trains on 90% the dataset defaults to 1 - use for lower costs
     model = "amuvarma/stage-2-tuned-example-model" # pass a huggingface model or local checkpoint folder
+)
+
+orpheus_trainer = orpheus.create_trainer( report_to="wandb" ) # subclasses Trainer 
+
+orpheus_trainer.train() # pass any additional params Trainer accepts in the X.train(**args)
+```
+
+Launch your script with a distributed command like accelerate, torchrun etc...
+
+``` bash
+accelerate launch my_script.py
+```
+
+You can push your model with:
+
+``` python
+checkpoint_name = "checkpoints/checkpoint-<TRAINING STEPS>" # find <TRAINING STEPS> in checkpoints/
+push_name = "canopy-tune-stage_3
+orpheus.fast_push_to_hub(checkpoint=checkpoint_name, push_name=push_name)
+```
+
+#### Testing out your tuned model [OPTIONAL]
+It isn't as straightforward/useful to test out your model at this stage. Instead compare the shape and values on your loss curve with those found in this blog post.
+
+### Stage 4
+
+We continue to train the speech projector.
+
+##### GPU requirements: minimum of 1 gpu with 80gb of vram
+##### Additional requirements: Aim to have at least 1 TB of disk space ideally more.
+
+You can use more GPUs to train faster. The model converges very quickly and you don't need to train it on the entire dataset (which we provide). The total training time if you were to train it on the entire dataset would be 7 H100-hours.
+
+You **should** use the default dataset unless you have a reason not to.
+
+``` python
+from orpheus import OrpheusTrainer
+
+orpehus = OrpheusTrainer()
+
+#** loading the datasets can take a while, even up to an hour **
+orpheus.initialise(
+    stage = "stage_4",
+    train_on_fraction = 0.5, #i.e. trains on 90% the dataset defaults to 1 - use for lower costs
+    model = "amuvarma/stage-3-tuned-example-model" # pass a huggingface model or local checkpoint folder
 )
 
 orpheus_trainer = orpheus.create_trainer( report_to="wandb" ) # subclasses Trainer 
