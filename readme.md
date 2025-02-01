@@ -432,9 +432,10 @@ You will need to first adapt your stage_1 dataset and save it to huggingface bef
 First we download the extra dependencies required for StyleTTS2:
 
 ```bash
-$ pip install pip install munch pydub pyyaml nltk matplotlib accelerate einops einops-exts typing typing-extensions cached-path tortoise-tts phonemizer
-
-$ apt install espeak espeak-ng
+pip install pip install munch pydub pyyaml nltk matplotlib accelerate einops einops-exts typing typing-extensions cached-path tortoise-tts phonemizer
+```
+```bash
+apt install espeak espeak-ng
 ```
 
 If you have issues with the installation check out the StyleTTS2 github.
