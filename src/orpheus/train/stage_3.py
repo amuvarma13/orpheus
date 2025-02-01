@@ -6,6 +6,7 @@ import torchaudio.transforms as T
 from collections import defaultdict
 from datasets import load_dataset, Dataset
 import whisper
+from transformers import Trainer
 
 whisper_model = whisper.load_model("small")
 
@@ -194,7 +195,7 @@ class Stage_3_Trainer():
         **kwargs
     ):
         self._create_training_args(**kwargs)
-        trainer = InterleavedFSDPTrainer(
+        trainer = Trainer(
             model=self.model,
             args=self.training_args,
             train_dataset=self.dataset,
