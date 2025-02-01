@@ -89,7 +89,7 @@ class OrpheusTrainer():
         self.dataset = None
 
         self.use_wandb = use_wandb
-
+        self._load_dataset("gpt-omni/VoiceAssistant-400K")
 
         
         if model_name is not None:
