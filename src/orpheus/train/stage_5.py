@@ -224,8 +224,6 @@ class Stage_5_Trainer():
 
     def _create_training_args(self, **kwargs):
 
-        assert self.num_gpus > 1, "At least 2 GPUs should be available for training, to allow FSDP."
-
         self.training_args = TrainingArguments(
             output_dir=self.save_folder,
             per_device_train_batch_size=self.batch_size,

@@ -429,6 +429,10 @@ GPU requirements:
 ##### Adapt your dataset
 You will need to first adapt your stage_1 dataset and save it to huggingface before starting the training. The input question will need to be speech. We provide a simple utility function which uses the Kokoro model to TTS and restructure the appropriate parts of your dataset.
 
+##### GPU requirements: Use exactly 1 gpu with 40gb+ of vram
+The script is only set up to be used with 1 GPU, and training time should be less than 10 minutes.
+
+
 First we download the extra dependencies required for Kokoro:
 
 ```bash
@@ -465,5 +469,5 @@ orpheus_trainer.train() # subclasses 🤗 Trainer
 Launch your script with a distributed command like accelerate, torchrun etc...
 
 ``` bash
-accelerate launch my_script.py
+accelerate launch my_script.py --num_processes=1
 ```
