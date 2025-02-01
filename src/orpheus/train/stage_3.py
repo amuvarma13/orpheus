@@ -15,6 +15,8 @@ class AudioChatDataCollator:
         self.tokenizer = tokenizer
         self.whisper_model = whisper_model
         self.model = model
+        self.whisper_model = whisper_model.to("cuda")
+        
         pass
 
     def _process_audio_tensor(audio, sample_rate=16000):
