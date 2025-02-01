@@ -26,8 +26,8 @@ import torchaudio
 import librosa
 from nltk.tokenize import word_tokenize
 
-from models import *
-from utils import *
+from .models import *
+from .utils_style import *
 from text_utils import TextCleaner
 textclenaer = TextCleaner()
 
