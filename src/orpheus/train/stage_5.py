@@ -84,6 +84,8 @@ class AudioChatDataCollator:
             batch = self._inference_collator(audio, user_response, assistant_response, snac_tokens)
             self.call_index += 1
 
+            print(self.call_index)
+
             return {
                 "audio_values": batch["audio_values"].cpu(),
                 "input_ids": batch["input_ids"].cpu(),
