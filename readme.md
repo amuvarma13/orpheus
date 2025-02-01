@@ -376,7 +376,7 @@ orpheus = OrpheusTrainer(
 
 orpheus_trainer = orpheus.create_trainer( report_to="wandb" ) # subclasses Trainer 
 
-orpheus_trainer.train() # pass any additional params Trainer accepts in the X.train(**args)
+orpheus_trainer.train()
 ```
 
 Launch your script with a distributed command like accelerate, torchrun etc...
