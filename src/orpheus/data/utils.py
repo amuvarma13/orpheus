@@ -1,6 +1,6 @@
 import random
 import librosa
-import msinference
+from .msinference import compute_style, inference
 from functools import partial
 from datasets import load_dataset
 from huggingface_hub import snapshot_download
@@ -38,14 +38,14 @@ class OrpheusDataProcessor():
 
     def _compute_voices(self):
         voices_strings = ["f-us-1.wav", "f-us-2.wav", "f-us-3.wav", "f-us-4.wav", "m-us-1.wav", "m-us-2.wav", "m-us-3.wav", "m-us-4.wav"]
-        voices = [msinference.compute_style("voices/"+voice) for voice in voices_strings]
+        voices = [compute_style("voices/"+voice) for voice in voices_strings]
         return voices
 
     def _add_audio(self, example, column_name, audio_column_name, target_sr=16000):
         try:
             text = example[column_name]
             voice = random.choice(self.voices)
-            wav = msinference.inference(
+            wav = inference(
                 text, 
                 voice, 
                 alpha=0.3, 
