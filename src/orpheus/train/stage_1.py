@@ -164,8 +164,6 @@ class Stage_1_Trainer():
 
         return {"codes_list": codes_list}
     
-
-
     # Map the function in parallel
     def _tokenize_fn(self, example):
         user_ids = self.tokenizer.encode(example["question"], add_special_tokens=True)

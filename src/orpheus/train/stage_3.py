@@ -148,13 +148,15 @@ class Stage_3_Trainer():
         pass
 
     def _prepare_model(self, model):
-        self.model = self.model.to(torch.bfloat16)
-        for param in self.model.parameters():
+        model = model.to(torch.bfloat16)
+        for param in model.parameters():
             param.requires_grad = False
-        for name, param in self.model.named_parameters():
+        for name, param in model.named_parameters():
             if "multi_modal_projector" in name:
                 param.requires_grad = True
-        pass
+        
+        return model
+
 
 
     def _create_training_args(self, **kwargs):
