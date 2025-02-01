@@ -460,7 +460,7 @@ orpheus.initialise(
 
 orpheus_trainer = orpheus.create_trainer() 
 
-orpheus_trainer.train() # sublasses 🤗 Trainer
+orpheus_trainer.train() # subclasses 🤗 Trainer
 ```
 
 Launch your script with a distributed command like accelerate, torchrun etc...
