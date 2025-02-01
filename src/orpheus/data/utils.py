@@ -53,7 +53,7 @@ class OrpheusDataProcessor():
             resampled_audio = self.resampler(audio)
 
             example[audio_column_name] = {
-                'audio': resampled_audio.to('cpu').numpy(),
+                'array': resampled_audio.to('cpu').numpy(),
                 'sampling_rate': 16000
             }
             return example
