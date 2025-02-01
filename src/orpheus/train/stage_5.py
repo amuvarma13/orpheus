@@ -9,6 +9,8 @@ import whisper
 from transformers import Trainer
 from snac import SNAC
 whisper_model = whisper.load_model("small")
+from .components import DistributedTrainer
+
 
 class AudioChatDataCollator:
     def __init__(self, tokenizer, model):
@@ -25,20 +27,25 @@ class AudioChatDataCollator:
         return mel, int(duration_ms / 20) + 1
 
     def _inference_collator(self, audio_input, user_res, ass_res, snac_tokens=[]):
-        user_input_ids = self.tokenizer(
-            user_res, return_tensors="pt").input_ids
-        assistant_input_ids = self.tokenizer(
-            ass_res, return_tensors="pt").input_ids
+
+        user_input_ids = self.tokenizer(user_res, return_tensors="pt").input_ids
+        assistant_input_ids = self.tokenizer(ass_res, return_tensors="pt").input_ids
 
         start_token = torch.tensor([[128259]], dtype=torch.int64)
-        end_tokens = torch.tensor(
-            [[128009, 128260, 128261]], dtype=torch.int64)
-        final_tokens = torch.tensor([[128009]], dtype=torch.int64)
+        end_tokens = torch.tensor([[128009, 128260, 128261]], dtype=torch.int64)
+        final_tokens = torch.tensor([[128009, 128257 ]], dtype=torch.int64)
+        post_assistant_tokens = torch.tensor([[128258, 128262]])
 
         user_tokens = torch.cat(
             [start_token, user_input_ids, end_tokens], dim=1)
+        snac_tokens_tensor = torch.tensor([snac_tokens], dtype=torch.int64)
 
-        labels = torch.cat([start_token, user_input_ids, end_tokens,
+        if len(snac_tokens) > 0:
+            labels = torch.cat([start_token, user_input_ids, end_tokens,
+                            assistant_input_ids, final_tokens, snac_tokens_tensor, post_assistant_tokens], dim=1)
+            
+        else:
+            labels = torch.cat([start_token, user_input_ids, end_tokens,
                             assistant_input_ids, final_tokens], dim=1)
 
         true_labels = torch.full_like(labels, -100)
@@ -48,11 +55,11 @@ class AudioChatDataCollator:
 
         audio_input = audio_input.squeeze(0)
         mel, length = self._process_audio_tensor(audio_input)
+        
         mel = mel.to(whisper_model.device)
         mel = mel.unsqueeze(0)
         audio_feature = whisper_model.embed_audio(mel)[0][:length]
         audio_feature = audio_feature.unsqueeze(0)
-
 
         return {
             "audio_values": audio_feature.to(self.model.device).to(self.model.dtype),
@@ -241,7 +248,7 @@ class Stage_5_Trainer():
         **kwargs
     ):
         self._create_training_args(**kwargs)
-        trainer = Trainer(
+        trainer = DistributedTrainer(
             model=self.model,
             args=self.training_args,
             train_dataset=self.dataset,

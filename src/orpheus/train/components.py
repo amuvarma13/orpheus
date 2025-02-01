@@ -80,3 +80,17 @@ class BatchedAlternatingDataset(Dataset):
         else:
             dataset_index = super_batch * self.batch_total + (position_in_super_batch - self.batch_total)
             return self.dataset2[dataset_index]
+
+
+class DistributedTrainer(Trainer):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+    def log(self, logs, start_time=None):
+        super().log(logs, start_time)
+        if self.is_world_process_zero():
+            global_step = self.state.global_step
+            if global_step % 2 == 0:
+                wandb.log({"text_loss": logs["loss"], "step": global_step})
+            else:
+                wandb.log({"audio_loss": logs["loss"], "step": global_step})
+    
