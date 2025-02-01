@@ -55,6 +55,7 @@ class AudioChatDataCollator:
         audio_feature = whisper_model.embed_audio(mel)[0][:length]
         audio_feature = audio_feature.unsqueeze(0)
 
+
         return {
             "audio_values": audio_feature.to(self.model.device).to(self.model.dtype),
             "input_ids": labels.to(self.model.device),
@@ -179,7 +180,7 @@ class Stage_3_Trainer():
             remove_unused_columns=False,
             warmup_ratio=0.03,
             lr_scheduler_type="cosine",
-            fp16=True,
+            bf16=True,
             save_steps=15000,
             **kwargs
         )
