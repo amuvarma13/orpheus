@@ -89,6 +89,9 @@ class DistributedTrainer(Trainer):
         super().log(logs, start_time)
         if self.is_world_process_zero():
             global_step = self.state.global_step
+            if "loss" not in logs:
+                return
+            
             if global_step % 2 == 0:
                 wandb.log({"text_loss": logs["loss"], "step": global_step})
             else:
