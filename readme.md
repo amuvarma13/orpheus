@@ -226,6 +226,22 @@ Now install Flash Attention. Depending on your version of CUDA and torch you may
 pip install flash_attn
 ```
 
+After each stage, you should push your model with:
+
+You can push your model with:
+
+``` python
+import 
+from orpheus import OrpheusUtility
+orpheus = OrpheusUtility()
+
+checkpoint_name = "checkpoints/checkpoint-<TRAINING STEPS>" # find <TRAINING STEPS> in checkpoints/
+push_name = "canopy-tune-stage_2"
+orpheus.fast_push_to_hub(checkpoint=checkpoint_name, push_name=push_name)
+
+```
+
+
 
 ### Stage 1
 
@@ -288,7 +304,7 @@ First log into the hub with:
 huggingface-cli login --token=<HF-API-TOKEN>
 ```
 
-You can push your model with:
+Push your model with the utility function provided in setup.
 
 ``` python
 checkpoint_name = "checkpoints/checkpoint-<TRAINING STEPS>" # find <TRAINING STEPS> in checkpoints/
@@ -341,14 +357,6 @@ Launch your script with a distributed command like accelerate, torchrun etc...
 accelerate launch my_script.py
 ```
 
-You can push your model with:
-
-``` python
-checkpoint_name = "checkpoints/checkpoint-<TRAINING STEPS>" # find <TRAINING STEPS> in checkpoints/
-push_name = "canopy-tune-stage_2"
-orpheus.fast_push_to_hub(checkpoint=checkpoint_name, push_name=push_name)
-```
-
 
 
 ### Stage 3
@@ -364,8 +372,6 @@ You **should** use the default dataset unless you have a reason not to.
 
 ``` python
 from orpheus import OrpheusTrainer
-
-orpheus = OrpheusTrainer()
 
 #** loading the datasets can take a while, even up to 30 mins **
 orpheus = OrpheusTrainer(
@@ -410,14 +416,12 @@ You **should** use the default dataset unless you have a reason not to.
 ``` python
 from orpheus import OrpheusTrainer
 
-orpehus = OrpheusTrainer()
-
 #** loading the datasets can take a while, even up to an hour **
-orpheus.initialise(
+orpehus = OrpheusTrainer(    
     stage = "stage_4",
-    train_on_fraction = 0.5, #i.e. trains on 90% the dataset defaults to 1 - use for lower costs
-    model = "amuvarma/stage-3-tuned-example-model" # pass a huggingface model or local checkpoint folder
-)
+    model_name = model_name,
+    batch_size = 21, # use batch_size * number_of_gpus = 64 for quickest training
+    )
 
 orpheus_trainer = orpheus.create_trainer( report_to="wandb" ) # subclasses Trainer 
 
@@ -430,71 +434,42 @@ Launch your script with a distributed command like accelerate, torchrun etc...
 accelerate launch my_script.py
 ```
 
-You can push your model with:
 
-``` python
-checkpoint_name = "checkpoints/checkpoint-<TRAINING STEPS>" # find <TRAINING STEPS> in checkpoints/
-push_name = "canopy-tune-stage_3
-orpheus.fast_push_to_hub(checkpoint=checkpoint_name, push_name=push_name)
-```
+### Stage 5
 
-### Stage 4
-
-Now you finetune the projector.
+We train the speech projector for a final time.
 
 You can use the same dataset you used in Stage 1, and it should have the same format.
-
-You will need to first adapt your stage_1 dataset and save it to huggingface before starting the training.
 
 GPU requirements: 
 - 1 V100/A100/H100 for adaptation
 - 2 vram >= 80gb for training
 
-#### Adapt Stage 1 dataset for Stage 4
+#### Adapt Stage 1 dataset for Stage 5
+
+You will need to first adapt your stage_1 dataset and save it to huggingface before starting the training. The input question will need to be speech. We provide a simple utility function which uses the StyleTTS2 model to turn this into speech.
+
+First we download the extra dependencies required for StyleTTS2:
+
+```bash
+pip install 
+```
 
 ``` python
 from orpheus import OrpheusTrainer
 
-orpehus = OrpheusTrainer()
+orpheus = OrpheusTrainer()
 
 dataset_name = "amuvarma/orpheus_stage_1"
 
 dataset = orpheus.fast_load_dataset(dataset)
 
-processed_dataset = orpheus.adapt_stage_1_to_stage_4_dataset(dataset)
-
-push_name = "adapted_stage_1_for_stage_4" # change this but keep it for the next part
-
-processed_dataset.push_to_hub(push_name)
-```
-Launch your script
-``` bash
-python my_script.py
-```
-
-Now we can use this adapted dataset to train our model
-
-``` python
-from orpheus import OrpheusTrainer
-
-orpehus = OrpheusTrainer()
-
-dataset_name = "amuvarma/adapted_stage_1_for_stage_4"
-
-dataset = orpheus.fast_load_dataset(dataset)
-
-processed_dataset = orpheus.adapt_stage_1_to_stage_4_dataset(dataset)
+processed_dataset = orpheus.adapt_stage_1_to_stage_5_dataset(dataset)
 
 orpheus.initialise(
-    stage = "stage_4",
+    stage = "stage_5",
     dataset = processed_dataset, 
-    train_on_fraction = 0.9, #i.e. trains on 90% the dataset defaults to 1 - use for lower costs
-    use_wandb = True, # optional, defaults to False
-    wandb_project_name = None, # optional defaults to "orpheus-stage-2"
-    wandb_run_name = None, # optional defaults to "r0"
-    model_stage_3= "amuvarma/stage-3-tuned-example-model" # pass a huggingface model or local checkpoint folder
-    model_based = "amuvarma/stage-2-tuned-example-model" # pass either your stage 1 or 2 model
-
+    model_name = "amuvarma/stage-4-tuned-example-model" # pass a huggingface model or local checkpoint folder
 )
 
 orpheus_trainer = orpheus.create_trainer() # subclasses Trainer 
@@ -506,12 +481,4 @@ Launch your script with a distributed command like accelerate, torchrun etc...
 
 ``` bash
 accelerate launch my_script.py
-```
-
-You can push your model with:
-
-``` python
-checkpoint_name = "checkpoints/checkpoint-<TRAINING STEPS>" # find <TRAINING STEPS> in checkpoints/
-push_name = "canopy-tune-stage_4
-orpheus.fast_push_to_hub(checkpoint=checkpoint_name, push_name=push_name)
 ```
