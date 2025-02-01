@@ -372,8 +372,6 @@ orpheus = OrpheusTrainer(
     stage = "stage_3",
     model_name = model_name,
     batch_size = 8, # use batch_size * number_of_gpus = 64 for quickest training
-    model = "amuvarma/stage-2-tuned-example-model" # pass a huggingface model or local checkpoint folder
-
 )
 
 orpheus_trainer = orpheus.create_trainer( report_to="wandb" ) # subclasses Trainer 
