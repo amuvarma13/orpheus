@@ -2,8 +2,7 @@ import random
 import librosa
 from functools import partial
 from datasets import load_dataset
-from huggingface_hub import snapshot_download
-from kokoro import KPipeline
+
 import torchaudio.transforms as T
 
 class OrpheusDataProcessor():
@@ -27,6 +26,8 @@ class OrpheusDataProcessor():
         return load_dataset(dataset_name, split=split)
     
     def adapt_stage_1_to_stage_5_dataset(self, dataset):
+        from huggingface_hub import snapshot_download
+        from kokoro import KPipeline
         add_audio_fn = partial(
             self._add_audio,
             column_name='question',
