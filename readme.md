@@ -432,7 +432,7 @@ You will need to first adapt your stage_1 dataset and save it to huggingface bef
 First we download the extra dependencies required for StyleTTS2:
 
 ```bash
-pip install munch pydub pyyaml nltk matplotlib accelerate einops einops-exts typing typing-extensions cached-path tortoise-tts phonemizer
+pip install munch pydub pyyaml nltk matplotlib accelerate einops einops-exts typing typing-extensions cached-path tortoise-tts phonemizer git+https://github.com/resemble-ai/monotonic_align.git transformers==4.47.0
 ```
 ```bash
 apt install espeak espeak-ng
