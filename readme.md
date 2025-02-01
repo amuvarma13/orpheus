@@ -443,7 +443,6 @@ If you have issues with the installation check out the StyleTTS2 github.
 ``` python
 from orpheus import OrpheusTrainer, OrpheusDataProcessor
 
-orpheus = OrpheusTrainer()
 data_processor = OrpheusDataProcessor()
 
 dataset_name = "amuvarma/orpheus_stage_1"
@@ -452,10 +451,10 @@ dataset = data_processor.fast_load_dataset(dataset)
 
 processed_dataset = data_processor.adapt_stage_1_to_stage_5_dataset(dataset)
 
-orpheus.initialise(
+orpheus = OrpheusTrainer(    
     stage = "stage_5",
     dataset = processed_dataset, 
-    model_name = "amuvarma/stage-4-tuned-example-model" # pass a 🤗 model or local checkpoint folder
+    model_name = "amuvarma/stage-4-tuned-example-model" # pass a 🤗 model or local checkpoint folder)
 )
 
 orpheus_trainer = orpheus.create_trainer() 

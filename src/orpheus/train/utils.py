@@ -86,8 +86,14 @@ class OrpheusTrainer():
                     pad_token = None, 
                     tokenizer_name = "amuvarma/3b-10m-pretrain-full", 
                     batch_size = None,
+                    dataset = None
                 ):
+
+        assert dataset is None or dataset_name is None, "Please pass either dataset or dataset_name, not both."
+        
         self.dataset = None
+        if dataset is not None:
+            self.dataset = dataset
 
         self.use_wandb = use_wandb
         self._load_dataset("gpt-omni/VoiceAssistant-400K")
