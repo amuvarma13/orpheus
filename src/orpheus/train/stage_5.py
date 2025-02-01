@@ -87,6 +87,9 @@ class AudioChatDataCollator:
 
             print(self.call_index)
 
+            print(batch["input_ids"])
+            print(batch["labels"])
+
             return {
                 "audio_values": batch["audio_values"].cpu(),
                 "input_ids": batch["input_ids"].cpu(),
@@ -236,8 +239,6 @@ class Stage_5_Trainer():
             push_to_hub=False,
             dataloader_pin_memory=False,
             remove_unused_columns=False,
-            warmup_ratio=0.03,
-            lr_scheduler_type="cosine",
             bf16=True,
             save_steps=15000,
             **kwargs
