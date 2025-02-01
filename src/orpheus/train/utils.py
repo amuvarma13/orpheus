@@ -3,9 +3,13 @@ from datasets import load_dataset
 from .stage_1 import Stage_1_Trainer
 from .stage_2 import Stage_2_Trainer
 from .stage_3 import Stage_3_Trainer
+from .stage_4 import Stage_4_Trainer
 from transformers import AutoModelForCausalLM, AutoTokenizer
 from ..model import OrpheusForConditionalGeneration
 from ..config import OrpheusConfig
+from ..utils import OrpheusUtility
+import torch
+from transformers import AutoModel
 
 class OrpheusTrainer():
     def _load_dataset(self, dataset_name):
@@ -55,16 +59,11 @@ class OrpheusTrainer():
 
         return model
 
-    def _load_orpheus_model_from_orpheus(self, model_name, base_model_name):
+    def _load_orpheus_model_from_orpheus(self, model_name):
+        orpheus_utility = OrpheusUtility()
+        orpheus_utility.initialise()
         self._download_model(model_name)
-        config = OrpheusConfig(
-            text_model_id=model_name,
-            audio_token_index=156939,
-            vocab_size=156939,
-        )
-
-        model = OrpheusForConditionalGeneration(config)
-
+        model = AutoModel.from_pretrained(model_name).to("cuda").to(torch.bfloat16)
         return model
 
 
@@ -98,6 +97,8 @@ class OrpheusTrainer():
                 self.model = self._load_model(model_name)
             elif stage == "stage_3":
                 self.model = self._load_orpheus_model(model_name)
+            elif stage == "stage_4":
+                self.model = self._load_orpheus_model_from_orpheus(model_name, base_model_name)
         
         if tokenizer_name is not None:
             self.tokenizer = self._load_tokenizer(model_name)
@@ -167,7 +168,18 @@ class OrpheusTrainer():
         if stage == "stage_4":
             assert dataset_name is not None, "Please pass the name of the processed dataset."
             assert model_name is not None, "Please pass model_name you trained in stage 3."
-            assert base_model_name is not None, "Please pass the name of the model you trained in stage 1 or stage 2 "
+            assert base_model_name is not None, "Please pass the name of the model you trained in stage 1 or stage 2."
+
+            if self.dataset is None:
+                self.dataset = self._load_dataset("gpt-omni/VoiceAssistant-400K")
+
+            self._training_class = Stage_4_Trainer(
+                model = self.model,
+                dataset = self.dataset,
+                tokenizer = self.tokenizer,
+                pad_token = self.pad_token,
+                batch_size = batch_size
+            )
 
         self._training_stage = stage
 

@@ -129,9 +129,6 @@ class OrpheusConversation():
         output = self.parent.parse_output_tokens(output_tokens)
         return output
         
-
-
-
 class OrpheusUtility():
     def __init__(self,
                  text_model_name="amuvarma/3b-zuckreg-convo",
