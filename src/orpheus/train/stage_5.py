@@ -9,7 +9,7 @@ import whisper
 from transformers import Trainer
 from snac import SNAC
 whisper_model = whisper.load_model("small")
-from .components import DistributedTrainer
+from .components import AlternatingTrainer
 
 
 class AudioChatDataCollator:
@@ -249,7 +249,7 @@ class Stage_5_Trainer():
         **kwargs
     ):
         self._create_training_args(**kwargs)
-        trainer = DistributedTrainer(
+        trainer = AlternatingTrainer(
             model=self.model,
             args=self.training_args,
             train_dataset=self.processed_dataset,

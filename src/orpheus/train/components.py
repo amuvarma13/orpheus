@@ -82,13 +82,13 @@ class BatchedAlternatingDataset(Dataset):
             return self.dataset2[dataset_index]
 
 
-class DistributedTrainer(Trainer):
+class AlternatingTrainer(Trainer):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
     def log(self, logs, start_time=None):
         super().log(logs, start_time)
         if self.is_world_process_zero():
-            
+
             global_step = self.state.global_step
 
             if "loss" not in logs:
