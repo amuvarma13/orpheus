@@ -436,15 +436,16 @@ pip install
 ```
 
 ``` python
-from orpheus import OrpheusTrainer
+from orpheus import OrpheusTrainer, OrpheusDataProcessor
 
 orpheus = OrpheusTrainer()
+data_processor = OrpheusDataProcessor()
 
 dataset_name = "amuvarma/orpheus_stage_1"
 
 dataset = orpheus.fast_load_dataset(dataset)
 
-processed_dataset = orpheus.adapt_stage_1_to_stage_5_dataset(dataset)
+processed_dataset = data_processor.adapt_stage_1_to_stage_5_dataset(dataset)
 
 orpheus.initialise(
     stage = "stage_5",
