@@ -6,11 +6,12 @@ import torchaudio.transforms as T
 from collections import defaultdict
 from datasets import load_dataset, Dataset
 import whisper
+
 whisper_model = whisper.load_model("small")
 
 
 class AudioChatDataCollator:
-    def __init__(self, tokenizer, whisper_model, model):
+    def __init__(self, tokenizer, model):
         self.tokenizer = tokenizer
         self.whisper_model = whisper_model
         self.model = model
@@ -197,6 +198,6 @@ class Stage_3_Trainer():
             args=self.training_args,
             train_dataset=self.dataset,
             compute_metrics=self._compute_metrics,
-            data_collator=AudioChatDataCollator(),
+            data_collator=AudioChatDataCollator(self.tokenizer,self.model),
         )
         return trainer
