@@ -29,7 +29,7 @@ class Stage_1_Trainer():
         # some default values that can be overridden in the .train() method
         self.batch_size = 1
         self.epochs = 1
-        self.save_steps = 2000
+        self.save_steps = 10000
         self.learning_rate = 5.0e-6
 
         self.num_gpus = torch.cuda.device_count()
