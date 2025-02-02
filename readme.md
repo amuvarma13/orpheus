@@ -276,12 +276,13 @@ import wandb #=> pip install wandb
 wandb.init(project="orpheusdeblib", name="s1")
 
 
-orpheus = OrpheusTrainer()
-
 speech_dataset_name = "amuvarma/stage_1_speech_dataset"
 text_dataset_name = "amuvarma/stage_1_text_dataset"
 
-orpheus.initialise(
+model_name = "amuvarma/3b-10m-pretrain-full"
+
+
+orpheus = OrpheusTrainer(
     stage = "stage_1",
     speech_dataset_name = speech_dataset_name,
     text_dataset_name = text_dataset_name, # optional, defaults to generic QA dataset for LLM tuning
