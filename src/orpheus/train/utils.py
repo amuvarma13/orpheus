@@ -73,7 +73,6 @@ class OrpheusTrainer():
         return AutoTokenizer.from_pretrained(model_name)
 
     def create_trainer(self, **kwargs):
-        print(**kwargs)
         return self._training_class.create_trainer(**kwargs)
 
     def __init__ (self, 
