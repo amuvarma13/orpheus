@@ -286,7 +286,7 @@ orpheus = OrpheusTrainer(
     stage = "stage_1",
     speech_dataset_name = speech_dataset_name,
     text_dataset_name = text_dataset_name, # optional, defaults to generic QA dataset for LLM tuning
-    model_name = None # optional, defaults to Canopy's pretrained model
+    model_name = model_name # optional, defaults to Canopy's pretrained model
 )
 
 orpheus_trainer = orpheus.create_trainer(

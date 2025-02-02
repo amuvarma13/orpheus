@@ -73,6 +73,7 @@ class OrpheusTrainer():
         return AutoTokenizer.from_pretrained(model_name)
 
     def create_trainer(self, **kwargs):
+        print(**kwargs)
         return self._training_class.create_trainer(**kwargs)
 
     def __init__ (self, 
@@ -104,6 +105,10 @@ class OrpheusTrainer():
                 self.model = self._load_orpheus_model(model_name)
             elif stage == "stage_4" or stage == "stage_5":
                 self.model = self._load_orpheus_model_from_orpheus(model_name)
+
+        elif stage == "stage_1":
+            model_name = "amuvarma/3b-10m-pretrain-full"
+            self.model = self._load_model(model_name)
             
         
         if tokenizer_name is not None:
