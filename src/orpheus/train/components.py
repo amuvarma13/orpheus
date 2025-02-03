@@ -1,6 +1,8 @@
 from torch.utils.data import DataLoader, Dataset
 from torch.distributed.fsdp import (FullyShardedDataParallel as FSDP, FullStateDictConfig, StateDictType)
 from torch.utils.data.distributed import DistributedSampler
+from torch.utils.data import SequentialSampler
+
 import torch
 from transformers import Trainer
 import wandb
@@ -104,12 +106,8 @@ class OrderedTrainer(Trainer):
         super().__init__(*args, **kwargs)
     
     def get_train_dataloader(self):
-        sampler = AlternatingDistributedSampler(
-            self.train_dataset,
-            num_replicas=torch.distributed.get_world_size(),
-            rank=torch.distributed.get_rank(),
-            shuffle=False, 
-        )
+        # Use SequentialSampler for ordered, non-distributed training
+        sampler = SequentialSampler(self.train_dataset)
 
         return DataLoader(
             self.train_dataset,
@@ -123,12 +121,11 @@ class OrderedTrainer(Trainer):
     
     def log(self, logs, callback=None):
         super().log(logs)
-        if self.is_world_process_zero():
-            global_step = self.state.global_step
-            if global_step % 2 == 0:
-                wandb.log({"text_loss": logs["loss"], "step": global_step})
-            else:
-                wandb.log({"audio_loss": logs["loss"], "step": global_step})
+        global_step = self.state.global_step
+        if global_step % 2 == 0:
+            wandb.log({"text_loss": logs["loss"], "step": global_step})
+        else:
+            wandb.log({"audio_loss": logs["loss"], "step": global_step})
 
     def save_model(self, output_dir=None, _internal_call=False):
         if output_dir is None:
