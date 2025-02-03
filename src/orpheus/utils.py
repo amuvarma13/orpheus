@@ -18,20 +18,12 @@ class OrpheusConversation():
         self.audio_encoder = parent.audio_encoder
         self.parent = parent
 
-        self._initialise_tokenizer()
 
     def append_message(self, message):
         self._validate_message(message)
         self.current_message = message
 
-    def _initialise_tokenizer(self):
-        if self.parent and self.parent.tokenizer:
-            self.tokenizer = self.parent.tokenizer
-        else:
-            default_tokenizer = "amuvarma/3b-zuckreg-convo"
-            self.tokenizer = AutoTokenizer.from_pretrained(default_tokenizer)
 
-        print("tokenizer initialised", self.tokenizer)
 
     def _validate_message(self, message):
         if "format" not in message:
@@ -171,6 +163,16 @@ class OrpheusUtility():
         if not self._is_model_initialised:
             raise ValueError("Please ensure you have registered the model with the OrpheusUtility class using orpheus.register_auto_model(model)")
         return self._is_model_initialised
+
+    def _initialise_tokenizer(self):
+        if self.parent and self.parent.tokenizer:
+            self.tokenizer = self.parent.tokenizer
+        else:
+            default_tokenizer = "amuvarma/3b-zuckreg-convo"
+            self.tokenizer = AutoTokenizer.from_pretrained(default_tokenizer)
+
+        print("tokenizer initialised", self.tokenizer)
+
 
     def _download_from_hub(self, model_name):
         snapshot_download(
@@ -365,6 +367,7 @@ class OrpheusUtility():
 
 
     def fast_push_to_hub(self, checkpoint=None, push_name=None, tokenizer=None):
+        self._initialise_tokenizer()
         if tokenizer is None:
             tokenizer = self.tokenizer
         
