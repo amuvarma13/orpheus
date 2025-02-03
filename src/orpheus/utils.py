@@ -364,6 +364,9 @@ class OrpheusUtility():
         return response_dict
 
 
+    def fast_download_from_hub(self, model_name):
+        self._download_from_hub(model_name)
+        
     def fast_push_to_hub(self, checkpoint=None, push_name=None, tokenizer=None):
         self._initialise_tokenizer()
         if tokenizer is None:
@@ -389,7 +392,19 @@ class OrpheusUtility():
         
     def _push_folder_to_hub(self, local_folder, repo_id, commit_message="Update model", max_workers=4):
         api = HfApi()
-
+        
+        # Define files/patterns to exclude
+        exclude_patterns = {
+            'optimizer.pt',
+            'optimizer.bin', 
+            'pytorch_model.bin',
+            '.bin',  # Excludes all .bin files
+            'scheduler.pt',
+            '.tmp',
+            '__pycache__',
+            '.git'
+        }
+        
         try:
             api.create_repo(repo_id=repo_id, exist_ok=True)
         except Exception as e:
@@ -401,10 +416,13 @@ class OrpheusUtility():
             upload_args = []
             for root, _, files in os.walk(local_folder):
                 for file in files:
+                    # Skip files matching exclude patterns
+                    if any(pattern in file for pattern in exclude_patterns):
+                        continue
+                        
                     file_path = os.path.join(root, file)
                     rel_path = os.path.relpath(file_path, local_folder)
                     upload_args.append((api, file_path, rel_path, repo_id, commit_message))
-
             # Upload files in parallel with progress bar
             successful_uploads = 0
             failed_uploads = []
