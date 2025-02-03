@@ -102,7 +102,6 @@ class AlternatingTrainer(Trainer):
 class OrderedTrainer(Trainer):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.repo_id = self.args.repo_id
     
     def get_train_dataloader(self):
         sampler = AlternatingDistributedSampler(
