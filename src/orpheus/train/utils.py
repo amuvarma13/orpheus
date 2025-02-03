@@ -100,6 +100,7 @@ class OrpheusTrainer():
         if model_name is not None:
             if stage == "stage_1" or stage == "stage_2":
                 self.model = self._load_model(model_name)
+                self.model = self.model.to(torch.bfloat16)
             elif stage == "stage_3":
                 self.model = self._load_orpheus_model(model_name)
             elif stage == "stage_4" or stage == "stage_5":
