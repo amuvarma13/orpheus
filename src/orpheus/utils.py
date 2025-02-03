@@ -165,11 +165,8 @@ class OrpheusUtility():
         return self._is_model_initialised
 
     def _initialise_tokenizer(self):
-        if self.parent and self.parent.tokenizer:
-            self.tokenizer = self.parent.tokenizer
-        else:
-            default_tokenizer = "amuvarma/3b-zuckreg-convo"
-            self.tokenizer = AutoTokenizer.from_pretrained(default_tokenizer)
+        default_tokenizer = "amuvarma/3b-zuckreg-convo"
+        self.tokenizer = AutoTokenizer.from_pretrained(default_tokenizer)
 
         print("tokenizer initialised", self.tokenizer)
 
