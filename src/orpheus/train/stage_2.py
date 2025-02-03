@@ -258,7 +258,7 @@ class Stage_2_Trainer():
         ):
         self._create_training_args(**kwargs)
         self.model = self.model.to(torch.bfloat16)
-        trainer = Trainer(
+        trainer = OrderedTrainer(
             model=self.model,
             args=self.training_args,
             train_dataset=self.dataset,

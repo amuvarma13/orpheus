@@ -13,14 +13,17 @@ import torch
 from transformers import AutoModel
 
 class OrpheusTrainer():
-    def _load_dataset(self, dataset_name):
+    def _load_dataset(self, dataset_name, do_shuffle=False):
         snapshot_download(
             repo_id=dataset_name,
             repo_type="dataset",   
             revision="main",        
             max_workers=64         
         )
-        return load_dataset(dataset_name, split="train")
+        ds = load_dataset(dataset_name, split="train")
+        if do_shuffle:
+            ds = ds.shuffle()
+        return ds
     
     def _download_model(self, model_name):
         snapshot_download(
@@ -121,8 +124,7 @@ class OrpheusTrainer():
 
         if dataset_name is not None:
             if stage == "stage_2" or stage == "stage_4":
-                self.dataset = self._load_dataset(dataset_name)
-                self.dataset = self.dataset.shuffle(seed=42)
+                self.dataset = self._load_dataset(dataset_name, do_shuffle=True)
                 # self.dataset = self.dataset.select(range(100))
 
         
