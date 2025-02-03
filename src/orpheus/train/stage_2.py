@@ -6,7 +6,7 @@ from snac import SNAC
 import torchaudio.transforms as T
 from collections import defaultdict
 from datasets import load_dataset, Dataset
-from .components import AlternatingTrainer
+from .components import OrderedTrainer
 
 class Stage_2_Trainer():
     def __init__(
@@ -256,7 +256,7 @@ class Stage_2_Trainer():
         ):
         self._create_training_args(**kwargs)
         self.model = self.model.to(torch.bfloat16)
-        trainer = InterleavedFSDPTrainer(
+        trainer = OrderedTrainer(
             model=self.model,
             args=self.training_args,
             train_dataset=self.dataset,
