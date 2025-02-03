@@ -215,7 +215,7 @@ class Stage_2_Trainer():
             logging_steps=1,
             bf16=True,
             output_dir=f"./{self.save_folder}",
-            fsdp="auto_wrap",
+            # fsdp="auto_wrap",
             save_steps=self.save_steps,
             remove_unused_columns=True, 
             learning_rate=self.learning_rate,
