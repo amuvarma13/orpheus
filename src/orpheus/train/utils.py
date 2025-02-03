@@ -46,7 +46,7 @@ class OrpheusTrainer():
 
     def _load_model(self, model_name):
         self._download_model(model_name)
-        return AutoModelForCausalLM.from_pretrained(model_name)
+        return AutoModelForCausalLM.from_pretrained(model_name, attn_implementation="flash_attention_2")
     
     def _load_orpheus_model(self, model_name):
         self._download_model(model_name)
