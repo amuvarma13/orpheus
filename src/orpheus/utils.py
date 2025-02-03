@@ -31,6 +31,8 @@ class OrpheusConversation():
             default_tokenizer = "amuvarma/3b-zuckreg-convo"
             self.tokenizer = AutoTokenizer.from_pretrained(default_tokenizer)
 
+        print("tokenizer initialised", self.tokenizer)
+
     def _validate_message(self, message):
         if "format" not in message:
             raise ValueError("Message must contain a 'format' key")
