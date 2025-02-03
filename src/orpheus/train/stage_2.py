@@ -30,7 +30,7 @@ class Stage_2_Trainer():
         self.batch_size = 1
         self.epochs = 1
         self.save_steps = 2000
-        self.learning_rate = 5.0e-7
+        self.learning_rate = 5.0e-6
 
         self.num_gpus = torch.cuda.device_count()
         self.tokeniser_length = 128256
@@ -216,6 +216,7 @@ class Stage_2_Trainer():
             bf16=True,
             output_dir=f"./{self.save_folder}",
             # fsdp="auto_wrap",
+            max_grad_norm=5.0,
             save_steps=self.save_steps,
             remove_unused_columns=True, 
             learning_rate=self.learning_rate,
