@@ -326,7 +326,6 @@ from orpheus import OrpheusTrainer
 import wandb
 wandb.init(project="orpheusdeblib", name="s1")
 
-orpehus = OrpheusTrainer()
 
 dataset_name = "amuvarma/stage_2_training_example"
 
