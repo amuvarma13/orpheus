@@ -371,6 +371,21 @@ class OrpheusUtility():
         
         tokenizer.push_to_hub(push_name)
         self._push_folder_to_hub(checkpoint, push_name)
+
+    
+    def _upload_single_file(self, args):
+        api, file_path, rel_path, repo_id, commit_message = args
+        try:
+            api.upload_file(
+                path_or_fileobj=file_path,
+                path_in_repo=rel_path,
+                repo_id=repo_id,
+                commit_message=commit_message
+            )
+            return True, rel_path
+        except Exception as e:
+            return False, f"Error uploading {rel_path}: {str(e)}"
+
         
     def _push_folder_to_hub(self, local_folder, repo_id, commit_message="Update model", max_workers=4):
         api = HfApi()
@@ -396,7 +411,7 @@ class OrpheusUtility():
             
             with ThreadPoolExecutor(max_workers=max_workers) as executor:
                 with tqdm(total=len(upload_args), desc="Uploading files") as pbar:
-                    for success, result in executor.map(upload_single_file, upload_args):
+                    for success, result in executor.map(self._upload_single_file, upload_args):
                         if success:
                             successful_uploads += 1
                         else:
