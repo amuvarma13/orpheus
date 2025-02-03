@@ -17,7 +17,7 @@ class Stage_2_Trainer():
             tokenizer = None,
             save_folder = "checkpoints",
             pad_token = None, 
-            max_length = 9600,
+            max_length = 7200,
 
         ):
         self.num_threads = 1
