@@ -106,7 +106,6 @@ class OrderedTrainer(Trainer):
         super().__init__(*args, **kwargs)
     
     def get_train_dataloader(self):
-        # Use SequentialSampler for ordered, non-distributed training
         sampler = SequentialSampler(self.train_dataset)
 
         return DataLoader(
@@ -126,14 +125,3 @@ class OrderedTrainer(Trainer):
             wandb.log({"text_loss": logs["loss"], "step": global_step})
         else:
             wandb.log({"audio_loss": logs["loss"], "step": global_step})
-
-    def save_model(self, output_dir=None, _internal_call=False):
-        if output_dir is None:
-            output_dir = self.args.output_dir
-        self.save_and_push_model(output_dir)
- 
-    def save_and_push_model(self, output_dir):
-        save_policy = FullStateDictConfig(offload_to_cpu=True, rank0_only=True)
-        with FSDP.state_dict_type(self.model, StateDictType.FULL_STATE_DICT, save_policy):
-            cpu_state_dict = self.model.state_dict()
-        self.model.save_pretrained(output_dir, state_dict=cpu_state_dict)
