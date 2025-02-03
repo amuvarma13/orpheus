@@ -316,7 +316,7 @@ Your dataset should have the columns `question` [String], `answer` [String], `an
 
 Here is an example dataset
 
-##### GPU requirements: minimum of 2 gpus with 80gb of vram each for ~5-15 minutes training time.
+##### GPU requirements: 1 minimum of 80gb vram (but ideally 140 gb) GPU
 
 
 ``` python
