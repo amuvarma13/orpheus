@@ -9,6 +9,7 @@ from snac import SNAC
 from huggingface_hub import HfApi
 from transformers import AutoTokenizer
 import os
+from tqdm import tqdm
 
 class OrpheusConversation():
     def __init__(self, parent):
