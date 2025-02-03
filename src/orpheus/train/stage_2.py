@@ -255,7 +255,7 @@ class Stage_2_Trainer():
             **kwargs
         ):
         self._create_training_args(**kwargs)
-        model = model.to(torch.bfloat16)
+        self.model = self.model.to(torch.bfloat16)
         trainer = Trainer(
             model=self.model,
             args=self.training_args,
