@@ -168,7 +168,6 @@ class OrpheusUtility():
         default_tokenizer = "amuvarma/3b-zuckreg-convo"
         self.tokenizer = AutoTokenizer.from_pretrained(default_tokenizer)
 
-        print("tokenizer initialised", self.tokenizer)
 
 
     def _download_from_hub(self, model_name):
