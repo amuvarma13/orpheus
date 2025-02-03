@@ -7,6 +7,7 @@ from transformers import AutoModel, AutoConfig
 from .model import OrpheusConfig, OrpheusForConditionalGeneration
 from snac import SNAC
 from huggingface_hub import HfApi
+from transformers import AutoTokenizer
 
 class OrpheusConversation():
     def __init__(self, parent):
@@ -15,12 +16,20 @@ class OrpheusConversation():
         self.model = parent.model
         self.special_tokens = parent.special_tokens
         self.audio_encoder = parent.audio_encoder
-        self.tokenizer = parent.tokenizer
         self.parent = parent
+
+        self._initialise_tokenizer()
 
     def append_message(self, message):
         self._validate_message(message)
         self.current_message = message
+
+    def _initialise_tokenizer(self):
+        if self.parent and self.parent.tokenizer:
+            self.tokenizer = self.parent.tokenizer
+        else:
+            default_tokenizer = "amuvarma/3b-zuckreg-convo"
+            self.tokenizer = AutoTokenizer.from_pretrained(default_tokenizer)
 
     def _validate_message(self, message):
         if "format" not in message:
