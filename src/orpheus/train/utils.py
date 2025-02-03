@@ -123,7 +123,7 @@ class OrpheusTrainer():
             if stage == "stage_2" or stage == "stage_4":
                 self.dataset = self._load_dataset(dataset_name)
                 self.dataset = self.dataset.shuffle(seed=42)
-                self.dataset = self.dataset.select(range(100))
+                # self.dataset = self.dataset.select(range(100))
 
         
         if text_dataset_name is not None:
