@@ -49,9 +49,6 @@ class OrpheusDataProcessor():
 
         dataset = dataset.map(add_audio_fn, batched=False)
         print("adapting dataset", dataset)
-        dataset = dataset.map(self._mark_missing_question_audio)
-        print("adapted dataset", dataset)
-        dataset = dataset.filter(lambda example: example is not None)
         return dataset
 
     def _add_audio(self, example, column_name, audio_column_name, target_sr=16000):
