@@ -67,7 +67,7 @@ class OrpheusTrainer():
         orpheus_utility = OrpheusUtility()
         orpheus_utility.initialise()
         self._download_model(model_name)
-        model = AutoModel.from_pretrained(model_name).to("cuda").to(torch.bfloat16)
+        model = AutoModel.from_pretrained(model_name).to(torch.bfloat16)
         return model
 
 
