@@ -36,6 +36,12 @@ class AudioChatDataCollator:
         final_tokens = torch.tensor([[128009, 128257 ]], dtype=torch.int64)
         post_assistant_tokens = torch.tensor([[128258, 128262]])
 
+        # crop to first 5000 tokens of snac list
+        if len(snac_tokens) > 5000:
+            snac_tokens = snac_tokens[:5000]
+
+
+
         user_tokens = torch.cat(
             [start_token, user_input_ids, end_tokens], dim=1)
         snac_tokens_tensor = torch.tensor([snac_tokens], dtype=torch.int64)
