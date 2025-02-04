@@ -57,6 +57,8 @@ class OrpheusDataProcessor():
     def _add_audio(self, example, column_name, audio_column_name, target_sr=16000):
         try:
             text = example[column_name]
+
+            example[audio_column_name] = None
             
             voice = random.choice(self.voices)
 
