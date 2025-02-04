@@ -215,7 +215,7 @@ class OrpheusTrainer():
             else :
                 self._training_class = Stage_5_Trainer(
                     model = self.model,
-                    dataset = self.processed_dataset,
+                    dataset = self.dataset,
                     tokenizer = self.tokenizer,
                     pad_token = self.pad_token,
                     batch_size = batch_size, 
