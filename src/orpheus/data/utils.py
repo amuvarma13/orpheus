@@ -25,7 +25,7 @@ class OrpheusDataProcessor():
         return load_dataset(dataset_name, split=split)
     
     
-    def _mark_missing_question_audio(example):
+    def _mark_missing_question_audio(self, example):
     # Return None for examples missing the key
         if "question_audio" not in example or example["question_audio"] is None:
             return None
