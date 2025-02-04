@@ -108,6 +108,9 @@ class Stage_4_Trainer():
         else:
             self.batch_size = 8
 
+
+
+
         self.num_gpus = torch.cuda.device_count()
 
         self.gradient_accumulation_steps = 64//(self.num_gpus*self.batch_size)
@@ -165,6 +168,7 @@ class Stage_4_Trainer():
 
         assert self.num_gpus > 1, "At least 2 GPUs should be available for training, to allow FSDP."
 
+        print(("batch size", self.batch_size))
         self.training_args = TrainingArguments(
             output_dir=self.save_folder,
             per_device_train_batch_size=self.batch_size,
