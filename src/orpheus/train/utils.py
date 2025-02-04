@@ -200,13 +200,23 @@ class OrpheusTrainer():
         if stage == "stage_5":
             assert model_name is not None, "Please pass model_name you trained in stage 4."
 
-            self._training_class = Stage_5_Trainer(
-                model = self.model,
-                dataset = self.dataset,
-                tokenizer = self.tokenizer,
-                pad_token = self.pad_token,
-                batch_size = batch_size
-            )
+            if self.processed_dataset is None:
+                self._training_class = Stage_5_Trainer(
+                    model = self.model,
+                    dataset = self.dataset,
+                    tokenizer = self.tokenizer,
+                    pad_token = self.pad_token,
+                    batch_size = batch_size
+                )
+            else :
+                self._training_class = Stage_5_Trainer(
+                    model = self.model,
+                    dataset = self.processed_dataset,
+                    tokenizer = self.tokenizer,
+                    pad_token = self.pad_token,
+                    batch_size = batch_size, 
+                    processed_dataset = True
+                )
 
         self._training_stage = stage
 

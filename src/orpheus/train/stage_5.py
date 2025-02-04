@@ -101,6 +101,7 @@ class Stage_5_Trainer():
             pad_token=None,
             max_length=9600,
             batch_size=None,
+            processed_dataset=False
 
     ):
         self.num_threads = 4
@@ -160,8 +161,10 @@ class Stage_5_Trainer():
             "cuda" if torch.cuda.is_available() else "cpu")
 
         self.dataset = dataset
-
-        self.processed_dataset = self._add_codes_to_dataset(self.dataset)
+        if processed_dataset:
+            self.processed_dataset = dataset
+        else:
+            self.processed_dataset = self._add_codes_to_dataset(self.dataset)
 
         pass
 
