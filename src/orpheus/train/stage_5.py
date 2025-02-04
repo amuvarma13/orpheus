@@ -19,6 +19,7 @@ class AudioChatDataCollator:
         whisper_model = whisper.load_model("small", device=f'cuda:{cuda_device}')
         self.whisper_model = whisper_model
         self.cuda_device = cuda_device
+        self.model = model
 
 
         pass 
@@ -80,8 +81,8 @@ class AudioChatDataCollator:
 
     def __call__(self, features):
         audio = torch.tensor([features[0]["question_audio"]["array"]])
-        assistant_response = features[0]["question"]
-        user_response = features[0]["answer"]
+        assistant_response = features[0]["answer"]
+        user_response = features[0]["question"]
         snac_tokens = features[0]["codes_list"]
 
         if "<|audio|>" in user_response:
