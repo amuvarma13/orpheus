@@ -76,7 +76,7 @@ class AudioChatDataCollator:
         batch = self._inference_collator(
             audio, user_response, assistant_response)
         
-        print("in inference collator", self.model.device)
+        # print("in inference collator", self.model.device)
 
         return {
             "audio_values": batch["audio_values"].cpu(),
