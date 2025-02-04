@@ -8,7 +8,7 @@ from datasets import load_dataset, Dataset
 import whisper
 from transformers import Trainer
 from snac import SNAC
-whisper_model = whisper.load_model("small")
+
 from .components import AlternatingTrainer
 
 
@@ -16,7 +16,6 @@ class AudioChatDataCollator:
     def __init__(self, tokenizer, model):
         self.tokenizer = tokenizer
         print("model device", self.model.device)
-        self.whisper_model = whisper_model.to(self.model.device)
         self.model = model
         pass 
 
@@ -28,6 +27,8 @@ class AudioChatDataCollator:
         return mel, int(duration_ms / 20) + 1
 
     def _inference_collator(self, audio_input, user_res, ass_res, snac_tokens=[]):
+        print("device of whisper", )
+        self.whisper_model = self.whisper_model.to(self.model.device)
 
         user_input_ids = self.tokenizer(user_res, return_tensors="pt").input_ids
         assistant_input_ids = self.tokenizer(ass_res, return_tensors="pt").input_ids
@@ -253,6 +254,10 @@ class Stage_5_Trainer():
         self,
         **kwargs
     ):
+        print("about to load whisper", self.model.device)
+        whisper_model = whisper.load_model("small")
+        self.whisper_model = whisper_model.to(self.device)
+
         self._create_training_args(**kwargs)
         print("processed ds", self.processed_dataset)
         trainer = InterleavedFSDPTrainer(
