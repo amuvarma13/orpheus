@@ -215,7 +215,7 @@ class Stage_5_Trainer():
     
     def _add_codes_to_dataset(self, dataset):
         self.sr = dataset[0]["answer_audio"]["sampling_rate"]
-        dataset = dataset.map(self._add_codes, cache_file_name=None)
+        dataset = dataset.map(self._add_codes, num_proc=self.num_threads)
         return dataset
     
 
