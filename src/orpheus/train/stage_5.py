@@ -14,10 +14,11 @@ from snac import SNAC
 class AudioChatDataCollator:
     def __init__(self, tokenizer, model):
         self.tokenizer = tokenizer
-        whisper_model = whisper.load_model("small")
         cuda_device = torch.cuda.current_device()
         print("device of whisper", cuda_device)
-        whisper_model = whisper_model.to(cuda_device)
+        whisper_model = whisper.load_model("small", device=f'cuda:{cuda_device}')
+
+
         pass 
 
     def _process_audio_tensor(self, audio, sample_rate=16000):
