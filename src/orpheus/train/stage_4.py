@@ -15,7 +15,7 @@ class AudioChatDataCollator:
         print("AudioChatDataCollator")
         self.tokenizer = tokenizer
         self.model = model
-        self.whisper_model = whisper_model.to(model.device)
+        self.whisper_model = whisper_model
         
         pass
 
@@ -75,6 +75,8 @@ class AudioChatDataCollator:
 
         batch = self._inference_collator(
             audio, user_response, assistant_response)
+        
+        print("in inference collator", self.model.device)
 
         return {
             "audio_values": batch["audio_values"].cpu(),
