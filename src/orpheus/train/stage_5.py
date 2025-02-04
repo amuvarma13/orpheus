@@ -247,7 +247,7 @@ class Stage_5_Trainer():
     ):
         self._create_training_args(**kwargs)
         print("processed ds", self.processed_dataset)
-        trainer = AlternatingTrainer(
+        trainer = InterleavedFSDPTrainer(
             model=self.model,
             args=self.training_args,
             train_dataset=self.processed_dataset,
