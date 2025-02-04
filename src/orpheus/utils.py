@@ -196,7 +196,7 @@ class OrpheusUtility():
             ]
         )
 
-    def initialise(self, text_model_name="amuvarma/3b-zuckreg-convo", multimodal_model_name="amuvarma/zuck-3bregconvo-automodelcompat"):
+    def initialise(self, text_model_name="amuvarma/canopy-tune-stage_2-luna", multimodal_model_name="amuvarma/canopy-tune-stage_5-luna-snacced"):
 
         self._download_from_hub(text_model_name)
         self._download_from_hub(multimodal_model_name)
