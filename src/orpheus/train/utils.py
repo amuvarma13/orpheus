@@ -65,7 +65,11 @@ class OrpheusTrainer():
 
     def _load_orpheus_model_from_orpheus(self, model_name):
         orpheus_utility = OrpheusUtility()
-        orpheus_utility.initialise()
+        orpheus_utility.initialise(
+            text_model_name = "amuvarma/canopy-tune-stage_2-luna", 
+            multimodal_model_name = model_name
+
+        )
         self._download_model(model_name)
         model = AutoModel.from_pretrained(model_name).to(torch.bfloat16)
         return model
