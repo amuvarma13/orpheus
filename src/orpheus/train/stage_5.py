@@ -17,6 +17,7 @@ class AudioChatDataCollator:
         cuda_device = torch.cuda.current_device()
         print("device of whisper", cuda_device)
         whisper_model = whisper.load_model("small", device=f'cuda:{cuda_device}')
+        self.whisper_model = whisper_model
 
 
         pass 
