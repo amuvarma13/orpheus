@@ -89,7 +89,8 @@ class OrpheusTrainer():
                     pad_token = None, 
                     tokenizer_name = "amuvarma/3b-10m-pretrain-full", 
                     batch_size = None,
-                    dataset = None
+                    dataset = None, 
+                    processed_dataset = False
                 ):
 
         assert dataset is None or dataset_name is None, "Please pass either dataset or dataset_name, not both."
@@ -97,6 +98,9 @@ class OrpheusTrainer():
         self.dataset = None
         if dataset is not None:
             self.dataset = dataset
+
+        self.processed_dataset = processed_dataset
+        
 
         self.use_wandb = use_wandb
         
