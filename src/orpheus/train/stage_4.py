@@ -12,6 +12,7 @@ whisper_model = whisper.load_model("small")
 
 class AudioChatDataCollator:
     def __init__(self, tokenizer, model):
+        print("AudioChatDataCollator")
         self.tokenizer = tokenizer
         self.model = model
         self.whisper_model = whisper_model.to(model.device)
