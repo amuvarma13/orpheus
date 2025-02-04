@@ -246,6 +246,7 @@ class Stage_5_Trainer():
         **kwargs
     ):
         self._create_training_args(**kwargs)
+        print("processed ds", self.processed_dataset)
         trainer = AlternatingTrainer(
             model=self.model,
             args=self.training_args,
