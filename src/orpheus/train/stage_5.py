@@ -32,7 +32,6 @@ class AudioChatDataCollator:
         return mel, int(duration_ms / 20) + 1
 
     def _inference_collator(self, audio_input, user_res, ass_res, snac_tokens=[]):
-        print("device of whisper", )
         user_input_ids = self.tokenizer(user_res, return_tensors="pt").input_ids
         assistant_input_ids = self.tokenizer(ass_res, return_tensors="pt").input_ids
 
