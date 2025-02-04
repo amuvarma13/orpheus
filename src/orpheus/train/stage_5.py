@@ -17,7 +17,7 @@ class AudioChatDataCollator:
         self.tokenizer = tokenizer
         self.whisper_model = whisper_model
         self.model = model
-        pass
+        pass 
 
     def _process_audio_tensor(self, audio, sample_rate=16000):
         audio = audio.to(torch.float32)
