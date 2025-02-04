@@ -9,17 +9,14 @@ import whisper
 from transformers import Trainer
 from snac import SNAC
 
-from .components import AlternatingTrainer
 
 
 class AudioChatDataCollator:
     def __init__(self, tokenizer, model):
         self.tokenizer = tokenizer
-        print(" tokenizer, model", tokenizer, model)
-        print("model device", self.model, )
-        self.model = model
         whisper_model = whisper.load_model("small")
         cuda_device = torch.cuda.current_device()
+        print("device of whisper", cuda_device)
         whisper_model = whisper_model.to(cuda_device)
         pass 
 
