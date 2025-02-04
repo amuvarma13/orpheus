@@ -25,6 +25,14 @@ class OrpheusDataProcessor():
         return load_dataset(dataset_name, split=split)
     
     
+    def _mark_missing_question_audio(example):
+    # Return None for examples missing the key
+        if "question_audio" not in example or example["question_audio"] is None:
+            return None
+        return example
+
+
+
     
     def adapt_stage_1_to_stage_5_dataset(self, dataset):
         
@@ -40,6 +48,9 @@ class OrpheusDataProcessor():
         )
 
         dataset = dataset.map(add_audio_fn, batched=False)
+        dataset = dataset.map(self._mark_missing_question_audio)
+
+        dataset = dataset.filter(lambda example: example is not None)
         return dataset
 
     def _add_audio(self, example, column_name, audio_column_name, target_sr=16000):
