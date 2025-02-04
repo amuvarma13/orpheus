@@ -15,8 +15,12 @@ from .components import AlternatingTrainer
 class AudioChatDataCollator:
     def __init__(self, tokenizer, model):
         self.tokenizer = tokenizer
-        print("model device", self.model.device)
+        print(" tokenizer, model", tokenizer, model)
+        print("model device", self.model, )
         self.model = model
+        whisper_model = whisper.load_model("small")
+        cuda_device = torch.cuda.current_device()
+        whisper_model = whisper_model.to(cuda_device)
         pass 
 
     def _process_audio_tensor(self, audio, sample_rate=16000):
@@ -256,9 +260,7 @@ class Stage_5_Trainer():
     ):
         print("about to load whisper", self.model.device)
         #self.device is get torch cuda device
-        cuda_device = torch.cuda.current_device()
-        print("cuda device", cuda_device)
-        whisper_model = whisper.load_model("small")
+
         # self.whisper_model = whisper_model.to(self.device)
 
         self._create_training_args(**kwargs)
