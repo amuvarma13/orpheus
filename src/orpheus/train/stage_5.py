@@ -18,6 +18,7 @@ class AudioChatDataCollator:
         print("device of whisper", cuda_device)
         whisper_model = whisper.load_model("small", device=f'cuda:{cuda_device}')
         self.whisper_model = whisper_model
+        self.cuda_device = cuda_device
 
 
         pass 
@@ -31,8 +32,6 @@ class AudioChatDataCollator:
 
     def _inference_collator(self, audio_input, user_res, ass_res, snac_tokens=[]):
         print("device of whisper", )
-        self.whisper_model = self.whisper_model.to(self.model.device)
-
         user_input_ids = self.tokenizer(user_res, return_tensors="pt").input_ids
         assistant_input_ids = self.tokenizer(ass_res, return_tensors="pt").input_ids
 
@@ -67,9 +66,9 @@ class AudioChatDataCollator:
         audio_input = audio_input.squeeze(0)
         mel, length = self._process_audio_tensor(audio_input)
         
-        mel = mel.to(whisper_model.device)
+        mel = mel.to(f'cuda:{self.cuda_device}')
         mel = mel.unsqueeze(0)
-        audio_feature = whisper_model.embed_audio(mel)[0][:length]
+        audio_feature = self.whisper_model.embed_audio(mel)[0][:length]
         audio_feature = audio_feature.unsqueeze(0)
 
         return {
