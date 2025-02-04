@@ -171,6 +171,8 @@ class Stage_4_Trainer():
         assert self.num_gpus > 1, "At least 2 GPUs should be available for training, to allow FSDP."
 
         print(("batch size", self.batch_size))
+        if self.gradient_accumulation_steps == 0:
+            self.gradient_accumulation_steps = 1
         self.training_args = TrainingArguments(
             output_dir=self.save_folder,
             per_device_train_batch_size=self.batch_size,
