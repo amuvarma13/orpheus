@@ -255,8 +255,11 @@ class Stage_5_Trainer():
         **kwargs
     ):
         print("about to load whisper", self.model.device)
+        #self.device is get torch cuda device
+        cuda_device = torch.cuda.current_device()
+        print("cuda device", cuda_device)
         whisper_model = whisper.load_model("small")
-        self.whisper_model = whisper_model.to(self.device)
+        # self.whisper_model = whisper_model.to(self.device)
 
         self._create_training_args(**kwargs)
         print("processed ds", self.processed_dataset)
