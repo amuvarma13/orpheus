@@ -197,6 +197,7 @@ class Stage_4_Trainer():
         self,
         **kwargs
     ):
+        print("self.model.device", self.model.device)
         self._create_training_args(**kwargs)
         trainer = Trainer(
             model=self.model,
