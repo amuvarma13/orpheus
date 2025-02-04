@@ -20,6 +20,7 @@ class AudioChatDataCollator:
         self.whisper_model = whisper_model
         self.cuda_device = cuda_device
         self.model = model
+        self.index = 0
 
 
         pass 
@@ -42,6 +43,8 @@ class AudioChatDataCollator:
 
         # crop to first 5000 tokens of snac list
         snac_tokens = []
+        self.index = self.index + 1
+        print(self.index)
         if len(snac_tokens) > 4200:
             snac_tokens = snac_tokens[:4200]
 
