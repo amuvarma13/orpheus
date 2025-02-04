@@ -15,7 +15,8 @@ from .components import AlternatingTrainer
 class AudioChatDataCollator:
     def __init__(self, tokenizer, model):
         self.tokenizer = tokenizer
-        self.whisper_model = whisper_model
+        print("model device", self.model.device)
+        self.whisper_model = whisper_model.to(self.model.device)
         self.model = model
         pass 
 
