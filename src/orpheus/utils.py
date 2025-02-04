@@ -19,6 +19,8 @@ class OrpheusConversation():
         self.special_tokens = parent.special_tokens
         self.audio_encoder = parent.audio_encoder
         self.parent = parent
+        if hasattr(parent, "tokenizer"):
+            self.tokenizer = parent.tokenizer
 
 
     def append_message(self, message):

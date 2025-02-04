@@ -360,6 +360,7 @@ You **should** use the default dataset unless you have a reason not to.
 
 ``` python
 from orpheus import OrpheusTrainer
+model_name = "amuvarma/canopy-tune-stage_2-luna" # from stage_2_train.py
 
 #** loading the datasets can take a while, even up to 30 mins **
 orpheus = OrpheusTrainer(
