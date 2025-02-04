@@ -231,6 +231,7 @@ class Stage_5_Trainer():
             num_train_epochs=1,
             learning_rate=2e-3,
             logging_steps=1,
+            fsdp = True,
             evaluation_strategy="no",
             push_to_hub=False,
             dataloader_pin_memory=False,
