@@ -255,7 +255,7 @@ class Stage_5_Trainer():
             dataloader_pin_memory=False,
             remove_unused_columns=False,
             bf16=True,
-            save_steps=15000,
+            save_steps=1000,
             **kwargs
         )
 
