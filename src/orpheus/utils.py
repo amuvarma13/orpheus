@@ -98,7 +98,7 @@ class OrpheusConversation():
         end_embeds = end_embeds.to(dtype=torch.bfloat16)
         
         if self.existing_embeds is not None:
-            self.existing_embeds =self.existing_embeds.to("cpu")
+            self.existing_embeds = self.existing_embeds.to(self.model.device).to(dtype=torch.bfloat16)
             all_embeds = torch.cat([self.existing_embeds, start_embeds, audio_embeds, end_embeds], dim=1)
         else:
             all_embeds = torch.cat([start_embeds, audio_embeds, end_embeds], dim=1)
