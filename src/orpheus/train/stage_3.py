@@ -111,7 +111,7 @@ class Stage_3_Trainer():
 
         self.num_gpus = torch.cuda.device_count()
 
-        self.gradient_accumulation_steps = 64//(self.num_gpus*self.batch_size)
+        self.gradient_accumulation_steps = 1
 
         # some default values that can be overridden in the .train() method
         self.epochs = 1
