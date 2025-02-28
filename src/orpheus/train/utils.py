@@ -57,6 +57,7 @@ class OrpheusTrainer():
             text_model_id=model_name,
             audio_token_index=156939,
             vocab_size=156939,
+            hidden_size=4096,
         )
 
         model = OrpheusForConditionalGeneration(config)
